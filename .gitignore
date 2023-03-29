@@ -21,11 +21,8 @@ yarn-error.log
 *.sublime-workspace
 
 # Visual Studio Code
+.vscode
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
 .history/*
 
 # Miscellaneous
@@ -40,3 +37,8 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Compiled files
+layout.css
+src/assets/demo/styles/badges.css
+src/assets/layout/styles/theme/designer
