@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
         { path: 'empty', loadChildren: () => import('./empty/emptydemo.module').then(m => m.EmptyDemoModule) },
         { path: 'timeline', loadChildren: () => import('./timeline/timelinedemo.module').then(m => m.TimelineDemoModule) },
         { path: 'paginablanca', loadChildren: () => import('./paginablanca/paginablanca.module').then(m => m.PaginablancaModule) },
+        {path:  'disciplinas', loadChildren:()=>import('./disciplinas/disciplinas.module').then(m => m.DisciplinasModule) },
         { path: '**', redirectTo: '/notfound' }
     ])],
     exports: [RouterModule]
