@@ -21,4 +21,11 @@ export class DisciplinasService {
       return this.http.get<any>(`${environment.apiUrl}disciplinas`)
     }
 
+    updateDisciplinas(form:any, id:any){
+      return this.http.put<any>(`${environment.apiUrl}disciplinas/${id}`,form)
+    }
+
+    deleteDisciplina(id:any){
+      return this.http.delete<any>(`${environment.apiUrl}disciplinas/${id}`)
+    }
 }

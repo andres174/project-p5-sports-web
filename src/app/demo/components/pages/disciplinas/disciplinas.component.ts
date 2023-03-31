@@ -4,6 +4,7 @@ import { Product } from 'src/app/demo/api/product';
 import { FormGroup, FormBuilder, Validators,FormControl } from '@angular/forms';
 import { DisciplinasService } from 'src/app/demo/service/disciplinas.service';
 import { DisciplinaInterface } from './disciplina_interface';
+import { log } from 'console';
 
 @Component({
   selector: 'app-disciplinas',
@@ -14,18 +15,21 @@ import { DisciplinaInterface } from './disciplina_interface';
 export class DisciplinasComponent {
   submitted: boolean = false;
 
-  productDialog: boolean = false;
+  disciplinaDialog: boolean = false;
 
-  deleteProductDialog: boolean = false;
+  deletedisciplinaDialog: boolean = false;
 
   deleteProductsDialog: boolean = false;
 
   disciplinas:any
- 
+  cols: any[] = [];
 
   product: Product = {};
 
   selectedProducts: Product[] = [];
+  
+  isUpdate:boolean=false;
+  idDisciplinaUpdate:any
 
   public formDisciplinas!: FormGroup;
   constructor(
@@ -49,6 +53,8 @@ saveDisciplina(){
   this.disciplinasService.guardarDisciplina(data).subscribe({
     next:(res)=>{
       console.log(res);
+      this.hideDialog();
+      this.formDisciplinas.reset()
       
     },
     error:(err)=>{
@@ -73,24 +79,66 @@ showDisciplinas(){
 
 
 hideDialog() {
-  this.productDialog = false;
+  this.disciplinaDialog = false;
   this.submitted = false;
+  if(this.isUpdate==true){
+    this.formDisciplinas.reset()
+    this.isUpdate=false
+  }
 }
 openNew() {
   //this.product = {};
   this.submitted = false;
-  this.productDialog = true;
+  this.disciplinaDialog = true;
 }
 
 deleteSelectedProducts() {
   this.deleteProductsDialog = true;
 }
 
-editProduct(product: Product) {
-
+editDisciplina(id:any) {
+  this.idDisciplinaUpdate=id
+    let data =this.disciplinas.find( (e:any) =>e.id==id)
+    console.log(data);
+    if (data) {
+      this.isUpdate=true
+      this.openNew()
+      this.formDisciplinas.controls['nombre'].setValue(data?.nombre)
+    }
 }
-deleteProduct(product: Product) {
 
+updateDisciplina(){
+  if (this.formDisciplinas.valid) {
+    let data : DisciplinaInterface={
+        nombre:this.formDisciplinas.value.nombre
+    }
+    this.disciplinasService.updateDisciplinas(data,this.idDisciplinaUpdate).subscribe({
+      next:(res)=>{
+        console.log(res);
+        this.hideDialog()
+        this.formDisciplinas.reset()
+        this.showDisciplinas()
+      },
+      error:(err)=>{
+        console.log(err);
+        
+      }
+    })
+   } else {
+     this.formDisciplinas.markAllAsTouched();
+   }
+}
+deleteDisciplina(id: any) {
+  this.disciplinasService.deleteDisciplina(id).subscribe({
+    next:(res)=>{
+      console.log(res);
+      this.showDisciplinas();
+    },
+    error:(err)=>{
+      console.log(err);
+      
+    }
+  })
 }
 }
 

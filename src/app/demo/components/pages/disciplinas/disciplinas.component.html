@@ -18,7 +18,7 @@
                 </ng-template> -->
             </p-toolbar>
            <!-- tabla con datos  -->
-            <p-table   [value]="disciplinas"  responsiveLayout="scroll"  [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="10" [paginator]="false" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table   [value]="disciplinas" [columns]="cols" responsiveLayout="scroll"  [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="10" [paginator]="false" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Manage Products</h5>
@@ -55,8 +55,8 @@
                         </td> -->
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" ></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" ></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editDisciplina(disciplinas.id)" ></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"(click)="deleteDisciplina(disciplinas.id)"></button>
                             </div>
                         </td>
                     </tr>
@@ -64,7 +64,7 @@
             </p-table>
         </div>
         <!-- modal -->
-        <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="disciplinaDialog" [style]="{width: '450px'}" header="Disciplinas" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
                 <form [formGroup]="formDisciplinas">
                     <div class="field">
@@ -83,17 +83,18 @@
 
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()" ></button>
-                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveDisciplina()"></button>
+                <button *ngIf="!isUpdate" pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveDisciplina()"></button>
+                <button *ngIf="isUpdate" pButton pRipple label="Update" icon="pi pi-check" class="p-button-text" (click)="updateDisciplina()"></button>
             </ng-template>
         </p-dialog>
 
-        <!-- <p-dialog [(visible)]="deleteProductDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <!-- <p-dialog [(visible)]="deletedisciplinaDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
                 <span *ngIf="product">Are you sure you want to delete <b>{{product.name}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductDialog = false"></button>
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletedisciplinaDialog = false"></button>
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
             </ng-template>
         </p-dialog> -->
@@ -103,7 +104,7 @@
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
                 <span>Are you sure you want to delete selected products?</span>
             </div>
-            <ng-template pTemplate="footer">
+            <ng-template pTemplate="footer"> 
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
             </ng-template>
