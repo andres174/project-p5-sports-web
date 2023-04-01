@@ -17,6 +17,7 @@ import { RippleModule } from "primeng/ripple";
 import { TableModule } from "primeng/table";
 import { ToastModule } from "primeng/toast";
 import { ToolbarModule } from "primeng/toolbar";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [UsuariosComponent],
@@ -37,6 +38,7 @@ import { ToolbarModule } from "primeng/toolbar";
     RadioButtonModule,
     InputNumberModule,
     DialogModule,
+    ReactiveFormsModule,
   ],
 })
 export class UsuariosModule {}

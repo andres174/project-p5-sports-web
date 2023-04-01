@@ -4,7 +4,7 @@ import { MessageService } from "primeng/api";
 import { Table } from "primeng/table";
 import { UsuarioInterface } from "src/app/demo/api/usuario.interface";
 import { environment } from "src/environments/environment";
-import { Observer } from "rxjs";
+import { FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({
   selector: "app-usuarios",
@@ -25,27 +25,25 @@ export class UsuariosComponent implements OnInit {
 
   selectedUsers: UsuarioInterface[] = [];
 
+  uploadedUserImage: any;
+
   submitted: boolean = false;
+
+  userForm!: FormGroup;
 
   constructor(
     private usuariosService: UsuariosService,
-    private messageService: MessageService
-  ) {}
-
-  private usuariosObserver: Observer<any> = {
-    next: (res) => {
-      console.log(res);
-      this.getOrganizadores();
-      this.messageService.add({
-        severity: "success",
-        summary: "Acción exitosa",
-        detail: res.message,
-        life: 3000,
-      });
-    },
-    error: (err) => console.log(err),
-    complete: () => {},
-  };
+    private messageService: MessageService,
+    private fb: FormBuilder
+  ) {
+    this.userForm = this.fb.group({
+      foto_perfil: [],
+      nombre: [],
+      apellido: [],
+      email: [],
+      password: [],
+    });
+  }
 
   getOrganizadores() {
     this.usuariosService.getOrganizadores().subscribe({
@@ -58,6 +56,15 @@ export class UsuariosComponent implements OnInit {
 
   ngOnInit() {
     this.getOrganizadores();
+  }
+
+  successMessage(msg: string) {
+    this.messageService.add({
+      severity: "success",
+      summary: "Acción exitosa",
+      detail: msg,
+      life: 3000,
+    });
   }
 
   openNew() {
@@ -87,18 +94,32 @@ export class UsuariosComponent implements OnInit {
   confirmDeleteSelected() {
     this.deleteUsersDialog = false;
 
-    this.selectedUsers.forEach((u) =>
-      this.usuariosService.deleteUsuario(u.id).subscribe(this.usuariosObserver)
-    );
+    this.usuariosService
+      .deleteUsuarios(this.selectedUsers.map((u) => u.id))
+      .subscribe({
+        next: console.log,
+        error: (err) => {
+          console.log("error");
+        },
+        complete: () => {
+          this.getOrganizadores();
+          this.successMessage("Organizadores Eliminados");
+        },
+      });
 
     this.selectedUsers = [];
   }
 
   confirmDelete() {
     this.deleteUserDialog = false;
-    this.usuariosService
-      .deleteUsuario(this.user.id)
-      .subscribe(this.usuariosObserver);
+    this.usuariosService.deleteUsuario(this.user.id).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.getOrganizadores();
+        this.successMessage("Organizador Eliminado");
+      },
+      error: (err) => console.log(err),
+    });
     this.user = {};
   }
 
@@ -111,5 +132,10 @@ export class UsuariosComponent implements OnInit {
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, "contains");
+  }
+
+  onUpload(event: any) {
+    console.log(event);
+    // this.uploadedUserImage = event.files
   }
 }
