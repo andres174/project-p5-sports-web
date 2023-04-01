@@ -4,7 +4,7 @@ import { Product } from 'src/app/demo/api/product';
 import { FormGroup, FormBuilder, Validators,FormControl } from '@angular/forms';
 import { DisciplinasService } from 'src/app/demo/service/disciplinas.service';
 import { DisciplinaInterface } from './disciplina_interface';
-import { log } from 'console';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-disciplinas',
@@ -140,6 +140,10 @@ deleteDisciplina(id: any) {
     }
   })
 }
+
+// onGlobalFilter(table: Table, event: Event) {
+//   table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+// }
 }
 
 
