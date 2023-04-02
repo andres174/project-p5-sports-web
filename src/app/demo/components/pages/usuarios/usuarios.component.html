@@ -73,7 +73,7 @@
             </th>
             <th>Foto de Perfil</th>
             <th pSortableColumn="email">
-              Email<p-sortIcon field="email"></p-sortIcon>
+              Correo Electrónico<p-sortIcon field="email"></p-sortIcon>
             </th>
             <th></th>
           </tr>
@@ -98,14 +98,14 @@
             <td style="width: 14%; min-width: 10rem">
               <span class="p-column-title">Foto de Perfil</span>
               <img
-                [src]="getUserImage(user)"
+                [src]="imgUrl + user.id + '/' + user.foto_perfil"
                 [alt]="user.name"
                 width="100"
                 class="shadow-4"
               />
             </td>
             <td style="width: 14%; min-width: 8rem">
-              <span class="p-column-title">Email</span>
+              <span class="p-column-title">Correo Electrónico</span>
               {{ user.email }}
             </td>
             <td>
@@ -138,44 +138,110 @@
       class="p-fluid"
     >
       <ng-template pTemplate="content">
-        <!-- <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="product.image"> -->
-        <img
-          [src]="getUserImage(user)"
-          [alt]="user.foto_perfil"
-          width="150"
-          class="mt-0 mx-auto mb-5 block shadow-2"
-          *ngIf="user.foto_perfil"
-        />
-        <div class="field">
-          <label for="nombre">Nombre</label>
-          <input
-            type="text"
-            pInputText
-            id="nombre"
-            [(ngModel)]="user.nombre"
-            required
-            autofocus
-            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !user.nombre }"
+        <form [formGroup]="userForm">
+          <img
+            [src]="
+              userImageSelectSrc ||
+              getUserImage(user) ||
+              '/assets/demo/images/avatar/default-user.svg'
+            "
+            alt="Foto de perfil"
+            width="150"
+            class="mt-1 mx-auto mb-5 block shadow-2"
           />
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.nombre"
-            >Name is required.</small
-          >
-        </div>
-        <div class="field">
-          <label for="apellido">Apellido</label>
-          <input
-            type="text"
-            pInputText
-            id="apellido"
-            [(ngModel)]="user.apellido"
-            required
-            autofocus
-            [ngClass]="{ 'ng-invalid ng-dirty': submitted && !user.apellido }"
-          />
-          <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.apellido"
-            >Name is required.</small
-          >
-        </div>
+
+          <div class="formgroup-inline">
+            <div class="field">
+              <p-fileUpload
+                #imgUpload
+                mode="basic"
+                chooseLabel="Subir Imagen"
+                (onSelect)="onImageSelect($event)"
+                (onClear)="onImageClear()"
+                [multiple]="false"
+                accept="image/*"
+                [auto]="false"
+                [maxFileSize]="100000"
+                uploadIcon="pi pi-image"
+                [disabled]="userImageSelectSrc != ''"
+              ></p-fileUpload>
+            </div>
+            <div class="field">
+              <button
+                pButton
+                pRipple
+                label="Cancelar"
+                icon="pi pi-times"
+                class="p-button mr-2"
+                (click)="imgUpload.clear()"
+                [disabled]="!userImageSelectSrc"
+              ></button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input
+              type="text"
+              pInputText
+              id="nombre"
+              formControlName="nombre"
+              required
+              autofocus
+              [ngClass]="{ 'ng-invalid ng-dirty': submitted && !user.nombre }"
+            />
+            <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.nombre"
+              >Name is required.</small
+            >
+          </div>
+          <div class="field">
+            <label for="apellido">Apellido</label>
+            <input
+              type="text"
+              pInputText
+              id="apellido"
+              formControlName="apellido"
+              required
+            />
+            <small
+              class="ng-dirty ng-invalid"
+              *ngIf="submitted && !user.apellido"
+              >Name is required.</small
+            >
+          </div>
+          <div class="field">
+            <label for="email">Correo Electrónico</label>
+            <input
+              type="text"
+              pInputText
+              id="email"
+              formControlName="email"
+              required
+            />
+            <small
+              class="ng-dirty ng-invalid"
+              *ngIf="submitted && !user.apellido"
+              >Name is required.</small
+            >
+          </div>
+          <div class="field">
+            <label for="password"
+              >Contraseña <small *ngIf="user.id">(Dejar vacio para no editar)</small></label
+            >
+            <input
+              type="text"
+              pInputText
+              id="password"
+              formControlName="password"
+              required
+            />
+            <small
+              class="ng-dirty ng-invalid"
+              *ngIf="submitted && !user.apellido"
+              >Name is required.</small
+            >
+          </div>
+        </form>
       </ng-template>
 
       <ng-template pTemplate="footer">

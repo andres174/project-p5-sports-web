@@ -10,6 +10,8 @@ import { RouterModule } from "@angular/router";
         {path:  'disciplinas', loadChildren:()=>import('./disciplinas/disciplinas.module').then(m => m.DisciplinasModule) },
         {path:  'configuracion', loadChildren:()=>import('./configuracion/configuracion.module').then(m=>m.ConfiguracionModule)},
         {path: "organizadores",loadChildren: () =>import("./usuarios/usuarios.module").then((m) => m.UsuariosModule),},
+        {path: "jugadores",loadChildren: () =>import("./jugadores/jugadores.module").then((m) => m.JugadoresModule),},
+        {path: "posiciones",loadChildren: () =>import("./posiciones/posiciones.module").then((m) => m.PosicionesModule),},
         { path: '**', redirectTo: '/notfound' }
     ])],
     exports: [RouterModule]
