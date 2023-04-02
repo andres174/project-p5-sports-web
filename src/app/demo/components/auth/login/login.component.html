@@ -11,7 +11,7 @@
 
                 <div>
                     <label for="email1" class="block text-900 text-xl font-medium mb-2">Correo electrónico</label>
-                    <input id="email1" type="text" placeholder="Email address" pInputText class="w-full md:w-30rem mb-5" style="padding:1rem">
+                    <input id="email1" [(ngModel)]="email" type="text" placeholder="Email address" pInputText class="w-full md:w-30rem mb-5" style="padding:1rem">
 
                     <label for="password1" class="block text-900 font-medium text-xl mb-2">Contraseña</label>
                     <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-5" inputStyleClass="w-full p-3 md:w-30rem"></p-password>
@@ -23,7 +23,7 @@
                         </div>
                         <a class="font-medium no-underline ml-2 text-right cursor-pointer" style="color: var(--primary-color)">Forgot password?</a> -->
                     </div>
-                    <button pButton pRipple label="Iniciar sesión" class="w-full p-3 text-xl" [routerLink]="['/']"></button>
+                    <button pButton pRipple label="Iniciar sesión" class="w-full p-3 text-xl" [routerLink]="['/']" (click)="login()"></button>
                 </div>
             </div>
         </div>
