@@ -51,5 +51,10 @@ export class LoginComponent implements  OnInit {
                 console.log(err);
             }
         });
+
+        /* 
+            En este componente hace falta revisar bien el tema de las rutas y demas detalles
+            No esta terminado en su totalidad, ni sus funcionalidades ni su diseño
+        */
     }
 }
