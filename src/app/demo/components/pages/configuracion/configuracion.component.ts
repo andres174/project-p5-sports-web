@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ConfiguracionInterface } from './configuracion.interface';
+import { ConfiguracionService } from 'src/app/demo/service/configuracion.service';
 
 @Component({
   selector: 'app-configuracion',
@@ -20,6 +22,7 @@ export class ConfiguracionComponent {
 
   configuracion:any
   cols: any[] = [];
+  idUsuario=3
 
   // product: Product = {};
 
@@ -31,6 +34,7 @@ export class ConfiguracionComponent {
   public formConfiguracion!:FormGroup
   constructor(
     private formBuilder:FormBuilder,
+    private configuracionService:ConfiguracionService
   )
   {
     this.formConfiguracion=formBuilder.group({
@@ -43,6 +47,11 @@ export class ConfiguracionComponent {
       ida_y_vuelta:           ['',[Validators.required]]
     })
   }
+
+  ngOnInit(): void {
+    this.showConfiguracion()
+  }
+
   hideDialog() {
     this.configuracionDialog = false;
     this.submitted = false;
@@ -68,24 +77,95 @@ export class ConfiguracionComponent {
       if (data) {
         this.isUpdate=true
         this.openNew()
-       // this.configuracion.controls['nombre'].setValue(data?.nombre)
+        this.formConfiguracion.controls['nombre'].setValue(data?.nombre)
+        this.formConfiguracion.controls['numero_grupos'].setValue(data?.numero_grupos)
+        this.formConfiguracion.controls['numero_miembros'].setValue(data?.numero_miembros)
+        this.formConfiguracion.controls['minutos_juego'].setValue(data?.minutos_juego)
+        this.formConfiguracion.controls['minutos_entre_partidos'].setValue(data?.minutos_entre_partidos)
+        this.formConfiguracion.controls['ida_y_vuelta'].setValue(data?.ida_y_vuelta)
+        this.formConfiguracion.controls['tarjetas'].setValue(data?.tarjetas)
       }
   }
   
   deleteConfiguracion(id: any) {
-    // this.disciplinasService.deleteDisciplina(id).subscribe({
-    //   next:(res)=>{
-    //     console.log(res);
-    //     this.showDisciplinas();
-    //   },
-    //   error:(err)=>{
-    //     console.log(err);
+    this.configuracionService.deleteConfiguracion(id).subscribe({
+      next:(res)=>{
+        console.log(res);
+        this.showConfiguracion()
+      },
+      error:(err)=>{
+        console.log(err);
         
-    //   }
-    // })
+      }
+    })
   }
   saveConfiguracion(){
-    //console.log(this.formConfiguracion.value.numero_grupos);
+    
+    if(this.formConfiguracion.valid){
+
+      let data: ConfiguracionInterface={
+        nombre:                 this.formConfiguracion.value.nombre,
+        numero_grupos:          this.formConfiguracion.value.numero_grupos , 
+        numero_miembros:        this.formConfiguracion.value.numero_miembros,
+        minutos_juego:          this.formConfiguracion.value.minutos_juego,
+        minutos_entre_partidos: this.formConfiguracion.value.minutos_entre_partidos,
+        tarjetas:               this.formConfiguracion.value.ida_y_vuelta,
+        ida_y_vuelta:           this.formConfiguracion.value.tarjetas,
+        id_organizador:3
+      }
+      this.configuracionService.saveConfiguracion(data).subscribe({
+        next:(res)=>{
+          console.log(res);
+
+        },
+        error:(err)=>{
+          console.log(err);
+        }
+      })
+    }
+    else{
+      this.formConfiguracion.markAllAsTouched()
+    }
+  }
+
+  showConfiguracion(){
+    this.configuracionService.showConfiguraciones().subscribe({
+      next:(res)=>{
+        this.configuracion=res
+        console.log(this.configuracion);
+      },
+      error:(err)=>{
+        console.log(err);
+      }
+    })
+  }
+
+  updateConfiguracion(){
+    if (this.formConfiguracion.valid) {
+      let data: ConfiguracionInterface={
+        nombre:                 this.formConfiguracion.value.nombre,
+        numero_grupos:          this.formConfiguracion.value.numero_grupos , 
+        numero_miembros:        this.formConfiguracion.value.numero_miembros,
+        minutos_juego:          this.formConfiguracion.value.minutos_juego,
+        minutos_entre_partidos: this.formConfiguracion.value.minutos_entre_partidos,
+        tarjetas:               this.formConfiguracion.value.ida_y_vuelta,
+        ida_y_vuelta:           this.formConfiguracion.value.tarjetas,
+        id_organizador:3
+      }
+      this.configuracionService.updateConfiguracion(data, this.idConfiguracionUpdate).subscribe({
+        next:(res)=>{
+          console.log(res);
+          this.hideDialog()
+          this.showConfiguracion()
+          this.formConfiguracion.reset()
+        },
+        error:(err)=>{
+          console.log(err);
+        }
+      })
+    } else {
+      this.formConfiguracion.markAllAsTouched()
+    }
   }
 
 }

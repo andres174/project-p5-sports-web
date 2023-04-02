@@ -35,11 +35,17 @@
                         </th>
                         <th pSortableColumn="code">Codigo <p-sortIcon field="code"></p-sortIcon></th>
                         <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Numero de grupos <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name"># de equipos por grupo <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Minutos de juego <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Minutos entre partidos <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Partidos de ida y vuelta <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="name">Tarjetas <p-sortIcon field="name"></p-sortIcon></th>
                         <!-- <th>Image</th> -->
                         <th></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-disciplinas>
+                <ng-template pTemplate="body" let-configuracion>
                     <tr >
                         <td>
                             <p-tableCheckbox ></p-tableCheckbox>
@@ -50,13 +56,31 @@
                         <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
                             {{configuracion.nombre}}
                         </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.numero_grupos}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.numero_miembros}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.minutos_juego}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.minutos_entre_partidos}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.ida_y_vuelta}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.tarjetas}}
+                        </td>
                         <!-- <td style="width:14%; min-width:10rem;"><span class="p-column-title">Image</span>
                             <img [src]="" width="100" class="shadow-4" />
                         </td> -->
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editConfiguracion(configuracion.id)" ></button>
-                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"(click)="deleteConfiguracion(configuracion.id)"></button>
+                                <button *ngIf="configuracion.id_organizador==idUsuario" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editConfiguracion(configuracion.id)" ></button>
+                                <button *ngIf="configuracion.id_organizador==idUsuario" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"(click)="deleteConfiguracion(configuracion.id)"></button>
                             </div>
                         </td>
                     </tr>
@@ -115,11 +139,11 @@
                     </div>
                     <div class="field">
                         <label for="name">El campeonato contara con partidos de ida y vuelta</label>
-                        <p-inputSwitch ></p-inputSwitch>
+                        <p-inputSwitch formControlName="ida_y_vuelta" ></p-inputSwitch>
                     </div>
                     <div class="field">
                         <label for="name">Se tomaran en cuenta las tarjetas dentro del capeonato</label>
-                        <p-inputSwitch ></p-inputSwitch>
+                        <p-inputSwitch formControlName="tarjetas" ></p-inputSwitch>
                     </div>
 
                    
@@ -131,7 +155,7 @@
             <ng-template pTemplate="footer">
                 <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()" ></button>
                 <button *ngIf="!isUpdate" pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveConfiguracion()"></button>
-                <!-- <button *ngIf="isUpdate" pButton pRipple label="Update" icon="pi pi-check" class="p-button-text" (click)="updateDisciplina()"></button> -->
+                <button *ngIf="isUpdate" pButton pRipple label="Update" icon="pi pi-check" class="p-button-text" (click)="updateConfiguracion()"></button>
             </ng-template>
         </p-dialog>
 
