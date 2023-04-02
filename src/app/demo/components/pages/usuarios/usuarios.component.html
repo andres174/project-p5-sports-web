@@ -98,7 +98,7 @@
             <td style="width: 14%; min-width: 10rem">
               <span class="p-column-title">Foto de Perfil</span>
               <img
-                [src]="getUserImage(user)"
+                [src]="imgUrl + user.id + '/' + user.foto_perfil"
                 [alt]="user.name"
                 width="100"
                 class="shadow-4"
@@ -139,41 +139,53 @@
     >
       <ng-template pTemplate="content">
         <form [formGroup]="userForm">
-          <div>{{ userForm.value | json }}</div>
           <img
-            [src]="getUserImage(user)"
-            [alt]="user.foto_perfil"
+            [src]="
+              userImageSelectSrc ||
+              getUserImage(user) ||
+              '/assets/demo/images/avatar/default-user.svg'
+            "
+            alt="Foto de perfil"
             width="150"
-            class="mt-0 mx-auto mb-5 block shadow-2"
-            *ngIf="user.foto_perfil"
+            class="mt-1 mx-auto mb-5 block shadow-2"
           />
 
-          <p-fileUpload
-          mode="basic"
-          url="https://www.primefaces.org/cdn/api/upload.php"
-            chooseLabel="Subir Imagen"
-            formGroupName="foto_perfil"
-            (onUpload)="onUpload($event)"
-            [multiple]="false"
-            accept="image/*"
-            [auto]="true"
-            [maxFileSize]="1000000"
-          >
-            <ng-template pTemplate="content">
-              <!-- <ul *ngIf="uploadedFiles.length">
-                <li *ngFor="let file of uploadedFiles">
-                  {{ file.name }} - {{ file.size }} bytes
-                </li>
-              </ul> -->
-            </ng-template>
-          </p-fileUpload>
+          <div class="formgroup-inline">
+            <div class="field">
+              <p-fileUpload
+                #imgUpload
+                mode="basic"
+                chooseLabel="Subir Imagen"
+                (onSelect)="onImageSelect($event)"
+                (onClear)="onImageClear()"
+                [multiple]="false"
+                accept="image/*"
+                [auto]="false"
+                [maxFileSize]="100000"
+                uploadIcon="pi pi-image"
+                [disabled]="userImageSelectSrc != ''"
+              ></p-fileUpload>
+            </div>
+            <div class="field">
+              <button
+                pButton
+                pRipple
+                label="Cancelar"
+                icon="pi pi-times"
+                class="p-button mr-2"
+                (click)="imgUpload.clear()"
+                [disabled]="!userImageSelectSrc"
+              ></button>
+            </div>
+          </div>
+
           <div class="field">
             <label for="nombre">Nombre</label>
             <input
               type="text"
               pInputText
               id="nombre"
-              formGroupName="nombre"
+              formControlName="nombre"
               required
               autofocus
               [ngClass]="{ 'ng-invalid ng-dirty': submitted && !user.nombre }"
@@ -188,7 +200,7 @@
               type="text"
               pInputText
               id="apellido"
-              formGroupName="apellido"
+              formControlName="apellido"
               required
             />
             <small
@@ -203,7 +215,7 @@
               type="text"
               pInputText
               id="email"
-              formGroupName="email"
+              formControlName="email"
               required
             />
             <small
@@ -213,12 +225,14 @@
             >
           </div>
           <div class="field">
-            <label for="password">Contraseña</label>
+            <label for="password"
+              >Contraseña <small *ngIf="user.id">(Dejar vacio para no editar)</small></label
+            >
             <input
               type="text"
               pInputText
               id="password"
-              formGroupName="password"
+              formControlName="password"
               required
             />
             <small
