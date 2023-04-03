@@ -30,4 +30,10 @@ export class ConfiguracionService {
   deleteConfiguracion(id:any){
     return this.http.delete<any>(`${environment.apiUrl}configuracion/${id}`)
   }
+  
+  deleteSelectConfiguracion(ids:any){
+    const params= new FormData();
+    params.append('ids',ids)
+      return this.http.post<any>(`${environment.apiUrl}deleteSelectConfiguracion`,params)
+  }
 }

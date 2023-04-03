@@ -18,7 +18,9 @@ export class ConfiguracionComponent {
 
   deleteConfiguracionDialog: boolean = false;
 
-  deleteConfigutacionDialog: boolean = false;
+  deleteConfiguracionesDialog: boolean = false;
+
+  selectedConfig:[]=[]
 
   configuracion:any
   cols: any[] = [];
@@ -30,11 +32,14 @@ export class ConfiguracionComponent {
   
   isUpdate:boolean=false;
   idConfiguracionUpdate:any
+  idConfiguracionDelete:any
+  grupoConfiguracion:any
 
   public formConfiguracion!:FormGroup
   constructor(
     private formBuilder:FormBuilder,
-    private configuracionService:ConfiguracionService
+    private configuracionService:ConfiguracionService,
+    private messageService: MessageService,
   )
   {
     this.formConfiguracion=formBuilder.group({
@@ -52,6 +57,24 @@ export class ConfiguracionComponent {
     this.showConfiguracion()
   }
 
+  successMessage(msg: string) {
+    this.messageService.add({
+      severity: "success",
+      summary: "Acción exitosa",
+      detail: msg,
+      life: 3000,
+    });
+  }
+
+  errorMessage(msg: string) {
+    this.messageService.add({
+      severity: "error",
+      summary: "Ocurrio un Error",
+      detail: msg,
+      life: 3000,
+    });
+  }
+
   hideDialog() {
     this.configuracionDialog = false;
     this.submitted = false;
@@ -66,8 +89,18 @@ export class ConfiguracionComponent {
     this.configuracionDialog = true;
   }
   
-  deleteSelectedProducts() {
-    this.deleteConfiguracionDialog = true;
+  confirmDeleteSelected() {
+    this.grupoConfiguracion=this.selectedConfig.map((u:any) =>u.id)
+    this.configuracionService.deleteSelectConfiguracion(this.grupoConfiguracion).subscribe({
+      next: (res)=>{
+        this.successMessage(res.message)
+        this.deleteConfiguracionesDialog = false;
+        this.showConfiguracion()
+      },
+      error:(err)=>{
+        this.errorMessage(err)
+      }
+    })
   }
 
   editConfiguracion(id:any) {
@@ -87,15 +120,20 @@ export class ConfiguracionComponent {
       }
   }
   
-  deleteConfiguracion(id: any) {
-    this.configuracionService.deleteConfiguracion(id).subscribe({
+  deleteConfiguracion(id:any){
+    this.deleteConfiguracionDialog=true
+    this.idConfiguracionDelete=id
+  }
+
+  confirmDelete() {
+    this.configuracionService.deleteConfiguracion(this.idConfiguracionDelete).subscribe({
       next:(res)=>{
-        console.log(res);
+        this.successMessage(res.message)
+        this.deleteConfiguracionDialog=false
         this.showConfiguracion()
       },
       error:(err)=>{
-        console.log(err);
-        
+        this.errorMessage(err)
       }
     })
   }
@@ -115,7 +153,7 @@ export class ConfiguracionComponent {
       }
       this.configuracionService.saveConfiguracion(data).subscribe({
         next:(res)=>{
-          console.log(res);
+          this.successMessage(res.message)
 
         },
         error:(err)=>{
@@ -154,7 +192,7 @@ export class ConfiguracionComponent {
       }
       this.configuracionService.updateConfiguracion(data, this.idConfiguracionUpdate).subscribe({
         next:(res)=>{
-          console.log(res);
+          this.successMessage(res.message)
           this.hideDialog()
           this.showConfiguracion()
           this.formConfiguracion.reset()
@@ -168,4 +206,7 @@ export class ConfiguracionComponent {
     }
   }
 
+  deletedSelectedConfig(){
+      this.deleteConfiguracionesDialog=true
+  }
 }
