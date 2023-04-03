@@ -24,6 +24,11 @@
             ></button>
           </div>
         </ng-template>
+        <ng-template pTemplate="center">
+          <div class="mx-4" *ngIf="loading">
+            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+          </div>
+        </ng-template>
       </p-toolbar>
       <p-table
         #dt
@@ -191,10 +196,8 @@
               formControlName="nombre"
               required
               autofocus
+              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('nombre')?.touched && userForm.get('nombre')?.errors?.['required']}"
             />
-            <!-- [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('nombre')?.touched || userForm.get('nombre')?.errors?.['required']
-              || userForm.get('nombre')?.errors?.['pattern']
-          || userForm.get('nombre')?.errors?.['minlength']}" -->
             <small
               class="ng-dirty ng-invalid block"
               *ngIf="userForm.get('nombre')?.touched && userForm.get('nombre')?.errors?.['required']"
@@ -220,6 +223,7 @@
               id="apellido"
               formControlName="apellido"
               required
+              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('apellido')?.touched && userForm.get('apellido')?.errors?.['required']}"
             />
             <small
               class="ng-dirty ng-invalid block"
@@ -246,6 +250,7 @@
               id="email"
               formControlName="email"
               required
+              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('email')?.touched && userForm.get('email')?.errors?.['required']}"
             />
             <small
               class="ng-dirty ng-invalid block"
@@ -262,13 +267,14 @@
           <div class="field">
             <label for="password"
               >Contraseña
-              <small *ngIf="user.id">(Dejar vacio para no editar)</small></label
-            >
+              <small *ngIf="user.id">(Dejar vacio para no editar)</small>
+            </label>
             <p-password
               formControlName="password"
               id="password"
               [feedback]="false"
               [toggleMask]="true"
+              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('password')?.touched && userForm.get('password')?.errors?.['required']}"
             ></p-password>
             <small
               class="ng-dirty ng-invalid block"
