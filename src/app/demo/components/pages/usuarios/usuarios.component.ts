@@ -21,14 +21,12 @@ export class UsuariosComponent implements OnInit {
   user: UsuarioInterface = {};
   selectedUsers: UsuarioInterface[] = [];
 
-  imgUrl: string = environment.userUrl;
-
   submitted: boolean = false;
 
   userForm: FormGroup;
 
-  userImageSelectSrc: string = "";
-  userImageSelectFile: File | any;
+  selectedImageSrc: string = "";
+  selectedImageFile: File | any;
 
   constructor(
     private usuariosService: UsuariosService,
@@ -41,7 +39,7 @@ export class UsuariosComponent implements OnInit {
         [
           Validators.required,
           Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),
-          Validators.minLength(4),
+          Validators.minLength(2),
         ],
       ],
       apellido: [
@@ -49,19 +47,21 @@ export class UsuariosComponent implements OnInit {
         [
           // Validators.required,
           Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),
-          Validators.minLength(4),
+          Validators.minLength(2),
         ],
       ],
       email: ["", [Validators.required, Validators.email]],
       password: ["", [Validators.minLength(8)]],
     });
+    console.log(this.userForm.get("nombre")?.errors);
+
+    this.openNew();
   }
 
   getOrganizadores() {
-    this.usuariosService.getOrganizadores().subscribe({
+    this.usuariosService.mostrarOrganizadores().subscribe({
       next: (res) => {
         this.users = res;
-        // console.log(this.users);
       },
     });
   }
@@ -90,8 +90,21 @@ export class UsuariosComponent implements OnInit {
 
   openNew() {
     this.userForm.reset();
+    this.userForm.get("password")?.addValidators(Validators.required);
     this.user = {};
     this.submitted = false;
+    this.userDialog = true;
+  }
+
+  editUser(user: UsuarioInterface) {
+    this.user = { ...user };
+    this.userForm.patchValue({ ...user });
+    this.userForm.controls["password"].setValue("");
+    this.userForm.get("password")?.removeValidators(Validators.required);
+
+    this.clearSelectedImage();
+    // console.log(user);
+    // console.log(this.userForm);
     this.userDialog = true;
   }
 
@@ -103,19 +116,6 @@ export class UsuariosComponent implements OnInit {
 
   deleteSelectedUsers() {
     this.deleteUsersDialog = true;
-  }
-
-  editUser(user: UsuarioInterface) {
-    this.user = { ...user };
-    this.userForm.patchValue({ ...user });
-    this.userForm.controls["password"].setValue("");
-
-    this.clearSelectedImage();
-
-    // console.log(user);
-    // console.log(this.userForm);
-
-    this.userDialog = true;
   }
 
   deleteUser(user: UsuarioInterface) {
@@ -162,8 +162,8 @@ export class UsuariosComponent implements OnInit {
   saveUser() {}
 
   clearSelectedImage() {
-    this.userImageSelectSrc = "";
-    this.userImageSelectFile = undefined;
+    this.selectedImageSrc = "";
+    this.selectedImageFile = undefined;
   }
 
   onGlobalFilter(table: Table, event: Event) {
@@ -171,12 +171,12 @@ export class UsuariosComponent implements OnInit {
   }
 
   onImageSelect(event: any) {
-    console.log(event);
-    this.userImageSelectFile = event.currentFiles[0];
-    if (!this.userImageSelectFile) return;
-    const fr = new FileReader();
-    fr.onload = (e: any) => (this.userImageSelectSrc = e.currentTarget.result);
-    fr.readAsDataURL(this.userImageSelectFile);
+    this.selectedImageFile = event.files[0];
+    if (!this.selectedImageFile) return;
+    const reader = new FileReader();
+    reader.onloadend = (e: any) =>
+      (this.selectedImageSrc = e.currentTarget.result);
+    reader.readAsDataURL(this.selectedImageFile);
   }
 
   onImageClear() {

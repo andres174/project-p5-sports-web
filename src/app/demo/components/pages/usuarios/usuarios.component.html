@@ -98,7 +98,10 @@
             <td style="width: 14%; min-width: 10rem">
               <span class="p-column-title">Foto de Perfil</span>
               <img
-                [src]="imgUrl + user.id + '/' + user.foto_perfil"
+                [src]="
+                  getUserImage(user) ||
+                  '/assets/demo/images/avatar/default-user.svg'
+                "
                 [alt]="user.name"
                 width="100"
                 class="shadow-4"
@@ -141,7 +144,7 @@
         <form [formGroup]="userForm">
           <img
             [src]="
-              userImageSelectSrc ||
+              selectedImageSrc ||
               getUserImage(user) ||
               '/assets/demo/images/avatar/default-user.svg'
             "
@@ -163,7 +166,7 @@
                 [auto]="false"
                 [maxFileSize]="100000"
                 uploadIcon="pi pi-image"
-                [disabled]="userImageSelectSrc != ''"
+                [disabled]="selectedImageSrc != ''"
               ></p-fileUpload>
             </div>
             <div class="field">
@@ -174,7 +177,7 @@
                 icon="pi pi-times"
                 class="p-button mr-2"
                 (click)="imgUpload.clear()"
-                [disabled]="!userImageSelectSrc"
+                [disabled]="!selectedImageSrc"
               ></button>
             </div>
           </div>
@@ -188,12 +191,27 @@
               formControlName="nombre"
               required
               autofocus
-              [ngClass]="{ 'ng-invalid ng-dirty': submitted && !user.nombre }"
             />
-            <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.nombre"
-              >Name is required.</small
-            >
+            <!-- [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('nombre')?.touched || userForm.get('nombre')?.errors?.['required']
+              || userForm.get('nombre')?.errors?.['pattern']
+          || userForm.get('nombre')?.errors?.['minlength']}" -->
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="userForm.get('nombre')?.touched && userForm.get('nombre')?.errors?.['required']"
+              >El nombre es requerido.
+            </small>
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="userForm.get('nombre')?.errors?.['pattern']"
+              >Solo se aceptan letras.
+            </small>
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="userForm.get('nombre')?.touched && userForm.get('nombre')?.errors?.['minlength']"
+              >El mínimo de caracteres debe ser 2.
+            </small>
           </div>
+
           <div class="field">
             <label for="apellido">Apellido</label>
             <input
@@ -204,11 +222,22 @@
               required
             />
             <small
-              class="ng-dirty ng-invalid"
-              *ngIf="submitted && !user.apellido"
-              >Name is required.</small
-            >
+              class="ng-dirty ng-invalid block"
+              *ngIf="userForm.get('apellido')?.touched && userForm.get('apellido')?.errors?.['required']"
+              >El apellido es requerido.
+            </small>
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="userForm.get('apellido')?.errors?.['pattern']"
+              >Solo se aceptan letras.
+            </small>
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="userForm.get('apellido')?.touched && userForm.get('apellido')?.errors?.['minlength']"
+              >El mínimo de caracteres debe ser 2.
+            </small>
           </div>
+
           <div class="field">
             <label for="email">Correo Electrónico</label>
             <input
@@ -219,27 +248,38 @@
               required
             />
             <small
-              class="ng-dirty ng-invalid"
-              *ngIf="submitted && !user.apellido"
-              >Name is required.</small
-            >
+              class="ng-dirty ng-invalid block"
+              *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors?.['required']"
+              >El correo electrónico es requerido.
+            </small>
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors?.['email']"
+              >Ingrese el correo electrónico en un formato correcto.
+            </small>
           </div>
+
           <div class="field">
             <label for="password"
-              >Contraseña <small *ngIf="user.id">(Dejar vacio para no editar)</small></label
+              >Contraseña
+              <small *ngIf="user.id">(Dejar vacio para no editar)</small></label
             >
-            <input
-              type="text"
-              pInputText
-              id="password"
+            <p-password
               formControlName="password"
-              required
-            />
+              id="password"
+              [feedback]="false"
+              [toggleMask]="true"
+            ></p-password>
             <small
-              class="ng-dirty ng-invalid"
-              *ngIf="submitted && !user.apellido"
-              >Name is required.</small
-            >
+              class="ng-dirty ng-invalid block"
+              *ngIf="userForm.get('password')?.touched && userForm.get('password')?.errors?.['required']"
+              >La contraseña es requerida.
+            </small>
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="userForm.get('password')?.touched && userForm.get('password')?.errors?.['minlength']"
+              >El mínimo de caracteres debe ser 8.
+            </small>
           </div>
         </form>
       </ng-template>
