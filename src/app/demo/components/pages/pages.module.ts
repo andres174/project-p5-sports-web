@@ -3,11 +3,13 @@ import { CommonModule } from "@angular/common";
 import { PagesRoutingModule } from "./pages-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { JugadoresComponent } from './jugadores/jugadores.component';
+import { GruposComponent } from './grupos/grupos.component';
 
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
-    JugadoresComponent
+    JugadoresComponent,
+    GruposComponent
   ],
   imports: [CommonModule, PagesRoutingModule],
 })
