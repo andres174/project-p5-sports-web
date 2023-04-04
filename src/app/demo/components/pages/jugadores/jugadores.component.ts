@@ -20,11 +20,13 @@ export class JugadoresComponent {
   deleteProductsDialog: boolean = false;
 
   jugadores:any
-
-  file: File | any;
+  selectedConfig:[]=[]
 
   cols: any[] = [];
+  file: File | any;
 
+  jugador: any[] = [];
+  idUsuario=3
   product: Product = {};
 
   selectedProducts: Product[] = [];
@@ -33,19 +35,23 @@ export class JugadoresComponent {
 
   fileSelect:any;
 
-  idDisciplinaUpdate:any
+  idJugadoresUpdate:any
+
 
   imagen:any;
+
+  idJugadoresDelete:any
 
   public formJugadores!: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
-    private jugadoresService: JugadoresService
+    private jugadoresService: JugadoresService,
+    private messageService: MessageService,
   ) {
     this.formJugadores= formBuilder.group({
       nombre:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]],
       apellido:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]],
-      cedula:['',[Validators.required,Validators.minLength(10),]],
+      cedula:['',[Validators.required]],
       foto: ['', [Validators.required]]
     })
   }
@@ -54,7 +60,72 @@ export class JugadoresComponent {
     this.showJugadores()
   }
 
-  savePosiciones(){
+  successMessage(msg: string) {
+    this.messageService.add({
+      severity: "success",
+      summary: "Acción exitosa",
+      detail: msg,
+      life: 3000,
+    });
+  }
+
+  errorMessage(msg: string) {
+    this.messageService.add({
+      severity: "error",
+      summary: "Ocurrio un Error",
+      detail: msg,
+      life: 3000,
+    });
+  }
+
+  hideDialog() {
+    this.jugadoresDialog = false;
+    this.submitted = false;
+    if(this.isUpdate==true){
+      this.formJugadores.reset()
+      this.isUpdate=false
+    }
+  }
+  openNew() {
+    //this.product = {};
+    this.submitted = false;
+    this.jugadoresDialog = true;
+  }
+  
+
+
+  editJugadores(id:any) {
+    this.idJugadoresUpdate=id
+      let data =this.jugadores.find( (e:any) =>e.id==id)
+      console.log(data);
+      if (data) {
+        this.isUpdate=true
+        this.openNew()
+        this.formJugadores.controls['nombre'].setValue(data?.nombre)
+        this.formJugadores.controls['apelido'].setValue(data?.apellido)
+        this.formJugadores.controls['cedula'].setValue(data?.cedula)
+      }
+  }
+  
+  deleteJugador(id:any){
+    this.deletejugadoresDialog=true
+    this.idJugadoresDelete=id
+  }
+
+  confirmDelete() {
+    this.jugadoresService.deleteJugadores(this.idJugadoresDelete).subscribe({
+      next:(res)=>{
+        this.successMessage(res.message)
+        this.deletejugadoresDialog=false
+        this.showJugadores()
+      },
+      error:(err)=>{
+        this.errorMessage(err)
+      }
+    })
+  }
+
+  saveJugadores(){
     if (this.formJugadores.valid) {
      let data : JugadoresInterface={
        nombre:this.formJugadores.value.nombre,
@@ -91,39 +162,8 @@ showJugadores(){
   })
  }
 
- hideDialog() {
-  this.jugadoresDialog = false;
-  this.submitted = false;
-  if(this.isUpdate==true){
-    this.formJugadores.reset()
-    this.isUpdate=false
-  }
-}
 
-openNew() {
-  //this.product = {};
-  this.submitted = false;
-  this.jugadoresDialog = true;
-}
-
-deleteSelectedProducts() {
-  this.deleteProductsDialog = true;
-}
-
-editDisciplina(id:any) {
-  this.idDisciplinaUpdate=id
-    let data =this.jugadores.find( (e:any) =>e.id==id)
-    console.log(data);
-    if (data) {
-      this.isUpdate=true
-      this.openNew()
-      this.formJugadores.controls['nombre'].setValue(data?.nombre),
-      this.formJugadores.controls['apellido'].setValue(data?.apellido),
-      this.formJugadores.controls['cedula'].setValue(data?.cedula)     
-    }
-}
-
-updateDisciplina(){
+updateJugadores(){
   if (this.formJugadores.valid) {
     let data : JugadoresInterface={
         nombre:this.formJugadores.value.nombre,
@@ -131,7 +171,7 @@ updateDisciplina(){
         cedula:this.formJugadores.value.cedula,
         foto: this.file
     }
-    this.jugadoresService.updateJugadores(data,this.idDisciplinaUpdate).subscribe({
+    this.jugadoresService.updateJugadores(data,this.idJugadoresUpdate).subscribe({
       next:(res)=>{
         console.log(res);
         this.hideDialog()
@@ -148,7 +188,14 @@ updateDisciplina(){
    }
 }
 
-deleteDisciplina(id: any) {
+deleteSelectedJugadores() {
+  this.deleteProductsDialog = true;
+}
+
+
+
+
+deleteJugadores(id: any) {
   this.jugadoresService.deleteJugadores(id).subscribe({
     next:(res)=>{
       console.log(res);

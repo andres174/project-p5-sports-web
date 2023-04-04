@@ -209,4 +209,5 @@ export class ConfiguracionComponent {
   deletedSelectedConfig(){
       this.deleteConfiguracionesDialog=true
   }
+  
 }
