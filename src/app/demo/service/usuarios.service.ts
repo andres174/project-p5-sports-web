@@ -9,12 +9,41 @@ import { forkJoin } from "rxjs";
 export class UsuariosService {
   constructor(private http: HttpClient) {}
 
-  getUsuarios() {
+  mostrarUsuarios() {
     return this.http.get<any>(`${environment.apiUrl}usuarios`);
   }
 
-  getOrganizadores() {
+  mostrarOrganizadores() {
     return this.http.get<any>(`${environment.apiUrl}organizadores`);
+  }
+
+  guardarUsuario(form: any) {
+    return this.http.post<any>(`${environment.apiUrl}usuarios`, form);
+  }
+
+  updateUsuario(form: any, id: any) {
+    return this.http.put<any>(`${environment.apiUrl}usuarios/${id}`, form);
+  }
+
+  updateEmailUsuario(form: any, id: any) {
+    return this.http.post<any>(
+      `${environment.apiUrl}edit-email-usuario/${id}`,
+      form
+    );
+  }
+
+  updatePasswordUsuario(form: any, id: any) {
+    return this.http.post<any>(
+      `${environment.apiUrl}edit-password-usuario/${id}`,
+      form
+    );
+  }
+
+  updateFotoPerfilUsuario(form: FormData, id: any) {
+    return this.http.post<any>(
+      `${environment.apiUrl}edit-foto-usuario/${id}`,
+      form
+    );
   }
 
   deleteUsuario(id: any) {

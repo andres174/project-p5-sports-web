@@ -15,9 +15,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
+
 @NgModule({
     declarations: [
-        AppComponent, NotfoundComponent, 
+        AppComponent, NotfoundComponent,
     ],
     imports: [
         AppRoutingModule,

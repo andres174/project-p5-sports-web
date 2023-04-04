@@ -7,7 +7,7 @@ import { JugadoresComponent } from './jugadores/jugadores.component';
 @NgModule({
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
-    JugadoresComponent
+    JugadoresComponent,
   ],
   imports: [CommonModule, PagesRoutingModule],
 })
