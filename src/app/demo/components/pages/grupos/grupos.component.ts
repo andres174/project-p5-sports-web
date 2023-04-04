@@ -6,7 +6,8 @@ import { ProductService } from 'src/app/demo/service/product.service';
 
 @Component({
   selector: 'app-grupos',
-  templateUrl: './grupos.component.html'
+  templateUrl: './grupos.component.html',
+  providers: [MessageService]
 })
 export class GruposComponent {
 

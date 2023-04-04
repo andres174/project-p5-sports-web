@@ -9,7 +9,7 @@ const routes: Routes = [];
   imports: [RouterModule.forChild([
     {
       path: '', 
-      component:GruposComponent
+      component: GruposComponent
     }
   ])],
   exports: [RouterModule]
