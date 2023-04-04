@@ -28,4 +28,10 @@ export class DisciplinasService {
     deleteDisciplina(id:any){
       return this.http.delete<any>(`${environment.apiUrl}disciplinas/${id}`)
     }
+
+    deleteSelectDisciplinas(ids:any){
+      const params= new FormData();
+      params.append('ids',ids)
+        return this.http.post<any>(`${environment.apiUrl}deleteSelectDisciplina`,params)
+    }
 }

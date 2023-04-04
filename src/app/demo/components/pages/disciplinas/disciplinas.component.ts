@@ -19,22 +19,25 @@ export class DisciplinasComponent {
 
   deletedisciplinaDialog: boolean = false;
 
-  deleteProductsDialog: boolean = false;
+  deleteDisciplinasDialog: boolean = false;
 
   disciplinas:any
   cols: any[] = [];
 
   product: Product = {};
 
-  selectedProducts: Product[] = [];
+  selectedDisciplinas: Product[] = [];
   
   isUpdate:boolean=false;
   idDisciplinaUpdate:any
+  idDisciplinaDelete:any
+
 
   public formDisciplinas!: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
-    private disciplinasService: DisciplinasService
+    private disciplinasService: DisciplinasService,
+    private messageService:MessageService
   ) {
     this.formDisciplinas= formBuilder.group({
       nombre:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]]
@@ -45,6 +48,24 @@ export class DisciplinasComponent {
     this.showDisciplinas()
   }
 
+  successMessage(msg: string) {
+    this.messageService.add({
+      severity: "success",
+      summary: "Acción exitosa",
+      detail: msg,
+      life: 3000,
+    });
+  }
+
+  errorMessage(msg: string) {
+    this.messageService.add({
+      severity: "error",
+      summary: "Ocurrio un Error",
+      detail: msg,
+      life: 3000,
+    });
+  }
+
 saveDisciplina(){
  if (this.formDisciplinas.valid) {
   let data : DisciplinaInterface={
@@ -52,13 +73,14 @@ saveDisciplina(){
   }
   this.disciplinasService.guardarDisciplina(data).subscribe({
     next:(res)=>{
-      console.log(res);
+      this.successMessage(res.message)
+     
       this.hideDialog();
       this.formDisciplinas.reset()
       
     },
     error:(err)=>{
-      console.log(err);
+      this.errorMessage(err)
       
     }
   })
@@ -92,8 +114,8 @@ openNew() {
   this.disciplinaDialog = true;
 }
 
-deleteSelectedProducts() {
-  this.deleteProductsDialog = true;
+deleteSelectedDisciplinas() {
+  this.deleteDisciplinasDialog = true;
 }
 
 editDisciplina(id:any) {
@@ -114,13 +136,13 @@ updateDisciplina(){
     }
     this.disciplinasService.updateDisciplinas(data,this.idDisciplinaUpdate).subscribe({
       next:(res)=>{
-        console.log(res);
+        this.successMessage(res.message)
         this.hideDialog()
         this.formDisciplinas.reset()
         this.showDisciplinas()
       },
       error:(err)=>{
-        console.log(err);
+        this.errorMessage(err)
         
       }
     })
@@ -128,14 +150,21 @@ updateDisciplina(){
      this.formDisciplinas.markAllAsTouched();
    }
 }
+
 deleteDisciplina(id: any) {
-  this.disciplinasService.deleteDisciplina(id).subscribe({
+  this.idDisciplinaDelete=id
+  this.deletedisciplinaDialog=true
+}
+
+confirmDelete(){
+  this.disciplinasService.deleteDisciplina(this.idDisciplinaDelete).subscribe({
     next:(res)=>{
-      console.log(res);
+      this.successMessage(res.message)
+      this.disciplinaDialog=false
       this.showDisciplinas();
     },
     error:(err)=>{
-      console.log(err);
+      this.errorMessage(err)
       
     }
   })
@@ -144,6 +173,22 @@ deleteDisciplina(id: any) {
 // onGlobalFilter(table: Table, event: Event) {
 //   table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
 // }
+
+confirmDeleteSelectedDisciplinas() {
+  let grupoDsiciplinas=this.selectedDisciplinas.map((dis:any)=>dis.id)
+  this.disciplinasService.deleteSelectDisciplinas(grupoDsiciplinas).subscribe({
+    next:(res)=>{
+        this.successMessage(res.message)
+        this.deleteDisciplinasDialog=false
+        this.showDisciplinas
+    },
+    error:(err)=>{
+        this.errorMessage(err)
+    }
+
+  })
+}
+
 }
 
 
