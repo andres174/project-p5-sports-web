@@ -4,6 +4,7 @@ import { Product } from 'src/app/demo/api/product';
 import { FormGroup, FormBuilder, Validators,FormControl } from '@angular/forms';
 import { JugadoresService } from 'src/app/demo/service/jugadores.service';
 import { JugadoresInterface } from './jugadores-interface';
+import { environment } from "src/environments/environment";
 
 @Component({
   selector: 'app-jugadores',
@@ -41,7 +42,7 @@ selectedJugadores: Product[] = [];
     this.formJugadores= formBuilder.group({
       nombre:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]],
       apellido:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]],
-      cedula:['',[Validators.required]],
+      cedula:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]],
     })
   }
 
@@ -84,6 +85,8 @@ selectedJugadores: Product[] = [];
        },
        error:(err)=>{
       this.errorMessage(err)
+      console.log(err)
+      debugger
          
        }
      })
@@ -183,6 +186,12 @@ confirmDelete() {
       this.errorMessage(err)
     }
   })
+}
+
+getUserImage(jugar: JugadoresInterface) {
+  if (jugar.foto)
+    return `${environment.userUrl}${jugar.id}/${jugar.foto}`;
+  else return "";
 }
 
 
