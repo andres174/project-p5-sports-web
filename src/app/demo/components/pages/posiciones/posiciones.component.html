@@ -8,7 +8,7 @@
                 <ng-template pTemplate="left">
                     <div class="my-2">
                         <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deletedSelectedPosiciones()" [disabled]="!selectedPosicion || !selectedPosicion.length"></button>
+                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deletedSelectedPosiciones()" [disabled]="!selectedPosiciones || !selectedPosiciones.length"></button>
                     </div>
                 </ng-template>
 
@@ -18,10 +18,10 @@
                 </ng-template> -->
             </p-toolbar>
            <!-- tabla con datos  -->
-            <p-table  #dt [value]="posiciones" [columns]="cols" responsiveLayout="scroll"  [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="10" [paginator]="false" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedPosicion"selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table  #dt [value]="posiciones" [columns]="cols" responsiveLayout="scroll"  [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="10" [paginator]="false" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedPosiciones" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Tabla de Posiciones</h5>
+                        <h5 class="m-0">Posiciones</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text"  placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -31,34 +31,32 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem">
-                            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+                            
                         </th>
                         <th pSortableColumn="code">Codigo <p-sortIcon field="code"></p-sortIcon></th>
-                        <th pSortableColumn="name">posiciones <p-sortIcon field="name"></p-sortIcon></th>
-
+                        <th pSortableColumn="name">Posicion <p-sortIcon field="name"></p-sortIcon></th>
                         <!-- <th>Image</th> -->
                         <th></th>
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-Posicion>
+                <ng-template pTemplate="body" let-posiciones>
                     <tr >
                         <td>
-                            <p-tableCheckbox [value]="Posicion" *ngIf="Posicion.id_organizador==idUsuario"></p-tableCheckbox>
+                            <p-tableCheckbox [value]="posiciones" ></p-tableCheckbox>
                         </td>
                         <td style="width:14%; min-width:10rem;"><span class="p-column-title">code</span>
-                            {{Posicion.id}}
+                            {{posiciones.id}}
                         </td>
                         <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
-                            {{Posicion.descripcion}}
+                            {{posiciones.descripcion}}
                         </td>
-                      
                         <!-- <td style="width:14%; min-width:10rem;"><span class="p-column-title">Image</span>
                             <img [src]="" width="100" class="shadow-4" />
                         </td> -->
                         <td>
                             <div class="flex">
-                                <button *ngIf="Posicion.id_organizador==idUsuario" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPosiciones(Posicion.id)" ></button>
-                                <button *ngIf="Posicion.id_organizador==idUsuario" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"(click)="deletePosiciones(Posicion.id)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPosiciones(posiciones.id)" ></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"(click)="deletePosiciones(posiciones.id)"></button>
                             </div>
                         </td>
                     </tr>
@@ -66,19 +64,18 @@
             </p-table>
         </div>
         <!-- modal -->
-        <p-dialog [(visible)]="posicionesDialog" [style]="{width: '450px'}" header="Disciplinas" [modal]="true" class="p-fluid">
+        <p-dialog [(visible)]="posicionesDialog" [style]="{width: '450px'}" header="Posiciones" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
                 <form [formGroup]="formPosiciones">
                     <div class="field">
                         <!-- <img [src]="'assets/demo/images/product/' + product.image" [alt]="product.image" width="150" class="mt-0 mx-auto mb-5 block shadow-2" *ngIf="product.image"> -->
-                        <label for="name">Ingrese el nombre de la disciplina</label>
+                        <label for="name">Ingrese la posiciones del Jugador</label>
                         <input type="text" pInputText id="name" required autofocus [ngClass]="{' ng-dirty' : formPosiciones.get('descripcion')?.touched || formPosiciones.get('descripcion')?.errors?.['required'] ||formPosiciones.get('descripcion')?.errors?.['pattern'] || formPosiciones.get('descripcion')?.errors?.['minLength'] }" formControlName="descripcion"/>
-                       <div>
                         <small class="ng-dirty ng-invalid" *ngIf="formPosiciones.get('descripcion')?.touched && formPosiciones.get('descripcion')?.errors?.['required']">El nombre es requerido</small>
                         <small class="ng-dirty ng-invalid" *ngIf=" formPosiciones.get('descripcion')?.errors?.['pattern']">Solo se aceptan letras</small>
                         <small class="ng-dirty ng-invalid" *ngIf=" formPosiciones.get('descripcion')?.errors?.['minlength']">El minimo de caracteres debe ser 4</small>
-                       </div>
-                    </div>                  
+                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
+                    </div>
                 </form>
                 
                 
@@ -94,7 +91,7 @@
         <p-dialog [(visible)]="deleteposicionesDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span >Esta seguro de que desea eliminar esta configuracion ?</span>
+                <span *ngIf="product">Estas seguro de quere eliminar esta Posicion</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteposicionesDialog = false"></button>
@@ -102,14 +99,14 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="deleteProductsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+        <p-dialog [(visible)]="deletePosicioneDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Are you sure you want to delete selected products?</span>
+                <span>Esta seguro de querer eliminar las posiciones seleccionadss?</span>
             </div>
             <ng-template pTemplate="footer"> 
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteProductsDialog = false"></button>
-              
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletePosicioneDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelectedPosiciones()"></button>
             </ng-template>
         </p-dialog>
     </div>

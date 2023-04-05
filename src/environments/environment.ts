@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   apiUrl:'http://127.0.0.1:8000/api/',
-  userUrl:'http://127.0.0.1:8000/storage/foto/usuario/'
+  userUrl:'http://127.0.0.1:8000/storage/foto/usuario/',
+  jugUrl:'http://127.0.0.1:8000/storage/foto/jugador/'
 };
 
 /*

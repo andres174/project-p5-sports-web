@@ -28,4 +28,10 @@ export class PosicionesService {
   deletePosiciones(id:any){
     return this.http.delete<any>(`${environment.apiUrl}posiciones/${id}`)
   }
+
+  deleteSelectPosiciones(ids:any){
+    const params= new FormData();
+    params.append('ids',ids)
+      return this.http.post<any>(`${environment.apiUrl}deleteSelectposicion`,params)
+  }
 }

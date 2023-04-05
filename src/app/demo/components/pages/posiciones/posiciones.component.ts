@@ -8,35 +8,29 @@ import { PosicionesInterface } from './posiciones-interface';
 @Component({
   selector: 'app-posiciones',
   templateUrl: './posiciones.component.html',
-  styleUrls: ['./posiciones.component.scss']
+    styleUrls: ['./posiciones.component.scss'],
+  providers: [MessageService],
 })
-
-
 export class PosicionesComponent implements OnInit {
-  
   submitted: boolean = false;
 
   posicionesDialog: boolean = false;
 
   deleteposicionesDialog: boolean = false;
 
-  deleteProductsDialog: boolean = false;
-
-  selectedPosicion:[]=[]
+  deletePosicioneDialog: boolean = false;
 
   posiciones:any
   cols: any[] = [];
-  idUsuario=3
 
+  product: Product = {};
 
-/*   product: Product = {}; */
-
-/*   selectedProducts: Product[] = []; */
+selectedPosiciones: Product[] = [];
   
   isUpdate:boolean=false;
   idPosicionesUpdate:any
   idPosicionDelete:any
-  grupoPosiciones:any
+
 
   public formPosiciones!: FormGroup;
   constructor(
@@ -49,7 +43,7 @@ export class PosicionesComponent implements OnInit {
     })
   }
 
-  ngOnInit(): void {
+  ngOnInit(){
     this.showPosiciones()
   }
 
@@ -71,7 +65,40 @@ export class PosicionesComponent implements OnInit {
     });
   }
 
-  hideDialog() {
+  savePosiciones(){
+    if (this.formPosiciones.valid) {
+     let data : PosicionesInterface={
+       descripcion:this.formPosiciones.value.descripcion
+     }
+     this.posicionesService.guardarPosiciones(data).subscribe({
+       next:(res)=>{
+        this.successMessage(res.message)
+
+        this.hideDialog();
+         this.formPosiciones.reset()
+         
+       },
+       error:(err)=>{
+      this.errorMessage(err)
+         
+       }
+     })
+    } else {
+      this.formPosiciones.markAllAsTouched();
+    }
+   }
+
+   showPosiciones(){
+    this.posicionesService.mostrarPosiciones().subscribe({
+      next:(res)=>{
+        this.posiciones=res
+        console.log(this.posiciones);
+
+      }
+    })
+  }
+
+   hideDialog() {
     this.posicionesDialog = false;
     this.submitted = false;
     if(this.isUpdate==true){
@@ -79,36 +106,63 @@ export class PosicionesComponent implements OnInit {
       this.isUpdate=false
     }
   }
-
+  
   openNew() {
     //this.product = {};
     this.submitted = false;
     this.posicionesDialog = true;
   }
 
+  deletedSelectedPosiciones(){
+    this.deletePosicioneDialog=true
+  }
 
   editPosiciones(id:any) {
     this.idPosicionesUpdate=id
       let data =this.posiciones.find( (e:any) =>e.id==id)
-      console.log(data);
-      if (data) {
-        this.isUpdate=true
+      console.log(data);    
+      if (data) {      
+        this.isUpdate=true     
         this.openNew()
         this.formPosiciones.controls['descripcion'].setValue(data?.descripcion)
       }
   }
   
-    deletePosiciones(id:any){
-    this.deleteposicionesDialog=true
-    this.idPosicionDelete=id
+  updatePosiciones(){
+    debugger
+    if (this.formPosiciones.valid) {
+      debugger
+      let data : PosicionesInterface={
+          descripcion:this.formPosiciones.value.descripcion
+      }
+      this.posicionesService.updatePosiciones(data,this.idPosicionesUpdate).subscribe({
+        next:(res)=>{
+          this.successMessage(res.message)
+          this.hideDialog()
+          this.formPosiciones.reset()
+          this.showPosiciones()
+        },
+        error:(err)=>{
+          this.errorMessage(err)
+          
+        }
+      })
+     } else {
+      debugger
+       this.formPosiciones.markAllAsTouched();
+     }
   }
 
+    deletePosiciones(id:any){
+      this.idPosicionDelete=id
+    this.deleteposicionesDialog=true
+  }
 
 confirmDelete() {
     this.posicionesService.deletePosiciones(this.idPosicionDelete).subscribe({
       next:(res)=>{
         this.successMessage(res.message)
-        this.deleteposicionesDialog=false
+        this.posicionesDialog=false
         this.showPosiciones()
       },
       error:(err)=>{
@@ -117,67 +171,23 @@ confirmDelete() {
     })
 }
   
-savePosiciones(){
- if (this.formPosiciones.valid) {
-  let data : PosicionesInterface={
-    descripcion:this.formPosiciones.value.descripcion
-  }
-  this.posicionesService.guardarPosiciones(data).subscribe({
+confirmDeleteSelectedPosiciones() {
+
+  let grupoPosiciones=this.selectedPosiciones.map((dis:any)=>dis.id)
+
+  this.posicionesService.deleteSelectPosiciones(grupoPosiciones).subscribe({
     next:(res)=>{
-      console.log(res);
-      this.hideDialog();
-      this.formPosiciones.reset()
-      
+        this.successMessage(res.message)
+        this.deletePosicioneDialog=false
+        this.showPosiciones
     },
     error:(err)=>{
-      console.log(err);
-      
+     console.log(err)
+        this.errorMessage(err)
     }
-  })
- } else {
-   this.formPosiciones.markAllAsTouched();
- }
-}
 
-showPosiciones(){
-  this.posicionesService.mostrarPosiciones().subscribe({
-    next:(res)=>{
-      this.posiciones=res
-      console.log(this.posiciones);
-    },
-    error:(err)=>{
-      console.log(err);
-    }
   })
 }
-
-
-updatePosiciones(){
-  if (this.formPosiciones.valid) {
-    let data : PosicionesInterface={
-        descripcion:this.formPosiciones.value.descripcion
-    }
-    this.posicionesService.updatePosiciones(data,this.idPosicionesUpdate).subscribe({
-      next:(res)=>{
-        console.log(res);
-        this.hideDialog()
-        this.formPosiciones.reset()
-        this.showPosiciones()
-      },
-      error:(err)=>{
-        console.log(err);
-        
-      }
-    })
-   } else {
-     this.formPosiciones.markAllAsTouched();
-   }
-}
-
-deletedSelectedPosiciones(){
-  this.deleteProductsDialog=true
-}
-
 
   }
 

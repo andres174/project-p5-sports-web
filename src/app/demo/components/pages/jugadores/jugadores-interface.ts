@@ -1,7 +1,9 @@
 export interface JugadoresInterface {
-    nombre: string;
-    apellido: string;
-    cedula: string;
-    foto: string | File;
+    
+    id?: number;
+    nombre?: string;
+    apellido?: string;
+    cedula?: string;
+   /*  foto?: string | File; */
 
 }
