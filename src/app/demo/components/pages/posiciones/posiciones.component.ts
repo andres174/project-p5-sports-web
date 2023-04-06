@@ -39,7 +39,8 @@ selectedPosiciones: Product[] = [];
     private messageService: MessageService,
   ) {
     this.formPosiciones= formBuilder.group({
-      descripcion:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]]
+      descripcion: ['', [Validators.required]],
+      
     })
   }
 
@@ -129,9 +130,7 @@ selectedPosiciones: Product[] = [];
   }
   
   updatePosiciones(){
-    debugger
     if (this.formPosiciones.valid) {
-      debugger
       let data : PosicionesInterface={
           descripcion:this.formPosiciones.value.descripcion
       }
@@ -148,7 +147,6 @@ selectedPosiciones: Product[] = [];
         }
       })
      } else {
-      debugger
        this.formPosiciones.markAllAsTouched();
      }
   }

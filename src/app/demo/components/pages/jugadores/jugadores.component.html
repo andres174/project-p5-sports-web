@@ -1,6 +1,7 @@
 <div class="grid">
     <div class="col-12">
         <div class="card px-6 py-6">
+          <p-toast></p-toast>
           <p-toolbar styleClass="mb-4">
               <ng-template pTemplate="left">
                 <div class="my-2">
@@ -153,9 +154,7 @@
             <button
               pButton  pRipple  label="Cancelar"  icon="pi pi-times"  class="p-button-text"  (click)="hideDialog()">
           </button>
-            <button
-              pButton pRipple  label="Guardar" icon="pi pi-check" class="p-button-text"  (click)="saveJugadores()">
-            </button>
+            <button pButton pRipple  label="Guardar" icon="pi pi-check" class="p-button-text"  (click)="saveJugadores()"></button>
           </ng-template>
         </p-dialog>
 

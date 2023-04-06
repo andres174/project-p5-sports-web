@@ -87,7 +87,7 @@ export class JugadoresComponent implements OnInit  {
     this.formJugadores.get("apellido")?.removeValidators(Validators.required);
     this.formJugadores.get("cedula")?.removeValidators(Validators.required);
     
-   /*  this.clearSelectedImage(); */
+    this.clearSelectedImage();
     this.jugadoresDialog = true;
   }
 
@@ -115,7 +115,7 @@ export class JugadoresComponent implements OnInit  {
         next: (res) => {
           this.getJugadores();
           console.log(res);
-          this.successMessage("Jugadores Eliminados");
+          this.successMessage(res.message)
         },
         error: this.errorMessage,
       });
@@ -127,14 +127,16 @@ export class JugadoresComponent implements OnInit  {
     this.deleteJugadoreDialog = false;
     this.submitted = true;
 
-    this.jugadoresService.deleteJugadores(this.jugadore.id).subscribe({
-      next: console.log,
-      error: this.errorMessage,
-      complete: () => {
+    this.jugadoresService.deleteJugadores(this.jugadore.id)
+    .subscribe({
+      next: (res) => {
         this.getJugadores();
-        this.successMessage("Jugador Eliminado");
+        console.log(res);
+        this.successMessage(res.message)
       },
+      error: this.errorMessage,
     });
+    
 
     this.jugadore = {};
   }
@@ -152,15 +154,11 @@ export class JugadoresComponent implements OnInit  {
 
     this.submitted = true;
     const values = { ...this.formJugadores.value };
-
     if (!this.jugadore.id) {
-      // crear
       this.storeJugadores(values);
     } else {
-      // editar
       this.updateJugadores(values);
     }
-
     this.hideDialog();
     this.jugadore = {};
   }
@@ -181,7 +179,7 @@ export class JugadoresComponent implements OnInit  {
       next: (res) => {
         this.getJugadores();
         console.log(res);
-        this.successMessage("jugador Creado");
+         this.successMessage(res.message)
       },
       error: this.errorMessage,
     });
@@ -190,7 +188,7 @@ export class JugadoresComponent implements OnInit  {
   updateJugadores(values: any) {
  
     if (this.selectedImageFile) {
-      const imageData = new FormData();
+      let imageData = new FormData();
       imageData.append("foto", this.selectedImageFile);
       this.jugadoresService.editImageJugadores(imageData, this.jugadore.id)
         .subscribe({
@@ -199,7 +197,7 @@ export class JugadoresComponent implements OnInit  {
         });
     }
 
-    const data = {
+    let data = {
       nombre: values.nombre,
       apellido: values.apellido,
       cedula: values.cedula,
@@ -209,7 +207,7 @@ export class JugadoresComponent implements OnInit  {
       next: (res) => {
         this.getJugadores();
         console.log(res);
-        this.successMessage("Jugadores Actualizado");
+        this.successMessage(res.message);
       },
       error: this.errorMessage,
     });
@@ -228,7 +226,7 @@ onGlobalFilter(table: Table, event: Event) {
 onImageSelect(event: any) {
   this.selectedImageFile = event.files[0];
   if (!this.selectedImageFile) return;
-  const reader = new FileReader();
+  let reader = new FileReader();
   reader.onloadend = (e: any) => {
     this.selectedImageSrc = e.currentTarget.result;
   };
