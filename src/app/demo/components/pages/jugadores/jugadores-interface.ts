@@ -1,5 +1,4 @@
-export interface JugadoresInterface {
-    
+export interface JugadoresInterface { 
     id?: number;
     nombre?: string;
     apellido?: string;

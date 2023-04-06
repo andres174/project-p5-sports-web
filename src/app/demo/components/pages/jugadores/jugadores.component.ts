@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Product } from 'src/app/demo/api/product';
+import { Table } from "primeng/table";
 import { FormGroup, FormBuilder, Validators,FormControl } from '@angular/forms';
 import { JugadoresService } from 'src/app/demo/service/jugadores.service';
 import { JugadoresInterface } from './jugadores-interface';
@@ -16,38 +17,43 @@ export class JugadoresComponent implements OnInit  {
   submitted: boolean = false;
 
   jugadoresDialog: boolean = false;
-
+  deleteJugadoreDialog: boolean = false;
   deleteJugadoresDialog: boolean = false;
 
-  deletejugadoreDialog: boolean = false;
+  jugadores: JugadoresInterface[] = [];
+  jugadore: JugadoresInterface = {};
+  selectedJugadores: JugadoresInterface[] = [];
 
-  jugadores:any
-  cols: any[] = [];
+  formJugadores: FormGroup;
 
-  product: Product = {};
-
-selectedJugadores: Product[] = [];
-  
-  isUpdate:boolean=false;
-  idJugadoresUpdate:any
-  idJugadoresDelete:any
+  selectedImageSrc: string = "";
+  selectedImageFile: File | any;
 
 
-  public formJugadores!: FormGroup;
+
   constructor(
     private formBuilder: FormBuilder,
     private jugadoresService: JugadoresService,
     private messageService: MessageService,
   ) {
     this.formJugadores= formBuilder.group({
-      nombre:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]],
-      apellido:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]],
-      cedula:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]],
+      nombre: ['', [Validators.required]],
+      apellido: ['', [Validators.required]],
+      cedula: ['', [Validators.required]],
     })
+  }
+  getJugadores() {
+    this.submitted = true;
+    this.jugadoresService.mostrarJugadores().subscribe({
+      next: (res) => {
+        this.jugadores = res;
+        this.submitted = false;
+      },
+    });
   }
 
   ngOnInit(){
-    this.showJugadores()
+    this.getJugadores()
   }
 
   successMessage(msg: string) {
@@ -68,237 +74,170 @@ selectedJugadores: Product[] = [];
     });
   }
 
-  saveJugadores(){
-    if (this.formJugadores.valid) {
-     let data : JugadoresInterface={
-       nombre:this.formJugadores.value.nombre,
-       apellido:this.formJugadores.value.apellido,
-       cedula:this.formJugadores.value.cedula
-     }
-     this.jugadoresService.guardarJugadores(data).subscribe({
-       next:(res)=>{
-        this.successMessage(res.message)
-
-        this.hideDialog();
-         this.formJugadores.reset()
-         
-       },
-       error:(err)=>{
-      this.errorMessage(err)
-      console.log(err)
-      debugger
-         
-       }
-     })
-    } else {
-      this.formJugadores.markAllAsTouched();
-    }
-   }
-
-  showJugadores(){
-    this.jugadoresService.mostrarJugadores().subscribe({
-       next:(res)=>{
-         this.jugadores=res
-         console.log(this.jugadores);     
-       }
-    })
-   }
-
-   hideDialog() {
-    this.jugadoresDialog = false;
-    this.submitted = false;
-    if(this.isUpdate==true){
-      this.formJugadores.reset()
-      this.isUpdate=false
-    }
-  }
-
   openNew() {
     //this.product = {};
     this.submitted = false;
     this.jugadoresDialog = true;
   }
-  
-  deletedSelectedJugadores(){
-    this.deletejugadoreDialog=true
+
+  editJugadores(jugar: JugadoresInterface) {
+    this.jugadore = { ...jugar };
+    this.formJugadores.patchValue({ ...jugar });
+    this.formJugadores.get("nombre")?.removeValidators(Validators.required);
+    this.formJugadores.get("apellido")?.removeValidators(Validators.required);
+    this.formJugadores.get("cedula")?.removeValidators(Validators.required);
+    
+   /*  this.clearSelectedImage(); */
+    this.jugadoresDialog = true;
   }
 
-  editJugadores(id:any) {
-    this.idJugadoresUpdate=id
-      let data =this.jugadores.find( (e:any) =>e.id==id)
-      console.log(data);    
-      if (data) {      
-        this.isUpdate=true     
-        this.openNew()
-        this.formJugadores.controls['nombre'].setValue(data?.nombre)
-        this.formJugadores.controls['apellido'].setValue(data?.apellido)
-        this.formJugadores.controls['cedula'].setValue(data?.cedula)
-      }
-  }
-
-  /* getJugadorImage(idd: JugadoresInterface) {
-    if (idd.foto)
-      return `${environment.jugUrl}${idd.id}/${idd.foto}`;
+  getJugadoresImage(jugar: JugadoresInterface) {
+    if (jugar.foto)
+      return `${environment.jugUrl}${jugar.id}/${jugar.foto}`;
     else return "";
-  } */
-
-  updateJugadores(){
-    debugger
-    if (this.formJugadores.valid) {
-      debugger
-      let data : JugadoresInterface={
-          nombre:this.formJugadores.value.nombre,
-          apellido:this.formJugadores.value.apellido,
-          cedula:this.formJugadores.value.cedula
-      }
-      this.jugadoresService.updateJugadores(data,this.idJugadoresUpdate).subscribe({
-        next:(res)=>{
-          this.successMessage(res.message)
-          this.hideDialog()
-          this.formJugadores.reset()
-          this.showJugadores()
-        },
-        error:(err)=>{
-          this.errorMessage(err)
-          
-        }
-      })
-     } else {
-      debugger
-       this.formJugadores.markAllAsTouched();
-     }
   }
-  
 
-  deleteJugadores(id:any){
-    this.idJugadoresDelete=id
-  this.deleteJugadoresDialog=true
-}
+  deleteSelectedJugadores() {
+    this.deleteJugadoresDialog = true;
+  }
 
-confirmDelete() {
-  this.jugadoresService.deleteJugadores(this.idJugadoresDelete).subscribe({
-    next:(res)=>{
-      this.successMessage(res.message)
-      this.jugadoresDialog=false
-      this.showJugadores()
-    },
-    error:(err)=>{
-      this.errorMessage(err)
-    }
-  })
-}
+  deleteJugadores(jugar: JugadoresInterface) {
+    this.deleteJugadoreDialog = true;
+    this.jugadore = { ...jugar };
+  }
 
-getUserImage(jugar: JugadoresInterface) {
-  if (jugar.foto)
-    return `${environment.userUrl}${jugar.id}/${jugar.foto}`;
-  else return "";
-}
+  confirmDeleteSelected() {
+    this.deleteJugadoresDialog = false;
+    this.submitted = true;
 
+    this.jugadoresService.deleteSelectJugadores(this.selectedJugadores.map((u) => u.id))
+      .subscribe({
+        next: (res) => {
+          this.getJugadores();
+          console.log(res);
+          this.successMessage("Jugadores Eliminados");
+        },
+        error: this.errorMessage,
+      });
 
+    this.selectedJugadores = [];
+  }
 
+  confirmDelete() {
+    this.deleteJugadoreDialog = false;
+    this.submitted = true;
 
- /*  saveJugadores() {
+    this.jugadoresService.deleteJugadores(this.jugadore.id).subscribe({
+      next: console.log,
+      error: this.errorMessage,
+      complete: () => {
+        this.getJugadores();
+        this.successMessage("Jugador Eliminado");
+      },
+    });
+
+    this.jugadore = {};
+  }
+
+  hideDialog() {
+    this.jugadoresDialog = false;
+    this.clearSelectedImage();
+  }
+
+  saveJugadores() {
     if (!this.formJugadores.valid) {
       this.formJugadores.markAllAsTouched();
       return;
     }
 
-    this.loading = true;
+    this.submitted = true;
     const values = { ...this.formJugadores.value };
 
-    if (!this.jugador.id) {
+    if (!this.jugadore.id) {
       // crear
-      const data = new FormData();
-
-      Object.keys(values).forEach((key) => {
-        data.append(key, values[key]);
-      });
-
-      if (this.selectedImageFile) {
-        data.append("foto_perfil", this.selectedImageFile);
-      }
-
-      this.jugadoresService.guardarJugadores(data).subscribe({
-        next: (res) => {
-          this.showJugadores();
-          console.log(res);
-          this.successMessage("Jugador Creado");
-        },
-        error: console.log,
-      });
+      this.storeJugadores(values);
     } else {
-
-      if (this.selectedImageFile) {
-        const imageData = new FormData();
-        imageData.append("foto_perfil", this.selectedImageFile);
-        this.jugadoresService.editImageJugadores(imageData, this.jugador.id)
-          .subscribe({
-            next: console.log,
-            error: console.log,
-          });
-      }
-
-      const data = {
-        nombre: values.nombre,
-        apellido: values.apellido,
-        cedula: values.cedula,
-      };
-
-      this.jugadoresService.updateJugadores(data, this.jugador.id).subscribe({
-        next: (res) => {
-          this.showJugadores();
-          console.log(res);
-          this.successMessage("Organizador Actualizado");
-        },
-        error: console.log,
-      });
+      // editar
+      this.updateJugadores(values);
     }
 
     this.hideDialog();
-    this.jugador = {};
-  } */
-
-/*    clearSelectedImage() {
-    this.selectedImageSrc = "";
-    this.selectedImageFile = undefined;
-  } */
-
-/*   onGlobalFilter(table: Table, event: Event) {
-    table.filterGlobal((event.target as HTMLInputElement).value, "contains");
-  } */
-
-/*   onImageSelect(event: any) {
-    this.selectedImageFile = event.files[0];
-    if (!this.selectedImageFile) return;
-    const reader = new FileReader();
-    reader.onloadend = (e: any) => {
-      this.selectedImageSrc = e.currentTarget.result;
-    };
-    reader.readAsDataURL(this.selectedImageFile);
-  } */
-
- /*  onImageClear() {
-    this.clearSelectedImage();
-  } */
-
-  confirmDeleteSelectedJugadores() {
-
-    let grupoJugadores=this.selectedJugadores.map((dis:any)=>dis.id)
-  
-    this.jugadoresService.deleteSelectJugadores(grupoJugadores).subscribe({
-      next:(res)=>{
-          this.successMessage(res.message)
-          this.deletejugadoreDialog=false
-          this.showJugadores
-      },
-      error:(err)=>{
-       console.log(err)
-          this.errorMessage(err)
-      }
-  
-    })
+    this.jugadore = {};
   }
 
+
+  storeJugadores(values: any) {
+    const data = new FormData();
+
+    Object.keys(values).forEach((key) => {
+      data.append(key, values[key]);
+    });
+
+    if (this.selectedImageFile) {
+      data.append("foto", this.selectedImageFile);
+    }
+
+    this.jugadoresService.guardarJugadores(data).subscribe({
+      next: (res) => {
+        this.getJugadores();
+        console.log(res);
+        this.successMessage("jugador Creado");
+      },
+      error: this.errorMessage,
+    });
+  }
+
+  updateJugadores(values: any) {
+ 
+    if (this.selectedImageFile) {
+      const imageData = new FormData();
+      imageData.append("foto", this.selectedImageFile);
+      this.jugadoresService.editImageJugadores(imageData, this.jugadore.id)
+        .subscribe({
+          next: console.log,
+          error: console.log,
+        });
+    }
+
+    const data = {
+      nombre: values.nombre,
+      apellido: values.apellido,
+      cedula: values.cedula,
+    };
+
+    this.jugadoresService.updateJugadores(data, this.jugadore.id).subscribe({
+      next: (res) => {
+        this.getJugadores();
+        console.log(res);
+        this.successMessage("Jugadores Actualizado");
+      },
+      error: this.errorMessage,
+    });
+  }
+
+
+clearSelectedImage() {
+  this.selectedImageSrc = "";
+  this.selectedImageFile = undefined;
+}
+
+onGlobalFilter(table: Table, event: Event) {
+  table.filterGlobal((event.target as HTMLInputElement).value, "contains");
+}
+
+onImageSelect(event: any) {
+  this.selectedImageFile = event.files[0];
+  if (!this.selectedImageFile) return;
+  const reader = new FileReader();
+  reader.onloadend = (e: any) => {
+    this.selectedImageSrc = e.currentTarget.result;
+  };
+  reader.readAsDataURL(this.selectedImageFile);
+}
+
+onImageClear() {
+  this.clearSelectedImage();
+}
 
 
 }
