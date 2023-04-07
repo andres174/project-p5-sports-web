@@ -50,11 +50,11 @@ export class UsuariosService {
     return this.http.delete<any>(`${environment.apiUrl}usuarios/${id}`);
   }
 
-  deleteUsuarios(ids: any[]) {
-    return forkJoin(
-      ids.map((id) =>
-        this.http.delete<any>(`${environment.apiUrl}usuarios/${id}`)
-      )
+  deleteSelectedUsuarios(ids: any[]) {
+    const data = { ids };
+    return this.http.post<any>(
+      `${environment.apiUrl}deleteSelectedUsuarios`,
+      data
     );
   }
 }

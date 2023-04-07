@@ -126,14 +126,14 @@ export class UsuariosComponent implements OnInit {
     this.loading = true;
 
     this.usuariosService
-      .deleteUsuarios(this.selectedUsers.map((u) => u.id))
+      .deleteSelectedUsuarios(this.selectedUsers.map((u) => u.id))
       .subscribe({
-        next: console.log,
-        error: console.log,
-        complete: () => {
+        next: (res) => {
           this.getOrganizadores();
+          console.log(res);
           this.successMessage("Organizadores Eliminados");
         },
+        error: this.errorMessage,
       });
 
     this.selectedUsers = [];
@@ -145,7 +145,7 @@ export class UsuariosComponent implements OnInit {
 
     this.usuariosService.deleteUsuario(this.user.id).subscribe({
       next: console.log,
-      error: console.log,
+      error: this.errorMessage,
       complete: () => {
         this.getOrganizadores();
         this.successMessage("Organizador Eliminado");
@@ -171,72 +171,80 @@ export class UsuariosComponent implements OnInit {
 
     if (!this.user.id) {
       // crear
-      const data = new FormData();
-
-      Object.keys(values).forEach((key) => {
-        data.append(key, values[key]);
-      });
-
-      if (this.selectedImageFile) {
-        data.append("foto_perfil", this.selectedImageFile);
-      }
-
-      this.usuariosService.guardarUsuario(data).subscribe({
-        next: (res) => {
-          this.getOrganizadores();
-          console.log(res);
-          this.successMessage("Organizador Creado");
-        },
-        error: console.log,
-      });
+      this.storeUser(values);
     } else {
       // editar
-      if (values.email.trim() !== this.user.email?.trim()) {
-        this.usuariosService
-          .updateEmailUsuario({ email: values.email }, this.user.id)
-          .subscribe({
-            next: console.log,
-            error: console.log,
-          });
-      }
-
-      if (values.password) {
-        this.usuariosService
-          .updatePasswordUsuario({ password: values.password }, this.user.id)
-          .subscribe({
-            next: console.log,
-            error: console.log,
-          });
-      }
-
-      if (this.selectedImageFile) {
-        const imageData = new FormData();
-        imageData.append("foto_perfil", this.selectedImageFile);
-        this.usuariosService
-          .updateFotoPerfilUsuario(imageData, this.user.id)
-          .subscribe({
-            next: console.log,
-            error: console.log,
-          });
-      }
-
-      const data = {
-        nombre: values.nombre,
-        apellido: values.apellido,
-      };
-
-      this.usuariosService.updateUsuario(data, this.user.id).subscribe({
-        next: (res) => {
-          this.getOrganizadores();
-          console.log(res);
-          this.successMessage("Organizador Actualizado");
-        },
-        error: console.log,
-      });
+      this.updateUser(values);
     }
 
     this.hideDialog();
     this.user = {};
+  }
+
+  storeUser(values: any) {
+    const data = new FormData();
+
+    Object.keys(values).forEach((key) => {
+      data.append(key, values[key]);
+    });
+
+    if (this.selectedImageFile) {
+      data.append("foto_perfil", this.selectedImageFile);
+    }
+
+    this.usuariosService.guardarUsuario(data).subscribe({
+      next: (res) => {
+        this.getOrganizadores();
+        console.log(res);
+        this.successMessage("Organizador Creado");
+      },
+      error: this.errorMessage,
+    });
+  }
+
+  updateUser(values: any) {
+    if (values.email.trim() !== this.user.email?.trim()) {
+      this.usuariosService
+        .updateEmailUsuario({ email: values.email }, this.user.id)
+        .subscribe({
+          next: console.log,
+          error: console.log,
+        });
+    }
+
+    if (values.password) {
+      this.usuariosService
+        .updatePasswordUsuario({ password: values.password }, this.user.id)
+        .subscribe({
+          next: console.log,
+          error: console.log,
+        });
+    }
+
+    if (this.selectedImageFile) {
+      const imageData = new FormData();
+      imageData.append("foto_perfil", this.selectedImageFile);
+      this.usuariosService
+        .updateFotoPerfilUsuario(imageData, this.user.id)
+        .subscribe({
+          next: console.log,
+          error: console.log,
+        });
+    }
+
+    const data = {
+      nombre: values.nombre,
+      apellido: values.apellido,
+    };
+
+    this.usuariosService.updateUsuario(data, this.user.id).subscribe({
+      next: (res) => {
+        this.getOrganizadores();
+        console.log(res);
+        this.successMessage("Organizador Actualizado");
+      },
+      error: this.errorMessage,
+    });
   }
 
   clearSelectedImage() {

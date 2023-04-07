@@ -1,63 +1,59 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { Product } from 'src/app/demo/api/product';
+import { Table } from "primeng/table";
 import { FormGroup, FormBuilder, Validators,FormControl } from '@angular/forms';
 import { JugadoresService } from 'src/app/demo/service/jugadores.service';
 import { JugadoresInterface } from './jugadores-interface';
-import { Table } from 'primeng/table';
+import { environment } from "src/environments/environment";
+
 @Component({
   selector: 'app-jugadores',
   templateUrl: './jugadores.component.html',
-  styleUrls: ['./jugadores.component.scss']
+  styleUrls: ['./jugadores.component.scss'],
+  providers: [MessageService],
 })
-export class JugadoresComponent {
+export class JugadoresComponent implements OnInit  {
   submitted: boolean = false;
 
   jugadoresDialog: boolean = false;
+  deleteJugadoreDialog: boolean = false;
+  deleteJugadoresDialog: boolean = false;
 
-  deletejugadoresDialog: boolean = false;
+  jugadores: JugadoresInterface[] = [];
+  jugadore: JugadoresInterface = {};
+  selectedJugadores: JugadoresInterface[] = [];
 
-  deleteProductsDialog: boolean = false;
+  formJugadores: FormGroup;
 
-  jugadores:any
-  selectedConfig:[]=[]
-
-  cols: any[] = [];
-  file: File | any;
-
-  jugador: any[] = [];
-  idUsuario=3
-  product: Product = {};
-
-  selectedProducts: Product[] = [];
-  
-  isUpdate:boolean=false;
-
-  fileSelect:any;
-
-  idJugadoresUpdate:any
+  selectedImageSrc: string = "";
+  selectedImageFile: File | any;
 
 
-  imagen:any;
 
-  idJugadoresDelete:any
-
-  public formJugadores!: FormGroup;
   constructor(
     private formBuilder: FormBuilder,
     private jugadoresService: JugadoresService,
     private messageService: MessageService,
   ) {
     this.formJugadores= formBuilder.group({
-      nombre:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]],
-      apellido:['',[Validators.required, Validators.pattern(/^[A-ZÀ-ÿ ]+$/i),Validators.minLength(4),]],
-      cedula:['',[Validators.required]],
-      foto: ['', [Validators.required]]
+      nombre: ['', [Validators.required]],
+      apellido: ['', [Validators.required]],
+      cedula: ['', [Validators.required]],
     })
   }
+  getJugadores() {
+    this.submitted = true;
+    this.jugadoresService.mostrarJugadores().subscribe({
+      next: (res) => {
+        this.jugadores = res;
+        this.submitted = false;
+      },
+    });
+  }
 
-  ngOnInit(): void {
-    this.showJugadores()
+  ngOnInit(){
+    this.getJugadores()
   }
 
   successMessage(msg: string) {
@@ -78,164 +74,168 @@ export class JugadoresComponent {
     });
   }
 
-  hideDialog() {
-    this.jugadoresDialog = false;
-    this.submitted = false;
-    if(this.isUpdate==true){
-      this.formJugadores.reset()
-      this.isUpdate=false
-    }
-  }
   openNew() {
     //this.product = {};
     this.submitted = false;
     this.jugadoresDialog = true;
   }
-  
 
-
-  editJugadores(id:any) {
-    this.idJugadoresUpdate=id
-      let data =this.jugadores.find( (e:any) =>e.id==id)
-      console.log(data);
-      if (data) {
-        this.isUpdate=true
-        this.openNew()
-        this.formJugadores.controls['nombre'].setValue(data?.nombre)
-        this.formJugadores.controls['apelido'].setValue(data?.apellido)
-        this.formJugadores.controls['cedula'].setValue(data?.cedula)
-      }
+  editJugadores(jugar: JugadoresInterface) {
+    this.jugadore = { ...jugar };
+    this.formJugadores.patchValue({ ...jugar });
+    this.formJugadores.get("nombre")?.removeValidators(Validators.required);
+    this.formJugadores.get("apellido")?.removeValidators(Validators.required);
+    this.formJugadores.get("cedula")?.removeValidators(Validators.required);
+    
+    this.clearSelectedImage();
+    this.jugadoresDialog = true;
   }
-  
-  deleteJugador(id:any){
-    this.deletejugadoresDialog=true
-    this.idJugadoresDelete=id
+
+  getJugadoresImage(jugar: JugadoresInterface) {
+    if (jugar.foto)
+      return `${environment.jugUrl}${jugar.id}/${jugar.foto}`;
+    else return "";
+  }
+
+  deleteSelectedJugadores() {
+    this.deleteJugadoresDialog = true;
+  }
+
+  deleteJugadores(jugar: JugadoresInterface) {
+    this.deleteJugadoreDialog = true;
+    this.jugadore = { ...jugar };
+  }
+
+  confirmDeleteSelected() {
+    this.deleteJugadoresDialog = false;
+    this.submitted = true;
+
+    this.jugadoresService.deleteSelectJugadores(this.selectedJugadores.map((u) => u.id))
+      .subscribe({
+        next: (res) => {
+          this.getJugadores();
+          console.log(res);
+          this.successMessage(res.message)
+        },
+        error: this.errorMessage,
+      });
+
+    this.selectedJugadores = [];
   }
 
   confirmDelete() {
-    this.jugadoresService.deleteJugadores(this.idJugadoresDelete).subscribe({
-      next:(res)=>{
+    this.deleteJugadoreDialog = false;
+    this.submitted = true;
+
+    this.jugadoresService.deleteJugadores(this.jugadore.id)
+    .subscribe({
+      next: (res) => {
+        this.getJugadores();
+        console.log(res);
         this.successMessage(res.message)
-        this.deletejugadoresDialog=false
-        this.showJugadores()
       },
-      error:(err)=>{
-        this.errorMessage(err)
-      }
-    })
+      error: this.errorMessage,
+    });
+    
+
+    this.jugadore = {};
   }
 
-  saveJugadores(){
-    if (this.formJugadores.valid) {
-     let data : JugadoresInterface={
-       nombre:this.formJugadores.value.nombre,
-       apellido:this.formJugadores.value.apellido,
-       cedula:this.formJugadores.value.cedula,
-       foto: this.file
-     }
-     this.jugadoresService.guardarJugadores(data).subscribe({
-       next:(res)=>{
-         console.log(res);
-         this.hideDialog();
-         this.formJugadores.reset()
-         
-       },
-       error:(err)=>{
-         console.log(err);
-         
-       }
-     })
-    } else {
+  hideDialog() {
+    this.jugadoresDialog = false;
+    this.clearSelectedImage();
+  }
+
+  saveJugadores() {
+    if (!this.formJugadores.valid) {
       this.formJugadores.markAllAsTouched();
+      return;
     }
-   }
 
-showJugadores(){
-  debugger
-  this.jugadoresService.mostrarJugadores().subscribe({
-     next:(res)=>{
-      debugger
-       this.jugadores=res
-       debugger
-       console.log(this.jugadores);     
-     }
-  })
- }
-
-
-updateJugadores(){
-  if (this.formJugadores.valid) {
-    let data : JugadoresInterface={
-        nombre:this.formJugadores.value.nombre,
-        apellido:this.formJugadores.value.apellido,
-        cedula:this.formJugadores.value.cedula,
-        foto: this.file
+    this.submitted = true;
+    const values = { ...this.formJugadores.value };
+    if (!this.jugadore.id) {
+      this.storeJugadores(values);
+    } else {
+      this.updateJugadores(values);
     }
-    this.jugadoresService.updateJugadores(data,this.idJugadoresUpdate).subscribe({
-      next:(res)=>{
+    this.hideDialog();
+    this.jugadore = {};
+  }
+
+
+  storeJugadores(values: any) {
+    const data = new FormData();
+
+    Object.keys(values).forEach((key) => {
+      data.append(key, values[key]);
+    });
+
+    if (this.selectedImageFile) {
+      data.append("foto", this.selectedImageFile);
+    }
+
+    this.jugadoresService.guardarJugadores(data).subscribe({
+      next: (res) => {
+        this.getJugadores();
         console.log(res);
-        this.hideDialog()
-        this.formJugadores.reset()
-        this.showJugadores()
+         this.successMessage(res.message)
       },
-      error:(err)=>{
-        console.log(err);
-        
-      }
-    })
-   } else {
-     this.formJugadores.markAllAsTouched();
-   }
-}
+      error: this.errorMessage,
+    });
+  }
 
-deleteSelectedJugadores() {
-  this.deleteProductsDialog = true;
-}
-
-
-
-
-deleteJugadores(id: any) {
-  this.jugadoresService.deleteJugadores(id).subscribe({
-    next:(res)=>{
-      console.log(res);
-      this.showJugadores();
-    },
-    error:(err)=>{
-      console.log(err);
-      
+  updateJugadores(values: any) {
+ 
+    if (this.selectedImageFile) {
+      let imageData = new FormData();
+      imageData.append("foto", this.selectedImageFile);
+      this.jugadoresService.editImageJugadores(imageData, this.jugadore.id)
+        .subscribe({
+          next: console.log,
+          error: console.log,
+        });
     }
-  })
+
+    let data = {
+      nombre: values.nombre,
+      apellido: values.apellido,
+      cedula: values.cedula,
+    };
+
+    this.jugadoresService.updateJugadores(data, this.jugadore.id).subscribe({
+      next: (res) => {
+        this.getJugadores();
+        console.log(res);
+        this.successMessage(res.message);
+      },
+      error: this.errorMessage,
+    });
+  }
+
+
+clearSelectedImage() {
+  this.selectedImageSrc = "";
+  this.selectedImageFile = undefined;
 }
 
-getFile(event: any) {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onloadend = () => {
-    this.fileSelect = reader.result;
+onGlobalFilter(table: Table, event: Event) {
+  table.filterGlobal((event.target as HTMLInputElement).value, "contains");
+}
+
+onImageSelect(event: any) {
+  this.selectedImageFile = event.files[0];
+  if (!this.selectedImageFile) return;
+  let reader = new FileReader();
+  reader.onloadend = (e: any) => {
+    this.selectedImageSrc = e.currentTarget.result;
   };
-  this.file = (event.target).files[0];
+  reader.readAsDataURL(this.selectedImageFile);
 }
 
-
-getFiles(event: any) {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
-  reader.onloadend = () => {
-    this.fileSelect = reader.result;
-  };
-  this.file = (event.target).files[0];
-   this.imagen = {
-    id: this.isUpdate,
-    imagen: this.file,
-  };    
-  this.jugadoresService.editImageJugadores(this.imagen).subscribe({
-    next:(res)=> {
-      console.log(res);
-    },
-  });
+onImageClear() {
+  this.clearSelectedImage();
 }
+
 
 }

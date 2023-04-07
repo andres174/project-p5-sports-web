@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 import { JugadoresRoutingModule } from './jugadores-routing.module';
 import { JugadoresComponent } from './jugadores.component';
 import { FormsModule } from '@angular/forms';
@@ -16,9 +17,11 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
+import { ReactiveFormsModule } from "@angular/forms";
+import { PasswordModule } from "primeng/password";
 
 @NgModule({
-  declarations: [],
+  declarations: [JugadoresComponent],
   imports: [
     CommonModule,
     JugadoresRoutingModule,
@@ -35,7 +38,9 @@ import { DialogModule } from 'primeng/dialog';
     DropdownModule,
     RadioButtonModule,
     InputNumberModule,
-    DialogModule
+    DialogModule,
+    ReactiveFormsModule,
+    PasswordModule
   ]
 })
 export class JugadoresModule { }

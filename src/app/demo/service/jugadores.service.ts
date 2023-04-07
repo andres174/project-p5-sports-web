@@ -27,10 +27,23 @@ export class JugadoresService {
     return this.http.delete<any>(`${environment.apiUrl}jugadores/${id}`)
   }
 
-  editImageJugadores(form:any){
+/*   editImageJugadores(form:any){
     console.log(form);
     const params = new FormData();
     params.append('foto', form.foto);
     return this.http.post<any>(`${environment.apiUrl}edit-foto-jugador/${form.id}`,params)
+  } */
+
+  editImageJugadores(form: FormData, id: any) {
+    return this.http.post<any>(
+      `${environment.apiUrl}edit-foto-jugador/${id}`,
+      form
+    );
+  }
+
+  deleteSelectJugadores(ids:any){
+    const params= new FormData();
+    params.append('ids',ids)
+      return this.http.post<any>(`${environment.apiUrl}deleteSelectjugador`,params)
   }
 }

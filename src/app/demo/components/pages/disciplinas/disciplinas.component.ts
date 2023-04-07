@@ -99,7 +99,6 @@ showDisciplinas(){
  })
 }
 
-
 hideDialog() {
   this.disciplinaDialog = false;
   this.submitted = false;
@@ -108,6 +107,7 @@ hideDialog() {
     this.isUpdate=false
   }
 }
+
 openNew() {
   //this.product = {};
   this.submitted = false;
@@ -165,7 +165,6 @@ confirmDelete(){
     },
     error:(err)=>{
       this.errorMessage(err)
-      
     }
   })
 }
