@@ -1,8 +1,49 @@
 <div class="grid">
     <div class="col-12">
         <div class="card">
-            <h4>Empty Page</h4>
+            <h4>Grupos</h4>
             <p>This is your empty page template to start building beautiful applications.</p>
+            <button pButton pRipple type="button" label="Generar grupos" class="p-button-success"
+                (click)="generarGruposBool()"></button>
+            <button pButton pRipple type="button" label="IMp ALert" class="p-button-success"
+                (click)="impAlert()"></button>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card">
+            <h4>Crear grupos automáticamente:</h4>
+
+            <div class="col-12 md:col-6">
+                <div class="card p-fluid">
+                    <h5>Seleccione los datos necesarios:</h5>
+                    <div class="field grid">
+                        <label htmlFor="name3" class="col-12 mb-2 md:col-2 md:mb-0">Evento:</label>
+                        <div class="col-12 md:col-10">
+                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="eventos"
+                                [(ngModel)]="evento_selected" optionLabel="nombre"
+                                (onChange)="getOneEventoDisciplina()"></p-dropdown>
+                        </div>
+                    </div>
+
+                    <div class="field grid">
+                        <label htmlFor="email3" class="col-12 mb-2 md:col-2 md:mb-0">Email</label>
+                        <div class="col-12 md:col-10">
+                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="evento_disciplina"
+                                [(ngModel)]="evento_disciplina_selected" optionLabel="disciplina"
+                                (onChange)="getEquiposFromDisciplina()"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <span *ngFor="let equipo of equipos_disciplina">
+                        {{equipo.nombre_equipo}}
+                    </span>
+                </div>
+
+            </div>
+
         </div>
     </div>
 </div>
