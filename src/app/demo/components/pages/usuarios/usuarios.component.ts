@@ -203,24 +203,6 @@ export class UsuariosComponent implements OnInit {
   }
 
   updateUser(values: any) {
-    if (values.email.trim() !== this.user.email?.trim()) {
-      this.usuariosService
-        .updateEmailUsuario({ email: values.email }, this.user.id)
-        .subscribe({
-          next: console.log,
-          error: console.log,
-        });
-    }
-
-    if (values.password) {
-      this.usuariosService
-        .updatePasswordUsuario({ password: values.password }, this.user.id)
-        .subscribe({
-          next: console.log,
-          error: console.log,
-        });
-    }
-
     if (this.selectedImageFile) {
       const imageData = new FormData();
       imageData.append("foto_perfil", this.selectedImageFile);
@@ -232,10 +214,14 @@ export class UsuariosComponent implements OnInit {
         });
     }
 
-    const data = {
-      nombre: values.nombre,
-      apellido: values.apellido,
-    };
+    const data = { ...values };
+
+    // Si no se cambio el email, se envia un null
+    if (values.email.trim() === this.user.email?.trim()) {
+      data.email = null;
+    }
+
+    // console.log(data);
 
     this.usuariosService.updateUsuario(data, this.user.id).subscribe({
       next: (res) => {
