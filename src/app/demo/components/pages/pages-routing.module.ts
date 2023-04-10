@@ -13,7 +13,9 @@ import { RouterModule } from "@angular/router";
         { path: "jugadores", loadChildren: () => import("./jugadores/jugadores.module").then((m) => m.JugadoresModule), },
         { path: "posiciones", loadChildren: () => import("./posiciones/posiciones.module").then((m) => m.PosicionesModule), },
         { path: "grupos", loadChildren: () => import("./grupos/grupos.module").then((m) => m.GruposModule), },
+        { path: "eventos", loadChildren: () => import("./eventos/eventos.module").then((m) => m.EventosModule), },
         { path: '**', redirectTo: '/notfound' }
+
     ])],
     exports: [RouterModule]
 })
