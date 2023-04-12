@@ -1,1 +1,184 @@
-<p>eventos works!</p>
+<div class="grid">
+  <div class="col-12">
+      <div class="card px-6 py-6">
+        <p-toast></p-toast>
+        <p-toolbar styleClass="mb-4">
+            <ng-template pTemplate="left">
+              <div class="my-2">
+                <button
+                  pButton pRipple label="Agregar" icon="pi pi-plus" class="p-button-success mr-2"(click)="openNew()">
+                </button>
+                <button 
+                  pButton pRipple label="Eliminar" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedEvento()" [disabled]="!selectedEventos || !selectedEventos.length">
+                </button>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="center">
+              <div class="mx-4" *ngIf="submitted">
+                <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+              </div>
+            </ng-template>
+        </p-toolbar>
+        <p-table #dt [value]="eventos"responsiveLayout="scroll" [globalFilterFields]="['nombre', 'apellido']" [rows]="10" [paginator]="false"[rowsPerPageOptions]="[10, 20, 30]"[showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedEventos" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <ng-template pTemplate="caption">
+              <div
+                class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <h5 class="m-0">eventos</h5>
+                <span class="block mt-2 md:mt-0 p-input-icon-left">
+                  <i class="pi pi-search"></i>
+                  <input pInputText type="text" placeholder="Search..." class="w-full sm:w-auto" (input)="onGlobalFilter(dt, $event)"/>
+                </span>
+              </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                  <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                  </th>
+                  <th pSortableColumn="id">
+                    Código<p-sortIcon field="id"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="nombre">
+                    Nombre<p-sortIcon field="nombre"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="fecha_inicio">
+                    fecha_inicio<p-sortIcon field="fecha_inicio"></p-sortIcon>
+                  </th>
+                  <th pSortableColumn="fecha_fin">
+                    fecha_fin<p-sortIcon field="fecha_fin"></p-sortIcon>
+                  </th>
+                  <th>Imagen evento</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-evento>
+              <tr>
+                <td>
+                  <p-tableCheckbox [value]="evento"></p-tableCheckbox>
+                </td>
+                <td style="width: 14%; min-width: 8rem">
+                  <span class="p-column-title">Código</span>
+                  {{ evento.id }}
+                </td>
+                <td style="width: 14%; min-width: 8rem">
+                  <span class="p-column-title">Nombre</span>
+                  {{ evento.nombre }}
+                </td>
+                <td style="width: 14%; min-width: 8rem">
+                  <span class="p-column-title">fecha_inicio</span>
+                  {{ evento.fecha_inicio }}
+                </td>
+              
+                <td style="width: 14%; min-width: 8rem">
+                  <span class="p-column-title">fecha_fin</span>
+                  {{ evento.fecha_fin }}
+                </td>
+                <td style="width: 14%; min-width: 10rem center">
+                  <span class="p-column-title">imagen</span>
+                  <img [src]=" getEventoImag(evento) ||'/assets/demo/images/avatar/default-user.svg'"[alt]="evento.name" width="90" class="shadow-4"/>
+                </td>
+                <td>
+                  <div class="flex">
+                    <button
+                      pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editEvento(evento)">
+                    </button>
+                    <button
+                      pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteEvento(evento)">
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </ng-template>
+        </p-table>
+      </div>
+      
+      <p-dialog [(visible)]="eventosDialog" [style]="{ width: '450px' }" header="Evento" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="content">
+          <form [formGroup]="formEventos">
+            <img [src]=" selectedImageSrc || getEventoImag(evento) || '/assets/demo/images/avatar/default-user.svg' " alt="Foto de perfil" width="100" class="mt-1 mx-auto mb-5 block shadow-2"/>
+              <div class="formgroup-inline center align-items-center">
+                <div class="field">
+                  <p-fileUpload #imgUpload mode="basic" chooseLabel="Subir Imagen" (onSelect)="onImageSelect($event)" (onClear)="onImageClear()" [multiple]="false" accept="image/*" [auto]="false" [maxFileSize]="100000" uploadIcon="pi pi-image" [disabled]="selectedImageSrc != ''">
+                  </p-fileUpload>
+                </div>
+                <div class="field">
+                  <button type="button" pButton pRipple  label="Cancelar" icon="pi pi-times" class="p-button mr-2" (click)="imgUpload.clear()" [disabled]="!selectedImageSrc">
+                  </button>
+                </div>
+              </div>
+
+            <div class="field">
+              <label for="nombre">Nombre</label>
+              <input type="text" pInputText id="nombre"  formControlName="nombre" required autofocus [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('nombre')?.touched && formEventos.get('nombre')?.errors?.['required']}"/>
+              <small class="ng-dirty ng-invalid block"*ngIf="formEventos.get('nombre')?.touched && formEventos.get('nombre')?.errors?.['required']">
+                El nombre es requerido.
+              </small>
+              <small class="ng-dirty ng-invalid block" *ngIf="formEventos.get('nombre')?.errors?.['pattern']">
+                Solo se aceptan letras.
+              </small>
+              <small class="ng-dirty ng-invalid block" *ngIf="formEventos.get('nombre')?.touched && formEventos.get('nombre')?.errors?.['minlength']">
+                El mínimo de caracteres debe ser 2.
+              </small>
+            </div>
+
+            <div class="field">
+              <label for="fecha_inicio">fecha_inicio</label>
+              <p-calendar inputId="fecha_inicio" id="fecha_inicio" formControlName="fecha_inicio" 
+               [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && 
+               formEventos.get('fecha_inicio')?.errors?.['required']}" class="ng-invalid ng-dirty"  [showIcon]="true"></p-calendar>
+              <!-- <input type="text" pInputText  id="fecha_inicio" formControlName="fecha_inicio" required [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_inicio')?.errors?.['required']}"/>
+        -->    <small class="ng-dirty ng-invalid block" *ngIf="formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_inicio')?.errors?.['required']" >
+                La fecha_inicio es requerido.
+              </small>             
+            </div>
+
+            <div class="field">
+              <label for="fecha_fin">fecha_fin</label>
+              <p-calendar inputId="fecha_fin" id="fecha_fin" formControlName="fecha_fin"  [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_fin')?.errors?.['required']}" class="ng-invalid ng-dirty"  [showIcon]="true"></p-calendar>
+        <!--   <input type="text" pInputText  id="fecha_inicio" formControlName="fecha_inicio" required [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_inicio')?.errors?.['required']}"/>
+         -->   <small class="ng-dirty ng-invalid block" *ngIf="formEventos.get('fecha_fin')?.touched && formEventos.get('fecha_fin')?.errors?.['required']" >
+                La fecha_fin es requerido.
+              </small>             
+            </div>        
+          </form>  
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+          <button
+            pButton  pRipple  label="Cancelar"  icon="pi pi-times"  class="p-button-text"  (click)="hideDialog()">
+        </button>
+          <button pButton pRipple  label="Guardar" icon="pi pi-check" class="p-button-text"  (click)="saveEvento()"></button>
+        </ng-template>
+      </p-dialog>
+
+      <p-dialog [(visible)]="deleteEventoDialog" header="Confirmación" [modal]="true" [style]="{ width: '450px' }">
+          <div class="flex align-items-center justify-content-center">
+            <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+            <span *ngIf="evento">Estás seguro que deseas eliminar a <b>{{ evento.nombre }}</b> </span>
+          </div>
+          <ng-template pTemplate="footer">
+              <button
+                pButton pRipple icon="pi pi-times" class="p-button-text" label="No"(click)="deleteEventoDialog = false">
+              </button>
+              <button
+                pButton pRipple icon="pi pi-check" class="p-button-text" label="Si" (click)="confirmDelete()">
+              </button>
+          </ng-template>
+      </p-dialog>
+
+      <p-dialog [(visible)]="deleteEventosDialog" header="Confirmación" [modal]="true" [style]="{ width: '450px' }">
+          <div class="flex align-items-center justify-content-center">
+              <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+              <span>Estás seguro que deseas eliminar los Evento seleccionados?</span>
+          </div>
+          <ng-template pTemplate="footer">
+              <button
+                pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteEventosDialog = false">
+              </button>
+              <button
+                pButton pRipple icon="pi pi-check" class="p-button-text" label="Si"(click)="confirmDeleteSelected()">
+              </button>
+          </ng-template>
+      </p-dialog>
+
+  </div>
+</div>

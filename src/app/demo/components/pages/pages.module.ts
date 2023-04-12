@@ -2,7 +2,6 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { PagesRoutingModule } from "./pages-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { EventosComponent } from './eventos/eventos.component';
 
 
 @NgModule({
@@ -10,7 +9,7 @@ import { EventosComponent } from './eventos/eventos.component';
   declarations: [
  
   
-    EventosComponent
+   
   ],
   imports: [CommonModule, PagesRoutingModule],
 })
