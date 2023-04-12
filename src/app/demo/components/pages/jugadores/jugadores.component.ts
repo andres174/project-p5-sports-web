@@ -147,6 +147,7 @@ export class JugadoresComponent implements OnInit  {
   }
 
   saveJugadores() {
+    debugger
     if (!this.formJugadores.valid) {
       this.formJugadores.markAllAsTouched();
       return;
@@ -236,6 +237,5 @@ onImageSelect(event: any) {
 onImageClear() {
   this.clearSelectedImage();
 }
-
 
 }

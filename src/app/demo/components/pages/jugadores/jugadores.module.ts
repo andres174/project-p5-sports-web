@@ -19,7 +19,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { ReactiveFormsModule } from "@angular/forms";
 import { PasswordModule } from "primeng/password";
-
+import { ImageModule } from 'primeng/image';
 @NgModule({
   declarations: [JugadoresComponent],
   imports: [
@@ -40,7 +40,8 @@ import { PasswordModule } from "primeng/password";
     InputNumberModule,
     DialogModule,
     ReactiveFormsModule,
-    PasswordModule
+    PasswordModule,
+    ImageModule,
   ]
 })
 export class JugadoresModule { }
