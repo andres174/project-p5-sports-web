@@ -14,6 +14,8 @@ import { Table } from 'primeng/table';
 })
 export class EventosComponent implements OnInit {
 
+
+
   submitted: boolean = false;
 
   eventosDialog: boolean = false;
@@ -146,12 +148,14 @@ export class EventosComponent implements OnInit {
 
 
   hideDialog() {
+    debugger
     this.eventosDialog = false;
+    debugger
     this.clearSelectedImage();
   }
 
   saveEvento() {
-    
+    debugger
     if (!this.formEventos.valid) {     
       this.formEventos.markAllAsTouched();
       return;
@@ -159,36 +163,36 @@ export class EventosComponent implements OnInit {
     
     this.submitted = true;
     const values = { ...this.formEventos.value };
-
+    debugger
     if (!this.evento.id) {
-      // crear
       this.storeEvento(values);
     } else {
-      // editar
       this.updateEvento(values);
     }
-
+    debugger
     this.hideDialog();
     this.evento = {};
   }
 
   storeEvento(values: any) {
     const data = new FormData();
+    debugger
 
     Object.keys(values).forEach((key) => {
       data.append(key, values[key]);
     });
-
+    debugger
     if (this.selectedImageFile) {
       data.append("imagen", this.selectedImageFile);
     }
-
+    debugger
     this.EventService.guardarEvento(data).subscribe({
       next: (res) => {
         this.getEvento();
         console.log(res);
         this.successMessage(res.message)
       },
+
       error: this.errorMessage,
     });
   }
@@ -223,6 +227,7 @@ export class EventosComponent implements OnInit {
   }
 
   clearSelectedImage() {
+    debugger
     this.selectedImageSrc = "";
     this.selectedImageFile = undefined;
   }
