@@ -60,6 +60,11 @@ export class AppMenuComponent implements OnInit {
             routerLink: ["/pages/jugadores"],
           },
           {
+            label: "Equipos",
+            icon: "pi pi-fw pi-th-large",
+            routerLink: ["/pages/equipos"],
+          },
+          {
             label: "Grupos",
             icon: "pi pi-fw pi-users",
             routerLink: ["/pages/grupos"],
