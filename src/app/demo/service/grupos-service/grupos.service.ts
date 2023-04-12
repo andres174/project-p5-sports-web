@@ -29,5 +29,14 @@ export class GruposService {
 
   }
 
+  getConfiguracionFromEventoDisciplina(id:number){
+
+    return this.http.get<any>(`${environment.apiUrl}get-config-eventos-discplina/${id}`);
+    
+  }
+
+  
+
 
 }
+

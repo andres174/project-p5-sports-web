@@ -19,6 +19,10 @@ export class GruposComponent implements OnInit {
     equipos_disciplina: any[] = [];
     array_equipos_disciplina: any[] = [];
 
+    configuracion_disciplina: any[] = [];
+
+    is_equipos_and_config_loaded: boolean = false;
+
     constructor(
         private grupoService: GruposService
     ) {
@@ -56,7 +60,7 @@ export class GruposComponent implements OnInit {
         });
     }
 
-    getEquiposFromDisciplina() {
+    getEquiposAndConfigFromDisciplina() {
         console.log(this.evento_disciplina_selected.id_evento_disciplina);
 
         this.grupoService.getEquiposFromOneDisciplina(this.evento_disciplina_selected.id_evento_disciplina).subscribe({
@@ -69,6 +73,18 @@ export class GruposComponent implements OnInit {
                 console.log(err);
             }
         });
+
+        this.grupoService.getConfiguracionFromEventoDisciplina(this.evento_disciplina_selected.id_evento_disciplina).subscribe({
+            next: (value) => {
+                console.log(value);
+                this.configuracion_disciplina = value;
+                console.log(this.configuracion_disciplina);
+            },
+            error: (err) => {
+                console.log(err);
+
+            }
+        })
         
     }
 
