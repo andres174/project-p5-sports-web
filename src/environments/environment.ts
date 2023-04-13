@@ -7,7 +7,8 @@ export const environment = {
   apiUrl:'http://127.0.0.1:8000/api/',
   userUrl:'http://127.0.0.1:8000/storage/foto/usuario/',
   jugUrl:'http://127.0.0.1:8000/storage/foto/jugador/',
-  EventUrl:'http://127.0.0.1:8000/storage/imagen/evento/'
+  EventUrl:'http://127.0.0.1:8000/storage/imagen/evento/',
+  equipoUrl:'http://127.0.0.1:8000/storage/logo/equipo/',
 
 };
 

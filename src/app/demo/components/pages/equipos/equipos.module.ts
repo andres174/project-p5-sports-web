@@ -19,6 +19,7 @@ import { RippleModule } from "primeng/ripple";
 import { TableModule } from "primeng/table";
 import { ToastModule } from "primeng/toast";
 import { ToolbarModule } from "primeng/toolbar";
+import { ImageModule } from "primeng/image";
 
 @NgModule({
   declarations: [EquiposComponent],
@@ -41,6 +42,7 @@ import { ToolbarModule } from "primeng/toolbar";
     DialogModule,
     ReactiveFormsModule,
     PasswordModule,
+    ImageModule,
   ],
 })
 export class EquiposModule {}
