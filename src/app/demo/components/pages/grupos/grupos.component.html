@@ -36,7 +36,7 @@
                     </div>
                 </div>
 
-                <div class="card" *ngIf="">
+                <div class="card" *ngIf="is_equipos_and_config_loaded == true">
                     <span *ngFor="let equipo of equipos_disciplina">
                         {{equipo.nombre_equipo}}
                     </span>

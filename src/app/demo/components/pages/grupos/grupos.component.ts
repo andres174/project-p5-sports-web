@@ -84,7 +84,9 @@ export class GruposComponent implements OnInit {
                 console.log(err);
 
             }
-        })
+        });
+
+        this.is_equipos_and_config_loaded = true;
         
     }
 
