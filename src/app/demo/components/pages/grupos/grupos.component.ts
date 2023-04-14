@@ -2,14 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { GruposService } from 'src/app/demo/service/grupos-service/grupos.service';
 
 
+
 @Component({
     selector: 'app-grupos',
     templateUrl: './grupos.component.html'
 })
 export class GruposComponent implements OnInit {
 
-    isLoadTable: boolean = false;
+    // booleans
+    is_generar_grupos_clicked: boolean = false;
+    is_equipos_and_config_loaded: boolean = false;
 
+    //arrays & selecteds
     eventos: any[] = [];
     evento_selected: any;
 
@@ -21,7 +25,7 @@ export class GruposComponent implements OnInit {
 
     configuracion_disciplina: any[] = [];
 
-    is_equipos_and_config_loaded: boolean = false;
+    
 
     constructor(
         private grupoService: GruposService
@@ -35,6 +39,7 @@ export class GruposComponent implements OnInit {
 
     generarGruposBool() {
         this.getEventos();
+        this.is_generar_grupos_clicked = true;
 
     }
 

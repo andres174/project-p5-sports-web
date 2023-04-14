@@ -16,10 +16,13 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { CardModule } from 'primeng/card';
+import { FieldsetModule } from 'primeng/fieldset';
 /* import { MessagesModule } from 'primeng/messages'; */
 
 import { GruposRoutingModule } from './grupos-routing.module';
 import { GruposComponent } from './grupos.component';
+
 
 
 
@@ -44,7 +47,9 @@ import { GruposComponent } from './grupos.component';
     FormsModule,
     ReactiveFormsModule,
     InputNumberModule,
-    InputSwitchModule, 
+    InputSwitchModule,
+    CardModule,
+    FieldsetModule
     /* MessagesModule */
   ]
 })

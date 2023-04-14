@@ -5,16 +5,17 @@
             <p>This is your empty page template to start building beautiful applications.</p>
             <button pButton pRipple type="button" label="Generar grupos" class="p-button-success"
                 (click)="generarGruposBool()"></button>
-            <button pButton pRipple type="button" label="IMp ALert" class="p-button-success"
-                (click)="impAlert()"></button>
+            <!-- <button pButton pRipple type="button" label="IMp ALert" class="p-button-success"
+                (click)="impAlert()"></button> -->
         </div>
     </div>
 
     <div class="col-12">
-        <div class="card">
+        <div class="card"  *ngIf="is_generar_grupos_clicked == true">
             <h4>Crear grupos automáticamente:</h4>
 
             <div class="col-12 md:col-6">
+
                 <div class="card p-fluid">
                     <h5>Seleccione los datos necesarios:</h5>
                     <div class="field grid">
@@ -36,10 +37,37 @@
                     </div>
                 </div>
 
-                <div class="card" *ngIf="is_equipos_and_config_loaded == true">
-                    <span *ngFor="let equipo of equipos_disciplina">
-                        {{equipo.nombre_equipo}}
-                    </span>
+                <div  *ngIf="is_equipos_and_config_loaded == true"> 
+
+                    
+                    <div class="card">
+                        <p-fieldset>
+                            <ng-template pTemplate="header">
+                                <div class="flex align-items-center text-primary">
+                                    <span class="pi pi-cog mr-2"></span>
+                                    <span class="font-bold text-lg">Configuración</span>
+                                </div>
+                            </ng-template>
+                            Content
+                        </p-fieldset>
+                    </div>
+
+                    <div class="" *ngFor="let equipo of equipos_disciplina">
+                        <p-card header={{equipo.nombre_equipo}} subheader="Card Subheader" [style]="{ width: '360px' }">
+                            <ng-template pTemplate="header">
+                                <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
+                            </ng-template>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
+                                quas!
+                            </p>
+                            <!-- <ng-template pTemplate="footer">
+                                <p-button label="Save" icon="pi pi-check"></p-button>
+                                <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }"></p-button>
+                            </ng-template> -->
+                        </p-card>
+                    </div>
+
                 </div>
 
             </div>

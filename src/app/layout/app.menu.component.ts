@@ -40,7 +40,7 @@ export class AppMenuComponent implements OnInit {
           },
           {
             label: 'Configuraciones',
-            icon: 'pi pi-fw pi-sitemap',
+            icon: 'pi pi-fw pi-cog',
             routerLink: ['/pages/configuracion']
           },
           {
