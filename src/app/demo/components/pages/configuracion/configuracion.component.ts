@@ -3,6 +3,7 @@ import { MessageService } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ConfiguracionInterface } from './configuracion.interface';
 import { ConfiguracionService } from 'src/app/demo/service/configuracion.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-configuracion',
@@ -24,7 +25,7 @@ export class ConfiguracionComponent {
 
   configuracion:any
   cols: any[] = [];
-  idUsuario=3
+  idUsuario=localStorage.getItem('id')
 
   // product: Product = {};
 
@@ -149,11 +150,14 @@ export class ConfiguracionComponent {
         minutos_entre_partidos: this.formConfiguracion.value.minutos_entre_partidos,
         tarjetas:               this.formConfiguracion.value.ida_y_vuelta,
         ida_y_vuelta:           this.formConfiguracion.value.tarjetas,
-        id_organizador:3
+        id_organizador:         Number(this.idUsuario)
       }
       this.configuracionService.saveConfiguracion(data).subscribe({
         next:(res)=>{
           this.successMessage(res.message)
+          this.hideDialog()
+          this.showConfiguracion()
+          this.formConfiguracion.reset()
 
         },
         error:(err)=>{
@@ -188,7 +192,7 @@ export class ConfiguracionComponent {
         minutos_entre_partidos: this.formConfiguracion.value.minutos_entre_partidos,
         tarjetas:               this.formConfiguracion.value.ida_y_vuelta,
         ida_y_vuelta:           this.formConfiguracion.value.tarjetas,
-        id_organizador:3
+        id_organizador:         Number(this.idUsuario)
       }
       this.configuracionService.updateConfiguracion(data, this.idConfiguracionUpdate).subscribe({
         next:(res)=>{
@@ -208,6 +212,10 @@ export class ConfiguracionComponent {
 
   deletedSelectedConfig(){
       this.deleteConfiguracionesDialog=true
+  }
+
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, "contains");
   }
   
 }
