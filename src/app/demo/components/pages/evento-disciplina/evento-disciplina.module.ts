@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { JugadoresRoutingModule } from './jugadores-routing.module';
-import { JugadoresComponent } from './jugadores.component';
-import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { ButtonModule } from 'primeng/button';
@@ -17,31 +14,35 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
-import { ReactiveFormsModule } from "@angular/forms";
-import { PasswordModule } from "primeng/password";
-import { ImageModule } from 'primeng/image';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputSwitchModule } from 'primeng/inputswitch';
+
+import { EventoDisciplinaRoutingModule } from './evento-disciplina-routing.module';
+import { EventoDisciplinaComponent } from './evento-disciplina.component';
+
+
 @NgModule({
-  declarations: [JugadoresComponent],
+  declarations: [EventoDisciplinaComponent],
   imports: [
     CommonModule,
-    JugadoresRoutingModule,
+    EventoDisciplinaRoutingModule,
+    InputTextModule,
     TableModule,
     FileUploadModule,
-    FormsModule,
     ButtonModule,
     RippleModule,
     ToastModule,
     ToolbarModule,
     RatingModule,
-    InputTextModule,
     InputTextareaModule,
     DropdownModule,
     RadioButtonModule,
     InputNumberModule,
     DialogModule,
+    FormsModule,
     ReactiveFormsModule,
-    PasswordModule,
-    ImageModule,
+    InputNumberModule,
+    InputSwitchModule
   ]
 })
-export class JugadoresModule { }
+export class EventoDisciplinaModule { }

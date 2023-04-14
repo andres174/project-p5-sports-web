@@ -8,6 +8,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: [
  
+  
+   
+ 
   ],
   imports: [CommonModule, PagesRoutingModule],
 })

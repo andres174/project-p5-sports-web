@@ -19,8 +19,8 @@
               label="Eliminar"
               icon="pi pi-trash"
               class="p-button-danger"
-              (click)="deleteSelectedUsers()"
-              [disabled]="!selectedUsers || !selectedUsers.length"
+              (click)="deleteSelectedEquipos()"
+              [disabled]="!selectedEquipos || !selectedEquipos.length"
             ></button>
           </div>
         </ng-template>
@@ -32,15 +32,15 @@
       </p-toolbar>
       <p-table
         #dt
-        [value]="users"
+        [value]="equipos"
         responsiveLayout="scroll"
-        [globalFilterFields]="['nombre', 'apellido', 'email']"
+        [globalFilterFields]="['nombre']"
         [rows]="10"
         [paginator]="false"
         [rowsPerPageOptions]="[10, 20, 30]"
         [showCurrentPageReport]="true"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [(selection)]="selectedUsers"
+        [(selection)]="selectedEquipos"
         selectionMode="multiple"
         [rowHover]="true"
         dataKey="id"
@@ -49,7 +49,7 @@
           <div
             class="flex flex-column md:flex-row md:justify-content-between md:align-items-center"
           >
-            <h5 class="m-0">Administrar Organizadores</h5>
+            <h5 class="m-0">Administrar Equipos</h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
               <i class="pi pi-search"></i>
               <input
@@ -73,51 +73,37 @@
             <th pSortableColumn="nombre">
               Nombre<p-sortIcon field="nombre"></p-sortIcon>
             </th>
-            <th pSortableColumn="apellido">
-              Apellido<p-sortIcon field="apellido"></p-sortIcon>
-            </th>
-            <th>Foto de Perfil</th>
-            <th pSortableColumn="email">
-              Correo Electrónico<p-sortIcon field="email"></p-sortIcon>
-            </th>
+            <th>Logo</th>
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-u>
+        <ng-template pTemplate="body" let-eq>
           <tr>
             <td>
-              <p-tableCheckbox [value]="u"></p-tableCheckbox>
+              <p-tableCheckbox [value]="eq"></p-tableCheckbox>
             </td>
             <td style="width: 14%; min-width: 8rem">
               <span class="p-column-title">Código</span>
-              {{ u.id }}
+              {{ eq.id }}
             </td>
             <td style="width: 14%; min-width: 8rem">
               <span class="p-column-title">Nombre</span>
-              {{ u.nombre }}
-            </td>
-            <td style="width: 14%; min-width: 8rem">
-              <span class="p-column-title">Apellido</span>
-              {{ u.apellido }}
+              {{ eq.nombre }}
             </td>
             <td style="width: 14%; min-width: 10rem">
-              <span class="p-column-title">Foto de Perfil</span>
+              <span class="p-column-title">Logo</span>
               <div class="flex justify-content-center">
                 <p-image
                   [src]="
-                    getUserImage(u) ||
-                    '/assets/demo/images/user-placeholder.svg'
+                    getEquipoLogo(eq) ||
+                    '/assets/demo/images/image-placeholder.svg'
                   "
-                  [alt]="u.nombre"
+                  [alt]="eq.nombre"
                   width="100"
                   class="shadow-2"
-                  [preview]="getUserImage(u) != ''"
+                  [preview]="getEquipoLogo(eq) != ''"
                 ></p-image>
               </div>
-            </td>
-            <td style="width: 14%; min-width: 8rem">
-              <span class="p-column-title">Correo Electrónico</span>
-              {{ u.email }}
             </td>
             <td>
               <div class="flex">
@@ -126,14 +112,14 @@
                   pRipple
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
-                  (click)="editUser(u)"
+                  (click)="editEquipo(eq)"
                 ></button>
                 <button
                   pButton
                   pRipple
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning"
-                  (click)="deleteUser(u)"
+                  (click)="deleteEquipo(eq)"
                 ></button>
               </div>
             </td>
@@ -141,22 +127,23 @@
         </ng-template>
       </p-table>
     </div>
+
     <p-dialog
-      [(visible)]="userDialog"
+      [(visible)]="equipoDialog"
       [style]="{ width: '450px' }"
-      header="Detalles de Organizador"
+      header="Detalles del Equipo"
       [modal]="true"
       class="p-fluid"
     >
       <ng-template pTemplate="content">
-        <form [formGroup]="userForm">
+        <form [formGroup]="equipoForm">
           <img
             [src]="
               selectedImageSrc ||
-              getUserImage(user) ||
-              '/assets/demo/images/user-placeholder.svg'
+              getEquipoLogo(equipo) ||
+              '/assets/demo/images/image-placeholder.svg'
             "
-            alt="Foto de perfil"
+            alt="Logo del equipo"
             width="150"
             class="mt-1 mx-auto mb-5 block shadow-2"
           />
@@ -165,6 +152,7 @@
             <div class="field">
               <p-fileUpload
                 #imgUpload
+                id="img-upload"
                 mode="basic"
                 chooseLabel="Subir Imagen"
                 (onSelect)="onImageSelect($event)"
@@ -200,95 +188,22 @@
               formControlName="nombre"
               required
               autofocus
-              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('nombre')?.touched && userForm.get('nombre')?.errors?.['required']}"
+              [ngClass]="{ 'ng-invalid ng-dirty': equipoForm.get('nombre')?.touched && equipoForm.get('nombre')?.errors?.['required']}"
             />
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('nombre')?.touched && userForm.get('nombre')?.errors?.['required']"
+              *ngIf="equipoForm.get('nombre')?.touched && equipoForm.get('nombre')?.errors?.['required']"
               >El nombre es requerido.
             </small>
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('nombre')?.errors?.['pattern']"
+              *ngIf="equipoForm.get('nombre')?.errors?.['pattern']"
               >Solo se aceptan letras.
             </small>
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('nombre')?.touched && userForm.get('nombre')?.errors?.['minlength']"
+              *ngIf="equipoForm.get('nombre')?.touched && equipoForm.get('nombre')?.errors?.['minlength']"
               >El mínimo de caracteres debe ser 2.
-            </small>
-          </div>
-
-          <div class="field">
-            <label for="apellido">Apellido</label>
-            <input
-              type="text"
-              pInputText
-              id="apellido"
-              formControlName="apellido"
-              required
-              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('apellido')?.touched && userForm.get('apellido')?.errors?.['required']}"
-            />
-            <small
-              class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('apellido')?.touched && userForm.get('apellido')?.errors?.['required']"
-              >El apellido es requerido.
-            </small>
-            <small
-              class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('apellido')?.errors?.['pattern']"
-              >Solo se aceptan letras.
-            </small>
-            <small
-              class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('apellido')?.touched && userForm.get('apellido')?.errors?.['minlength']"
-              >El mínimo de caracteres debe ser 2.
-            </small>
-          </div>
-
-          <div class="field">
-            <label for="email">Correo Electrónico</label>
-            <input
-              type="text"
-              pInputText
-              id="email"
-              formControlName="email"
-              required
-              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('email')?.touched && userForm.get('email')?.errors?.['required']}"
-            />
-            <small
-              class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors?.['required']"
-              >El correo electrónico es requerido.
-            </small>
-            <small
-              class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors?.['email']"
-              >Ingrese el correo electrónico en un formato correcto.
-            </small>
-          </div>
-
-          <div class="field">
-            <label for="password"
-              >Contraseña
-              <small *ngIf="user.id">(Dejar vacio para no editar)</small>
-            </label>
-            <p-password
-              formControlName="password"
-              id="password"
-              [feedback]="false"
-              [toggleMask]="true"
-              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('password')?.touched && userForm.get('password')?.errors?.['required']}"
-            ></p-password>
-            <small
-              class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('password')?.touched && userForm.get('password')?.errors?.['required']"
-              >La contraseña es requerida.
-            </small>
-            <small
-              class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('password')?.touched && userForm.get('password')?.errors?.['minlength']"
-              >El mínimo de caracteres debe ser 8.
             </small>
           </div>
         </form>
@@ -309,21 +224,21 @@
           label="Guardar"
           icon="pi pi-check"
           class="p-button-text"
-          (click)="saveUser()"
+          (click)="saveEquipo()"
         ></button>
       </ng-template>
     </p-dialog>
 
     <p-dialog
-      [(visible)]="deleteUserDialog"
+      [(visible)]="deleteEquipoDialog"
       header="Confirmación"
       [modal]="true"
       [style]="{ width: '450px' }"
     >
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span *ngIf="user"
-          >Estás seguro que deseas eliminar a <b>{{ user.nombre }}</b
+        <span *ngIf="equipo"
+          >Estás seguro que deseas eliminar el equipo <b>{{ equipo.nombre }}</b
           >?</span
         >
       </div>
@@ -334,7 +249,7 @@
           icon="pi pi-times"
           class="p-button-text"
           label="No"
-          (click)="deleteUserDialog = false"
+          (click)="deleteEquipoDialog = false"
         ></button>
         <button
           pButton
@@ -348,17 +263,14 @@
     </p-dialog>
 
     <p-dialog
-      [(visible)]="deleteUsersDialog"
+      [(visible)]="deleteEquiposDialog"
       header="Confirmación"
       [modal]="true"
       [style]="{ width: '450px' }"
     >
       <div class="flex align-items-center justify-content-center">
         <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-        <span
-          >Estás seguro que deseas eliminar los organizadores
-          seleccionados?</span
-        >
+        <span>Estás seguro que deseas eliminar los equipos seleccionados?</span>
       </div>
       <ng-template pTemplate="footer">
         <button
@@ -367,7 +279,7 @@
           icon="pi pi-times"
           class="p-button-text"
           label="No"
-          (click)="deleteUsersDialog = false"
+          (click)="deleteEquiposDialog = false"
         ></button>
         <button
           pButton

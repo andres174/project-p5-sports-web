@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { JugadoresRoutingModule } from './jugadores-routing.module';
-import { JugadoresComponent } from './jugadores.component';
+import { EventosRoutingModule } from './eventos-routing.module';
+import { EventosComponent } from './eventos.component';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -18,13 +18,15 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { ReactiveFormsModule } from "@angular/forms";
-import { PasswordModule } from "primeng/password";
-import { ImageModule } from 'primeng/image';
+import { CalendarModule } from "primeng/calendar";
+
+
+
 @NgModule({
-  declarations: [JugadoresComponent],
+  declarations: [EventosComponent],
   imports: [
     CommonModule,
-    JugadoresRoutingModule,
+    EventosRoutingModule,
     TableModule,
     FileUploadModule,
     FormsModule,
@@ -40,8 +42,7 @@ import { ImageModule } from 'primeng/image';
     InputNumberModule,
     DialogModule,
     ReactiveFormsModule,
-    PasswordModule,
-    ImageModule,
+    CalendarModule
   ]
 })
-export class JugadoresModule { }
+export class EventosModule { }

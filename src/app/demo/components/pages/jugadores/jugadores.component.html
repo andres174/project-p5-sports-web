@@ -25,7 +25,7 @@
                   class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                   <h5 class="m-0">Jugadores</h5>
                   <span class="block mt-2 md:mt-0 p-input-icon-left">
-                    <i class="pi pi-search"></i>
+                    <i class="pi pi-search "></i>
                     <input pInputText type="text" placeholder="Search..." class="w-full sm:w-auto" (input)="onGlobalFilter(dt, $event)"/>
                   </span>
                 </div>
@@ -44,7 +44,7 @@
                     <th pSortableColumn="apellido">
                       Apellido<p-sortIcon field="apellido"></p-sortIcon>
                     </th>
-                    <th pSortableColumn="apellido">
+                    <th pSortableColumn="cedula">
                       Cedula<p-sortIcon field="cedula"></p-sortIcon>
                     </th>
                     <th>Foto Jugador</th>
@@ -74,7 +74,8 @@
                   </td>
                   <td style="width: 14%; min-width: 10rem center">
                     <span class="p-column-title">Foto</span>
-                    <img [src]=" getJugadoresImage(jugadore) ||'/assets/demo/images/avatar/default-user.svg'"[alt]="jugadore.name" width="90" class="shadow-4"/>
+                    <p-image [src]=" getJugadoresImage(jugadore) ||'/assets/demo/images/avatar/default-user.svg'" alt="Image" width="100" [preview]="true"></p-image>
+                   <!--  <img [src]=" getJugadoresImage(jugadore) ||'/assets/demo/images/avatar/default-user.svg'"[alt]="jugadore.name" width="90" class="shadow-4"/> -->
                   </td>
                   <td>
                     <div class="flex">
@@ -94,9 +95,10 @@
         <p-dialog [(visible)]="jugadoresDialog" [style]="{ width: '450px' }" header="Jugadore" [modal]="true" class="p-fluid">
           <ng-template pTemplate="content">
             <form [formGroup]="formJugadores">
-              <img [src]=" selectedImageSrc || getJugadoresImage(jugadore) || '/assets/demo/images/avatar/default-user.svg' " alt="Foto de perfil" width="100" class="mt-1 mx-auto mb-5 block shadow-2"/>
-                <div class="formgroup-inline center align-items-center">
-                  <div class="field">
+              <img  [src]=" selectedImageSrc || getJugadoresImage(jugadore) || '/assets/demo/images/avatar/default-user.svg' " alt="Foto de perfil" width="100" class="mt-4 mx-auto mb-6 block shadow-7 " />
+             
+              <div class="formgroup-inline center align-items-center ">
+                  <div class="field ">
                     <p-fileUpload #imgUpload mode="basic" chooseLabel="Subir Imagen" (onSelect)="onImageSelect($event)" (onClear)="onImageClear()" [multiple]="false" accept="image/*" [auto]="false" [maxFileSize]="100000" uploadIcon="pi pi-image" [disabled]="selectedImageSrc != ''">
                     </p-fileUpload>
                   </div>
@@ -108,14 +110,18 @@
 
               <div class="field">
                 <label for="nombre">Nombre</label>
+          
                 <input type="text" pInputText id="nombre"  formControlName="nombre" required autofocus [ngClass]="{ 'ng-invalid ng-dirty': formJugadores.get('nombre')?.touched && formJugadores.get('nombre')?.errors?.['required']}"/>
                 <small class="ng-dirty ng-invalid block"*ngIf="formJugadores.get('nombre')?.touched && formJugadores.get('nombre')?.errors?.['required']">
+                  <i class="pi pi-spin pi-spinner"></i>
                   El nombre es requerido.
                 </small>
                 <small class="ng-dirty ng-invalid block" *ngIf="formJugadores.get('nombre')?.errors?.['pattern']">
+                  <i class="pi pi-spin pi-spinner"></i>
                   Solo se aceptan letras.
                 </small>
                 <small class="ng-dirty ng-invalid block" *ngIf="formJugadores.get('nombre')?.touched && formJugadores.get('nombre')?.errors?.['minlength']">
+                  <i class="pi pi-spin pi-spinner"></i>
                   El mínimo de caracteres debe ser 2.
                 </small>
               </div>
@@ -124,12 +130,15 @@
                 <label for="apellido">Apellido</label>
                 <input type="text" pInputText  id="apellido" formControlName="apellido" required [ngClass]="{ 'ng-invalid ng-dirty': formJugadores.get('apellido')?.touched && formJugadores.get('apellido')?.errors?.['required']}"/>
                 <small class="ng-dirty ng-invalid block" *ngIf="formJugadores.get('apellido')?.touched && formJugadores.get('apellido')?.errors?.['required']" >
+                  <i class="pi pi-spin pi-spinner"></i>
                   El apellido es requerido.
                 </small>
                 <small class="ng-dirty ng-invalid block" *ngIf="formJugadores.get('apellido')?.errors?.['pattern']">
+                  <i class="pi pi-spin pi-spinner"></i>
                   Solo se aceptan letras.
                 </small>
                 <small class="ng-dirty ng-invalid block" *ngIf="formJugadores.get('apellido')?.touched && formJugadores.get('apellido')?.errors?.['minlength']">
+                  <i class="pi pi-spin pi-spinner"></i>
                   El mínimo de caracteres debe ser 4.
                 </small>
               </div>
@@ -138,12 +147,15 @@
                 <label for="cedula">Cedula</label>
                 <input type="text" pInputText id="cedula" formControlName="cedula" required autofocus [ngClass]="{ 'ng-invalid ng-dirty': formJugadores.get('cedula')?.touched && formJugadores.get('cedula')?.errors?.['required']}"/>
                 <small class="ng-dirty ng-invalid block" *ngIf="formJugadores.get('cedula')?.touched && formJugadores.get('cedula')?.errors?.['required']">
+                  <i class="pi pi-spin pi-spinner"></i>
                   La cedula es requerido.
                 </small>
                 <small class="ng-dirty ng-invalid block" *ngIf="formJugadores.get('cedula')?.errors?.['pattern']">
+                  <i class="pi pi-spin pi-spinner"></i>
                   Solo se aceptan numero.
                 </small>
                 <small  class="ng-dirty ng-invalid block" *ngIf="formJugadores.get('cedula')?.touched && formJugadores.get('cedula')?.errors?.['minlength']">
+                  <i class="pi pi-spin pi-spinner"></i>
                   Solo se puede ingresar 10 numero.
                 </small>
               </div>
