@@ -195,7 +195,7 @@ export class UsuariosComponent implements OnInit {
     this.usuariosService.guardarUsuario(data).subscribe({
       next: (res) => {
         this.getOrganizadores();
-        // console.log(res);
+        console.log(res);
         this.successMessage("Organizador Creado");
       },
       error: (err) => this.errorMessage(err.message),
