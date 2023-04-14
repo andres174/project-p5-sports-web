@@ -70,6 +70,11 @@ export class AppMenuComponent implements OnInit {
             routerLink: ["/pages/eventos"],
           },
           {
+            label: "Eventos Disciplina",
+            icon: "pi pi-fw pi-calendar-minus",
+            routerLink: ["/pages/evento-disciplina"],
+          },
+          {
             label: "Auth",
             icon: "pi pi-fw pi-user",
             items: [

@@ -26,9 +26,11 @@ export class EventosComponent implements OnInit {
 
   eventos: EventoInterface[] = [];
   evento: EventoInterface = {};
+
   selectedEventos: EventoInterface[] = [];
 
   formEventos: FormGroup;
+  idUsuario=2
 
   selectedImageSrc: string = "";
   selectedImageFile: File | any;
@@ -157,6 +159,12 @@ export class EventosComponent implements OnInit {
   saveEvento() {
     debugger
     if (!this.formEventos.valid) {     
+      let data: EventoInterface = {
+        nombre: this.formEventos.value.nombre,
+        fecha_inicio: this.formEventos.value.fecha_inicio,
+        fecha_fin: this.formEventos.value.fecha_fin,
+        id_organizador:2
+      }; 
       this.formEventos.markAllAsTouched();
       return;
     }
@@ -185,7 +193,9 @@ export class EventosComponent implements OnInit {
     if (this.selectedImageFile) {
       data.append("imagen", this.selectedImageFile);
     }
+    console.log(data)
     debugger
+    
     this.EventService.guardarEvento(data).subscribe({
       next: (res) => {
         this.getEvento();
@@ -193,7 +203,7 @@ export class EventosComponent implements OnInit {
         this.successMessage(res.message)
       },
 
-      error: this.errorMessage,
+     // error: this.errorMessage,
     });
   }
 
@@ -208,10 +218,11 @@ export class EventosComponent implements OnInit {
         });
     }
 
-    let data = {
-      nombre: values.nombre,
-      fecha_inicio: values.fecha_inicio,
-      fecha_fin: values.fecha_fin,
+    let data: EventoInterface = {
+      nombre: this.formEventos.value.nombre,
+      fecha_inicio: this.formEventos.value.fecha_inicio,
+      fecha_fin: this.formEventos.value.fecha_fin,
+      id_organizador:2
     };
 
     // console.log(data);
