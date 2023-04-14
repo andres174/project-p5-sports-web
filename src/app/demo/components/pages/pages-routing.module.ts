@@ -14,7 +14,9 @@ import { RouterModule } from "@angular/router";
         { path: "posiciones", loadChildren: () => import("./posiciones/posiciones.module").then((m) => m.PosicionesModule), },
         { path: "grupos", loadChildren: () => import("./grupos/grupos.module").then((m) => m.GruposModule), },
         { path: "eventos", loadChildren: () => import("./eventos/eventos.module").then((m) => m.EventosModule), },
+        { path: "evento-disciplina", loadChildren: () => import("./evento-disciplina/evento-disciplina.module").then((m) => m.EventoDisciplinaModule), },
         { path: "equipos", loadChildren: () => import("./equipos/equipos.module").then((m) => m.EquiposModule), },
+        { path: "tabla-posicion", loadChildren: () => import("./tabla-posicion/tabla-posicion.module").then((m) => m.TablaPosicionModule), },
         { path: '**', redirectTo: '/notfound' }
 
     ])],

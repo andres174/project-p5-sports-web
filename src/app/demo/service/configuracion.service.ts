@@ -19,7 +19,7 @@ export class ConfiguracionService {
 
 
   showConfiguraciones(){
-    let id=3
+    let id=localStorage.getItem('id')
     return this.http.get<any>(`${environment.apiUrl}configuracion/${id}`)
   }
 

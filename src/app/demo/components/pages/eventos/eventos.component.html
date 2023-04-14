@@ -122,20 +122,20 @@
 
             <div class="field">
               <label for="fecha_inicio">fecha_inicio</label>
-              <p-calendar inputId="fecha_inicio" id="fecha_inicio" formControlName="fecha_inicio" 
+              <!-- <p-calendar inputId="fecha_inicio" id="fecha_inicio" formControlName="fecha_inicio" 
                [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && 
-               formEventos.get('fecha_inicio')?.errors?.['required']}" class="ng-invalid ng-dirty"  [showIcon]="true"></p-calendar>
-              <!-- <input type="text" pInputText  id="fecha_inicio" formControlName="fecha_inicio" required [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_inicio')?.errors?.['required']}"/>
-        -->    <small class="ng-dirty ng-invalid block" *ngIf="formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_inicio')?.errors?.['required']" >
+               formEventos.get('fecha_inicio')?.errors?.['required']}" class="ng-invalid ng-dirty"  [showIcon]="true"></p-calendar> -->
+              <input type="text" pInputText  id="fecha_inicio" formControlName="fecha_inicio" required [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_inicio')?.errors?.['required']}"/>
+              <small class="ng-dirty ng-invalid block" *ngIf="formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_inicio')?.errors?.['required']" >
                 La fecha_inicio es requerido.
               </small>             
             </div>
 
             <div class="field">
               <label for="fecha_fin">fecha_fin</label>
-              <p-calendar inputId="fecha_fin" id="fecha_fin" formControlName="fecha_fin"  [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_fin')?.errors?.['required']}" class="ng-invalid ng-dirty"  [showIcon]="true"></p-calendar>
-        <!--   <input type="text" pInputText  id="fecha_inicio" formControlName="fecha_inicio" required [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_inicio')?.errors?.['required']}"/>
-         -->   <small class="ng-dirty ng-invalid block" *ngIf="formEventos.get('fecha_fin')?.touched && formEventos.get('fecha_fin')?.errors?.['required']" >
+<!--               <p-calendar inputId="fecha_fin" id="fecha_fin" formControlName="fecha_fin"  [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_fin')?.touched && formEventos.get('fecha_fin')?.errors?.['required']}" class="ng-invalid ng-dirty"  [showIcon]="true"></p-calendar>
+ -->          <input type="text" pInputText  id="fecha_fin" formControlName="fecha_fin" required [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_fin')?.touched && formEventos.get('fecha_fin')?.errors?.['required']}"/>
+            <small class="ng-dirty ng-invalid block" *ngIf="formEventos.get('fecha_fin')?.touched && formEventos.get('fecha_fin')?.errors?.['required']" >
                 La fecha_fin es requerido.
               </small>             
             </div>        

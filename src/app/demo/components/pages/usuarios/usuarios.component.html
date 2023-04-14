@@ -34,7 +34,7 @@
         #dt
         [value]="users"
         responsiveLayout="scroll"
-        [globalFilterFields]="['nombre', 'apellido']"
+        [globalFilterFields]="['nombre', 'apellido', 'email']"
         [rows]="10"
         [paginator]="false"
         [rowsPerPageOptions]="[10, 20, 30]"
@@ -83,38 +83,41 @@
             <th></th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-user>
+        <ng-template pTemplate="body" let-u>
           <tr>
             <td>
-              <p-tableCheckbox [value]="user"></p-tableCheckbox>
+              <p-tableCheckbox [value]="u"></p-tableCheckbox>
             </td>
             <td style="width: 14%; min-width: 8rem">
               <span class="p-column-title">Código</span>
-              {{ user.id }}
+              {{ u.id }}
             </td>
             <td style="width: 14%; min-width: 8rem">
               <span class="p-column-title">Nombre</span>
-              {{ user.nombre }}
+              {{ u.nombre }}
             </td>
             <td style="width: 14%; min-width: 8rem">
               <span class="p-column-title">Apellido</span>
-              {{ user.apellido }}
+              {{ u.apellido }}
             </td>
             <td style="width: 14%; min-width: 10rem">
               <span class="p-column-title">Foto de Perfil</span>
-              <img
-                [src]="
-                  getUserImage(user) ||
-                  '/assets/demo/images/avatar/default-user.svg'
-                "
-                [alt]="user.name"
-                width="100"
-                class="shadow-4"
-              />
+              <div class="flex justify-content-center">
+                <p-image
+                  [src]="
+                    getUserImage(u) ||
+                    '/assets/demo/images/user-placeholder.svg'
+                  "
+                  [alt]="u.nombre"
+                  width="100"
+                  class="shadow-2"
+                  [preview]="getUserImage(u) != ''"
+                ></p-image>
+              </div>
             </td>
             <td style="width: 14%; min-width: 8rem">
               <span class="p-column-title">Correo Electrónico</span>
-              {{ user.email }}
+              {{ u.email }}
             </td>
             <td>
               <div class="flex">
@@ -123,14 +126,14 @@
                   pRipple
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
-                  (click)="editUser(user)"
+                  (click)="editUser(u)"
                 ></button>
                 <button
                   pButton
                   pRipple
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-warning"
-                  (click)="deleteUser(user)"
+                  (click)="deleteUser(u)"
                 ></button>
               </div>
             </td>
@@ -151,7 +154,7 @@
             [src]="
               selectedImageSrc ||
               getUserImage(user) ||
-              '/assets/demo/images/avatar/default-user.svg'
+              '/assets/demo/images/user-placeholder.svg'
             "
             alt="Foto de perfil"
             width="150"

@@ -19,6 +19,8 @@ import { ToastModule } from "primeng/toast";
 import { ToolbarModule } from "primeng/toolbar";
 import { ReactiveFormsModule } from "@angular/forms";
 import { PasswordModule } from "primeng/password";
+import { ImageModule } from "primeng/image";
+import { BlockUIModule } from "primeng/blockui";
 
 @NgModule({
   declarations: [UsuariosComponent],
@@ -40,7 +42,8 @@ import { PasswordModule } from "primeng/password";
     InputNumberModule,
     DialogModule,
     ReactiveFormsModule,
-    PasswordModule
+    PasswordModule,
+    ImageModule,
   ],
 })
 export class UsuariosModule {}
