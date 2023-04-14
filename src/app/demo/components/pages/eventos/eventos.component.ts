@@ -150,14 +150,14 @@ export class EventosComponent implements OnInit {
 
 
   hideDialog() {
-    debugger
+    
     this.eventosDialog = false;
-    debugger
+    
     this.clearSelectedImage();
   }
 
   saveEvento() {
-    debugger
+    
     if (!this.formEventos.valid) {     
       let data: EventoInterface = {
         nombre: this.formEventos.value.nombre,
@@ -171,30 +171,30 @@ export class EventosComponent implements OnInit {
     
     this.submitted = true;
     const values = { ...this.formEventos.value };
-    debugger
+    
     if (!this.evento.id) {
       this.storeEvento(values);
     } else {
       this.updateEvento(values);
     }
-    debugger
+   
     this.hideDialog();
     this.evento = {};
   }
 
   storeEvento(values: any) {
     const data = new FormData();
-    debugger
+    
 
     Object.keys(values).forEach((key) => {
       data.append(key, values[key]);
     });
-    debugger
+    
     if (this.selectedImageFile) {
       data.append("imagen", this.selectedImageFile);
     }
     console.log(data)
-    debugger
+    
     
     this.EventService.guardarEvento(data).subscribe({
       next: (res) => {
@@ -238,7 +238,7 @@ export class EventosComponent implements OnInit {
   }
 
   clearSelectedImage() {
-    debugger
+    
     this.selectedImageSrc = "";
     this.selectedImageFile = undefined;
   }
