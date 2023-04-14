@@ -31,12 +31,12 @@
                         <div class="col-12 md:col-10">
                             <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="evento_disciplina"
                                 [(ngModel)]="evento_disciplina_selected" optionLabel="disciplina"
-                                (onChange)="getEquiposFromDisciplina()"></p-dropdown>
+                                (onChange)="getEquiposAndConfigFromDisciplina()"></p-dropdown>
                         </div>
                     </div>
                 </div>
 
-                <div class="card">
+                <div class="card" *ngIf="is_equipos_and_config_loaded == true">
                     <span *ngFor="let equipo of equipos_disciplina">
                         {{equipo.nombre_equipo}}
                     </span>

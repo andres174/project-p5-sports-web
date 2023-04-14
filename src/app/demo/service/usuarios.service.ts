@@ -1,7 +1,6 @@
 import { environment } from "src/environments/environment";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { forkJoin } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -53,7 +52,7 @@ export class UsuariosService {
   deleteSelectedUsuarios(ids: any[]) {
     const data = { ids };
     return this.http.post<any>(
-      `${environment.apiUrl}deleteSelectedUsuarios`,
+      `${environment.apiUrl}delete-selected-usuarios`,
       data
     );
   }

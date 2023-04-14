@@ -2,7 +2,7 @@ import { UsuariosService } from "src/app/demo/service/usuarios.service";
 import { Component, OnInit } from "@angular/core";
 import { MessageService } from "primeng/api";
 import { Table } from "primeng/table";
-import { UsuarioInterface } from "src/app/demo/api/usuario.interface";
+import { Usuario } from "src/app/demo/api/usuario.interface";
 import { environment } from "src/environments/environment";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
@@ -17,9 +17,9 @@ export class UsuariosComponent implements OnInit {
   deleteUserDialog: boolean = false;
   deleteUsersDialog: boolean = false;
 
-  users: UsuarioInterface[] = [];
-  user: UsuarioInterface = {};
-  selectedUsers: UsuarioInterface[] = [];
+  users: Usuario[] = [];
+  user: Usuario = {};
+  selectedUsers: Usuario[] = [];
 
   userForm: FormGroup;
 
@@ -94,7 +94,7 @@ export class UsuariosComponent implements OnInit {
     this.userDialog = true;
   }
 
-  editUser(user: UsuarioInterface) {
+  editUser(user: Usuario) {
     this.user = { ...user };
     this.userForm.patchValue({ ...user });
     this.userForm.controls["password"].setValue("");
@@ -106,7 +106,7 @@ export class UsuariosComponent implements OnInit {
     this.userDialog = true;
   }
 
-  getUserImage(user: UsuarioInterface) {
+  getUserImage(user: Usuario) {
     if (user.foto_perfil)
       return `${environment.userUrl}${user.id}/${user.foto_perfil}`;
     else return "";
@@ -116,7 +116,7 @@ export class UsuariosComponent implements OnInit {
     this.deleteUsersDialog = true;
   }
 
-  deleteUser(user: UsuarioInterface) {
+  deleteUser(user: Usuario) {
     this.deleteUserDialog = true;
     this.user = { ...user };
   }
@@ -130,10 +130,10 @@ export class UsuariosComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.getOrganizadores();
-          console.log(res);
+          // console.log(res);
           this.successMessage("Organizadores Eliminados");
         },
-        error: this.errorMessage,
+        error: (err) => this.errorMessage(err.message),
       });
 
     this.selectedUsers = [];
@@ -144,12 +144,11 @@ export class UsuariosComponent implements OnInit {
     this.loading = true;
 
     this.usuariosService.deleteUsuario(this.user.id).subscribe({
-      next: console.log,
-      error: this.errorMessage,
-      complete: () => {
+      next: (res) => {
         this.getOrganizadores();
         this.successMessage("Organizador Eliminado");
       },
+      error: (err) => this.errorMessage(err.message),
     });
 
     this.user = {};
@@ -184,6 +183,7 @@ export class UsuariosComponent implements OnInit {
   storeUser(values: any) {
     const data = new FormData();
 
+    // Pasar los valores a un FormData
     Object.keys(values).forEach((key) => {
       data.append(key, values[key]);
     });
@@ -195,10 +195,10 @@ export class UsuariosComponent implements OnInit {
     this.usuariosService.guardarUsuario(data).subscribe({
       next: (res) => {
         this.getOrganizadores();
-        console.log(res);
+        // console.log(res);
         this.successMessage("Organizador Creado");
       },
-      error: this.errorMessage,
+      error: (err) => this.errorMessage(err.message),
     });
   }
 
@@ -221,15 +221,12 @@ export class UsuariosComponent implements OnInit {
       data.email = null;
     }
 
-    // console.log(data);
-
     this.usuariosService.updateUsuario(data, this.user.id).subscribe({
       next: (res) => {
         this.getOrganizadores();
-        console.log(res);
         this.successMessage("Organizador Actualizado");
       },
-      error: this.errorMessage,
+      error: (err) => this.errorMessage(err.message),
     });
   }
 

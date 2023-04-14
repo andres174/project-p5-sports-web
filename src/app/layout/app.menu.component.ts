@@ -60,6 +60,11 @@ export class AppMenuComponent implements OnInit {
             routerLink: ["/pages/jugadores"],
           },
           {
+            label: "Equipos",
+            icon: "pi pi-fw pi-th-large",
+            routerLink: ["/pages/equipos"],
+          },
+          {
             label: "Grupos",
             icon: "pi pi-fw pi-users",
             routerLink: ["/pages/grupos"],
@@ -69,6 +74,13 @@ export class AppMenuComponent implements OnInit {
             icon: "pi pi-fw pi-calendar-times",
             routerLink: ["/pages/eventos"],
           },
+
+          {
+            label: "Tabla de Posicion",
+            icon: "pi pi-fw pi-calendar-times",
+            routerLink: ["/pages/tabla-posicion"],
+          },
+          
           {
             label: "Eventos Disciplina",
             icon: "pi pi-fw pi-calendar-minus",
