@@ -9,11 +9,8 @@ import { environment } from 'src/environments/environment';
     constructor(private http: HttpClient) {}
   
     guardarEvento(form:any){
-<<<<<<< HEAD
       console.log(JSON.stringify(form))
       debugger
-=======
->>>>>>> 305b70ce415291cd04f4b5891647d8363f845dc1
         return this.http.post<any>(`${environment.apiUrl}Evento`,form)
       }
 

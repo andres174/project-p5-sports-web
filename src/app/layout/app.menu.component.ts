@@ -77,7 +77,7 @@ export class AppMenuComponent implements OnInit {
 
           {
             label: "Tabla de Posicion",
-            icon: "pi pi-fw pi-calendar-times",
+            icon: "pi pi-fw pi-server",
             routerLink: ["/pages/tabla-posicion"],
           },
           
