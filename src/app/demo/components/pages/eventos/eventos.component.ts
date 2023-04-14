@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { EventService } from 'src/app/demo/service/event.service';
 import { environment } from 'src/environments/environment';
 import { Table } from 'primeng/table';
+import { log } from 'console';
 
 @Component({
   selector: 'app-eventos',
@@ -43,6 +44,7 @@ export class EventosComponent implements OnInit {
   )
   {
     this.formEventos=formBuilder.group({
+
       nombre: ['',[Validators.required]],
       fecha_inicio: ['', [Validators.required]],
       fecha_fin: ['', [Validators.required]],
@@ -150,52 +152,37 @@ export class EventosComponent implements OnInit {
 
 
   hideDialog() {
-    
     this.eventosDialog = false;
-    
     this.clearSelectedImage();
   }
 
   saveEvento() {
-    
     if (!this.formEventos.valid) {     
-      let data: EventoInterface = {
-        nombre: this.formEventos.value.nombre,
-        fecha_inicio: this.formEventos.value.fecha_inicio,
-        fecha_fin: this.formEventos.value.fecha_fin,
-        id_organizador:2
-      }; 
+      
       this.formEventos.markAllAsTouched();
       return;
     }
     
     this.submitted = true;
     const values = { ...this.formEventos.value };
-    
     if (!this.evento.id) {
       this.storeEvento(values);
     } else {
       this.updateEvento(values);
     }
-   
     this.hideDialog();
     this.evento = {};
   }
 
   storeEvento(values: any) {
     const data = new FormData();
-    
-
     Object.keys(values).forEach((key) => {
       data.append(key, values[key]);
     });
-    
+    data.append('id_organizador',localStorage.getItem('id')!)
     if (this.selectedImageFile) {
       data.append("imagen", this.selectedImageFile);
     }
-    console.log(data)
-    
-    
     this.EventService.guardarEvento(data).subscribe({
       next: (res) => {
         this.getEvento();
