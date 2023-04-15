@@ -35,6 +35,14 @@ export class GruposService {
     
   }
 
+  generarGrupos(form:any){
+    debugger
+    return this.http.post<any>(`${environment.apiUrl}generar-grupos-auto`, form);
+
+  }
+
+  
+
   
 
 

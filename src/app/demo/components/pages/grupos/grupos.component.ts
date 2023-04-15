@@ -36,11 +36,6 @@ export class GruposComponent implements OnInit {
     margen = {
         'margin-bottom.em': '2'
     }
-    //d-flex
-    dFlex = {
-        'display': 'flex'
-    }
-
     
 
     constructor(
@@ -110,6 +105,37 @@ export class GruposComponent implements OnInit {
 
         this.is_equipos_and_config_loaded = true;
         
+    }
+
+    generarGrupos(){
+        let id_evento_disciplina = this.evento_disciplina_selected.id_evento_disciplina;
+        let equipos:string = '';
+
+        this.equipos_disciplina.forEach(e => {
+            if(equipos == ''){
+                equipos = e.id_equipo
+            } else {
+                equipos = equipos + ',' + e.id_equipo;
+            }
+        });
+
+        //es gracioso que esto funcione
+
+        console.log(equipos, "id" + id_evento_disciplina);
+
+        let data = {
+            id_evento_disciplina: id_evento_disciplina,
+            equipos: equipos
+        }
+
+        this.grupoService.generarGrupos(data).subscribe({
+            next: (value) => {
+                console.log(value);
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
     }
 
     impAlert() {
