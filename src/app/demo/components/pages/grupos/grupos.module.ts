@@ -18,7 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { CardModule } from 'primeng/card';
 import { FieldsetModule } from 'primeng/fieldset';
-/* import { MessagesModule } from 'primeng/messages'; */
+
 
 import { GruposRoutingModule } from './grupos-routing.module';
 import { GruposComponent } from './grupos.component';
@@ -50,7 +50,6 @@ import { GruposComponent } from './grupos.component';
     InputSwitchModule,
     CardModule,
     FieldsetModule
-    /* MessagesModule */
   ]
 })
 export class GruposModule { }

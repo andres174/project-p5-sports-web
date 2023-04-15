@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { GruposService } from 'src/app/demo/service/grupos-service/grupos.service';
+import { environment } from 'src/environments/environment';
 
 
 
 @Component({
     selector: 'app-grupos',
-    templateUrl: './grupos.component.html'
+    templateUrl: './grupos.component.html',
+    styleUrls: ['./grupos.component.scss']
 })
 export class GruposComponent implements OnInit {
+
+    //logo equipo
+    logo_equipo_url = environment.equipoUrl;
 
     // booleans
     is_generar_grupos_clicked: boolean = false;
@@ -16,6 +21,7 @@ export class GruposComponent implements OnInit {
     //arrays & selecteds
     eventos: any[] = [];
     evento_selected: any;
+    is_evento_selected: boolean = true; // para el disable
 
     evento_disciplina: any[] = [];
     evento_disciplina_selected: any;
@@ -24,6 +30,16 @@ export class GruposComponent implements OnInit {
     array_equipos_disciplina: any[] = [];
 
     configuracion_disciplina: any[] = [];
+
+    //ngStyle 
+    //margen
+    margen = {
+        'margin-bottom.em': '2'
+    }
+    //d-flex
+    dFlex = {
+        'display': 'flex'
+    }
 
     
 
@@ -63,6 +79,7 @@ export class GruposComponent implements OnInit {
                 console.log(err);
             }
         });
+        this.is_evento_selected = false;
     }
 
     getEquiposAndConfigFromDisciplina() {
@@ -70,7 +87,7 @@ export class GruposComponent implements OnInit {
 
         this.grupoService.getEquiposFromOneDisciplina(this.evento_disciplina_selected.id_evento_disciplina).subscribe({
             next: (value) => {
-                console.log(value);
+                /* console.log(value); */
                 this.equipos_disciplina = value;
                 console.log(this.equipos_disciplina);
             },
@@ -81,7 +98,7 @@ export class GruposComponent implements OnInit {
 
         this.grupoService.getConfiguracionFromEventoDisciplina(this.evento_disciplina_selected.id_evento_disciplina).subscribe({
             next: (value) => {
-                console.log(value);
+                /* console.log(value); */
                 this.configuracion_disciplina = value;
                 console.log(this.configuracion_disciplina);
             },

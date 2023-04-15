@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="card">
             <h4>Grupos</h4>
-            <p>This is your empty page template to start building beautiful applications.</p>
+            <p>En este modulo podras crear los grupos para tu campeonato, ya sea de forma automática o manual.</p>
             <button pButton pRipple type="button" label="Generar grupos" class="p-button-success"
                 (click)="generarGruposBool()"></button>
             <!-- <button pButton pRipple type="button" label="IMp ALert" class="p-button-success"
@@ -10,37 +10,51 @@
         </div>
     </div>
 
+    <div class="col-12" *ngIf="is_generar_grupos_clicked == false">
+        <div class="card">
+            <h5>
+                Selecciona una opción para iniciar.
+            </h5>
+        </div>
+    </div>
+
     <div class="col-12">
-        <div class="card"  *ngIf="is_generar_grupos_clicked == true">
+        <div class="card" *ngIf="is_generar_grupos_clicked == true">
             <h4>Crear grupos automáticamente:</h4>
 
-            <div class="col-12 md:col-6">
+            <div class="col-12 md:col-12">
 
                 <div class="card p-fluid">
-                    <h5>Seleccione los datos necesarios:</h5>
-                    <div class="field grid">
-                        <label htmlFor="name3" class="col-12 mb-2 md:col-2 md:mb-0">Evento:</label>
+                    <h5 [ngStyle]="margen">Seleccione los datos necesarios:</h5>
+                    <div class="field grid" [ngStyle]="margen">
                         <div class="col-12 md:col-10">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="eventos"
-                                [(ngModel)]="evento_selected" optionLabel="nombre"
-                                (onChange)="getOneEventoDisciplina()"></p-dropdown>
+                            <span class="p-float-label">
+                                <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="eventos"
+                                    [(ngModel)]="evento_selected" optionLabel="nombre"
+                                    (onChange)="getOneEventoDisciplina()">
+                                </p-dropdown>
+                                <label for="float-label">Evento: </label>
+                            </span>
                         </div>
                     </div>
 
-                    <div class="field grid">
-                        <label htmlFor="email3" class="col-12 mb-2 md:col-2 md:mb-0">Email</label>
+                    <div class="field grid" [ngStyle]="margen">
                         <div class="col-12 md:col-10">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="evento_disciplina"
-                                [(ngModel)]="evento_disciplina_selected" optionLabel="disciplina"
-                                (onChange)="getEquiposAndConfigFromDisciplina()"></p-dropdown>
+                            <span class="p-float-label">
+                                <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="evento_disciplina"
+                                    [(ngModel)]="evento_disciplina_selected" optionLabel="disciplina"
+                                    [disabled]="is_evento_selected" (onChange)="getEquiposAndConfigFromDisciplina()">
+                                </p-dropdown>
+                                <label for="float-label">Disciplinas: </label>
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                <div  *ngIf="is_equipos_and_config_loaded == true"> 
+                <div *ngIf="is_equipos_and_config_loaded == true">
 
-                    
-                    <div class="card">
+
+                    <div class="card" *ngFor="let config of configuracion_disciplina">
                         <p-fieldset>
                             <ng-template pTemplate="header">
                                 <div class="flex align-items-center text-primary">
@@ -48,30 +62,85 @@
                                     <span class="font-bold text-lg">Configuración</span>
                                 </div>
                             </ng-template>
-                            Content
+                            <h6>
+                                {{config.nombre}}
+                            </h6>
+
+                            <div class="grid">
+                                <div class="lg:col-6 md:col-4">
+                                    Número de grupos: <b>{{config.numero_grupos}}</b>
+                                </div>
+                                <div class="lg:col-6 md:col-4">
+                                    Número de equipos por grupo: <b>{{config.numero_miembros}}</b>
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="lg:col-6 md:col-4">
+                                    Tiempo de juego: <b>{{config.minutos_juego}}min</b>
+                                </div>
+                                <div class="lg:col-6 md:col-4">
+                                    Tiempo entre partidos: <b>{{config.minutos_entre_partidos}}min</b>
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="lg:col-6 md:col-4">
+                                    Ida y vuelta: <span *ngIf="config.ida_y_vuelta == 1; else no_bool"><b>Sí</b></span>
+                                </div>
+                                <div class="lg:col-6 md:col-4">
+                                    Tarjetas: <span *ngIf="config.tarjetas == 1; else no_bool"><b>Sí</b></span>
+                                </div>
+                                <!-- no se si esto funciona bien -->
+                                <ng-template #no_bool><b>No</b></ng-template>
+                            </div>
+
+                            <div class="grid">
+                                <div class="lg:col-6 md:col-4">
+                                    <h6>
+                                        Propietario:
+                                    </h6>
+                                    <p>
+                                        {{config.nombre_org}} {{config.apellido_org}}
+                                    </p>
+                                </div>
+                            </div>
+
                         </p-fieldset>
                     </div>
 
-                    <div class="" *ngFor="let equipo of equipos_disciplina">
-                        <p-card header={{equipo.nombre_equipo}} subheader="Card Subheader" [style]="{ width: '360px' }">
-                            <ng-template pTemplate="header">
-                                <img alt="Card" src="https://primefaces.org/cdn/primeng/images/usercard.png" />
-                            </ng-template>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate neque
-                                quas!
-                            </p>
-                            <!-- <ng-template pTemplate="footer">
-                                <p-button label="Save" icon="pi pi-check"></p-button>
-                                <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }"></p-button>
-                            </ng-template> -->
-                        </p-card>
+                    <div class="grid-container">
+                        <div class="grid-item" *ngFor="let equipo of equipos_disciplina">
+                            <p-card header={{equipo.nombre_equipo}} subheader="{{equipo.disciplina}}"
+                                [style]="{ width: '250px' }">
+                                <ng-template pTemplate="header">
+                                    <img alt="{{equipo.logo}}"
+                                        [src]="logo_equipo_url + equipo.id + '/' + equipo.logo || '/assets/img/no-image.png'" />
+                                    <!-- no esta funcionando lo del no-image -->
+                                </ng-template>
+                                <p>
+
+                                </p>
+                                <!-- <ng-template pTemplate="footer">
+                                    <p-button label="Save" icon="pi pi-check"></p-button>
+                                    <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }"></p-button>
+                                </ng-template> -->
+                            </p-card>
+                        </div>
                     </div>
 
+
+
                 </div>
+
+
 
             </div>
 
         </div>
+
+
     </div>
+
+
 </div>
