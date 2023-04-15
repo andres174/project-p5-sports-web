@@ -16,6 +16,7 @@ import { log } from 'console';
 export class EventosComponent implements OnInit {
 
 
+ 
 
   submitted: boolean = false;
 
@@ -50,6 +51,13 @@ export class EventosComponent implements OnInit {
       fecha_fin: ['', [Validators.required]],
     })
   }
+
+  updateDate(controlName: string) {
+    const selectedDate = this.formEventos.controls[controlName].value;
+    const formattedDate = selectedDate.toISOString().slice(0, 10);
+    this.formEventos.controls[controlName].setValue(formattedDate);
+  }
+
 
   getEvento() {
     this.submitted = true;
