@@ -115,23 +115,20 @@
                                 [style]="{ width: '250px' }">
                                 <ng-template pTemplate="header">
                                     <img alt="{{equipo.logo}}"
-                                        [src]="logo_equipo_url + equipo.id + '/' + equipo.logo || '/assets/img/no-image.png'" />
+                                        [src]="logo_equipo_url + equipo.id_equipo + '/' + equipo.logo || '/assets/img/no-image.png'" />
                                     <!-- no esta funcionando lo del no-image -->
                                 </ng-template>
                                 <p>
 
                                 </p>
-                                <!-- <ng-template pTemplate="footer">
-                                    <p-button label="Save" icon="pi pi-check"></p-button>
-                                    <p-button label="Cancel" icon="pi pi-times" styleClass="p-button-secondary" [style]="{ 'margin-left': '.5em' }"></p-button>
-                                </ng-template> -->
+
                             </p-card>
                         </div>
                     </div>
 
                     <div class="card">
                         <button pButton pRipple type="button" label="Generar grupos" class="p-button-success"
-                        (click)="generarGrupos()"></button>
+                            (click)="generarGrupos()"></button>
                     </div>
 
 

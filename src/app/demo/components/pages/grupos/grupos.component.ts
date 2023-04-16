@@ -36,7 +36,7 @@ export class GruposComponent implements OnInit {
     margen = {
         'margin-bottom.em': '2'
     }
-    
+
 
     constructor(
         private grupoService: GruposService
@@ -104,15 +104,15 @@ export class GruposComponent implements OnInit {
         });
 
         this.is_equipos_and_config_loaded = true;
-        
+
     }
 
-    generarGrupos(){
+    generarGrupos() {
         let id_evento_disciplina = this.evento_disciplina_selected.id_evento_disciplina;
-        let equipos:string = '';
+        let equipos: string = '';
 
         this.equipos_disciplina.forEach(e => {
-            if(equipos == ''){
+            if (equipos == '') {
                 equipos = e.id_equipo
             } else {
                 equipos = equipos + ',' + e.id_equipo;
