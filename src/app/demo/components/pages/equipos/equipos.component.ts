@@ -52,6 +52,10 @@ export class EquiposComponent implements OnInit {
         this.equipos = res;
         this.loading = false;
       },
+      error: (err) => {
+        console.log(err);
+        this.errorMessage("Error interno del servidor");
+      },
     });
   }
 
@@ -125,7 +129,10 @@ export class EquiposComponent implements OnInit {
           this.getEquipos();
           this.successMessage(res.message);
         },
-        error: this.errorMessage,
+        error: (err) => {
+          console.log(err);
+          this.errorMessage(err.error.message);
+        },
       });
 
     this.selectedEquipos = [];
@@ -140,7 +147,10 @@ export class EquiposComponent implements OnInit {
         this.getEquipos();
         this.successMessage(res.message);
       },
-      error: this.errorMessage,
+      error: (err) => {
+        console.log(err);
+        this.errorMessage(err.error.message);
+      },
     });
 
     this.equipo = {};
@@ -187,7 +197,7 @@ export class EquiposComponent implements OnInit {
         this.getEquipos();
         this.successMessage(res.message);
       },
-      error: (err) => this.errorMessage(err.message),
+      error: console.log,
     });
   }
 
@@ -210,7 +220,7 @@ export class EquiposComponent implements OnInit {
         this.getEquipos();
         this.successMessage(res.message);
       },
-      error: (err) => this.errorMessage(err.message),
+      error: console.log,
     });
   }
 

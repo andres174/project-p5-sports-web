@@ -62,6 +62,10 @@ export class UsuariosComponent implements OnInit {
         this.users = res;
         this.loading = false;
       },
+      error: (err) => {
+        console.log(err);
+        this.errorMessage("Error interno del servidor");
+      },
     });
   }
 
@@ -133,7 +137,10 @@ export class UsuariosComponent implements OnInit {
           // console.log(res);
           this.successMessage("Organizadores Eliminados");
         },
-        error: (err) => this.errorMessage(err.message),
+        error: (err) => {
+          console.log(err);
+          this.errorMessage(err.error.message);
+        },
       });
 
     this.selectedUsers = [];
@@ -148,7 +155,10 @@ export class UsuariosComponent implements OnInit {
         this.getOrganizadores();
         this.successMessage("Organizador Eliminado");
       },
-      error: (err) => this.errorMessage(err.message),
+      error: (err) => {
+        console.log(err);
+        this.errorMessage(err.error.message);
+      },
     });
 
     this.user = {};
@@ -198,7 +208,10 @@ export class UsuariosComponent implements OnInit {
         console.log(res);
         this.successMessage("Organizador Creado");
       },
-      error: (err) => this.errorMessage(err.message),
+      error: (err) => {
+        console.log(err);
+        this.errorMessage(err.error.message);
+      },
     });
   }
 
@@ -226,7 +239,10 @@ export class UsuariosComponent implements OnInit {
         this.getOrganizadores();
         this.successMessage("Organizador Actualizado");
       },
-      error: (err) => this.errorMessage(err.message),
+      error: (err) => {
+        console.log(err);
+        this.errorMessage(err.error.message);
+      },
     });
   }
 
