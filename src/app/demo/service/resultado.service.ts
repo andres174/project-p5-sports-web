@@ -12,29 +12,13 @@ export class ResultadoService {
 
   constructor(private http: HttpClient) { }
 
-  getEventos() {
-    return this.http.get<any>(`${environment.apiUrl}get-all-eventos`);
-  }
-
-  getEquiposFromOneDisciplina(id: number) {
-
-    return this.http.get<any>(`${environment.apiUrl}get-equipos-discplinas/${id}`);
-
-  }
-
-  getConfiguracionFromEventoDisciplina(id: number) {
-
-    return this.http.get<any>(`${environment.apiUrl}get-config-eventos-discplina/${id}`);
-
-  }
-
-
-
   MostrarTablePosition(id: number): Observable<TablaPosicion[]>{
     return this.http.get<TablaPosicion[]>(`${environment.apiUrl}tablaposicion/${id}`);
   }
 
-
+  gettablaposicion(id: number) {
+    return this.http.get<any>(`${environment.apiUrl}tablaposicion/${id}`);
+  }
 
 
 }
