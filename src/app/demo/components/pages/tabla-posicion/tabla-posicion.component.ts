@@ -92,12 +92,16 @@ export class TablaPosicionComponent implements OnInit {
               console.log(err);
           }
       });
-      this.ResultadoService.MostrarTablePosition(this.evento_disciplina_selected.id_evento_disciplina).subscribe({
-       
-        next:(res)=> this.tablaPosicion = res,
-        error:(err)=>console.log(err)
-        
-      });
+      this.ResultadoService.MostrarTablePosition(this.evento_disciplina_selected).subscribe({       
+        next: (value) => {
+            /* console.log(value); */
+            this.tablaPosicion = value;
+            console.log(this.tablaPosicion);
+        },
+        error: (err) => {
+            console.log(err);
+        }
+    });
       this.is_equipos_and_config_loaded = true;
 
   }
