@@ -18,6 +18,7 @@ import { RouterModule } from "@angular/router";
         { path: "equipos", loadChildren: () => import("./equipos/equipos.module").then((m) => m.EquiposModule), },
         { path: "tabla-posicion", loadChildren: () => import("./tabla-posicion/tabla-posicion.module").then((m) => m.TablaPosicionModule), },
         { path: "equipos-jugadores", loadChildren: () => import("./equipos-jugadores/equipos-jugadores.module").then((m) => m.EquiposJugadoresModule), },
+        { path: "resultados", loadChildren: () => import("./resultados/resultados.module").then((m) => m.ResultadosModule), },
         { path: '**', redirectTo: '/notfound' }
 
     ])],
