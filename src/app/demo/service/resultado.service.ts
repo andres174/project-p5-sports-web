@@ -17,6 +17,7 @@ export class ResultadoService {
   }
 
   gettablaposicion(id: number) {
+    debugger
     return this.http.get<any>(`${environment.apiUrl}tablaposicion/${id}`);
   }
 
