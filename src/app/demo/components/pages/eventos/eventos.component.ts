@@ -15,8 +15,9 @@ import { log } from 'console';
 })
 export class EventosComponent implements OnInit {
 
+  mostrarModalCalendarioInicio = false;
 
- 
+  mostrarModalCalendario = false;
 
   submitted: boolean = false;
 
@@ -36,7 +37,7 @@ export class EventosComponent implements OnInit {
 
   selectedImageSrc: string = "";
   selectedImageFile: File | any;
-
+  
 
   constructor(
     private formBuilder:FormBuilder,
@@ -48,9 +49,31 @@ export class EventosComponent implements OnInit {
 
       nombre: ['',[Validators.required]],
       fecha_inicio: ['', [Validators.required]],
-      fecha_fin: ['', [Validators.required]],
+      fecha_fin: [' '] // Valor por defecto y no requera la fecha fin
     })
   }
+
+  limpiarFechaInicio() {
+    this.mostrarModalCalendarioInicio = false;
+    const fechaInicioInput  = document.querySelector('#fecha_inicio') as HTMLInputElement;
+    const fechaInicioInputAnterior = document.activeElement as HTMLInputElement;
+    if (fechaInicioInput) {
+      this.formEventos.get('fecha_inicio')?.setValue(null);
+      fechaInicioInputAnterior.focus();
+    }
+  }
+  
+
+  limpiarFechafin() {
+    this.mostrarModalCalendario = false;
+    const fechaFinInput = document.querySelector('#fecha_fin') as HTMLInputElement;
+    const fechaFinInputAnterior = document.activeElement as HTMLInputElement;
+    if (fechaFinInput) {
+      this.formEventos.get('fecha_fin')?.setValue(null);
+      fechaFinInputAnterior.focus();
+    }
+  }
+  
 
   updateDate(controlName: string) {
     const selectedDate = this.formEventos.controls[controlName].value;

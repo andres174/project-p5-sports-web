@@ -19,6 +19,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { ReactiveFormsModule } from "@angular/forms";
 import { CalendarModule } from "primeng/calendar";
+import {CheckboxModule} from 'primeng/checkbox';
+import { ImageModule } from 'primeng/image';
 
 
 
@@ -42,7 +44,9 @@ import { CalendarModule } from "primeng/calendar";
     InputNumberModule,
     DialogModule,
     ReactiveFormsModule,
-    CalendarModule
+    CalendarModule,
+    CheckboxModule,
+    ImageModule
   ]
 })
 export class EventosModule { }

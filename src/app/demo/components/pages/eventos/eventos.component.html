@@ -74,8 +74,10 @@
                 </td>
                 <td style="width: 14%; min-width: 10rem center">
                   <span class="p-column-title">imagen</span>
-                  <img [src]=" getEventoImag(evento) ||'/assets/demo/images/avatar/default-user.svg'"[alt]="evento.name" width="90" class="shadow-4"/>
-                </td>
+                  <p-image [src]="getEventoImag(evento) || '/assets/demo/images/avatar/default-user.svg'"  alt="Image" width="100" [preview]="true"></p-image>
+
+<!--                    <img [src]=" getEventoImag(evento) ||'/assets/demo/images/avatar/default-user.svg'"[alt]="evento.name" width="90" class="shadow-4"/>
+ -->                </td>
                 <td>
                   <div class="flex">
                     <button
@@ -123,24 +125,60 @@
             <div class="field">
               <label for="fecha_inicio">fecha_inicio</label>
 
-                 <p-calendar inputId="fecha_inicio" id="fecha_inicio" formControlName="fecha_inicio"
-                 [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && 
-                 formEventos.get('fecha_inicio')?.errors?.['required']}" dateFormat="yy-mm-dd"
-                [showIcon]="true" (onSelect)="updateDate('fecha_inicio')" ></p-calendar>
+              <input  pInputText id="fecha_inicio"  formControlName="fecha_inicio" autocomplete="off"
+              [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && 
+              formEventos.get('fecha_inicio')?.errors?.['required']}" (click)="mostrarModalCalendarioInicio = true"/>
+                
+                <p-dialog [(visible)]="mostrarModalCalendarioInicio" header="Calendario"  [style]="{width: '30rem', height: '40rem'}">  
+                  <p-calendar class="max-w-full" [inline]="true" inputId="fecha_inicio"  id="fecha_inicio" formControlName="fecha_inicio" 
+                  [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_inicio')?.touched && 
+                  formEventos.get('fecha_inicio')?.errors?.['required']}" dateFormat="yy-mm-dd" 
+                  [showIcon]="true" (onSelect)="updateDate('fecha_inicio')" (click)="mostrarModalCalendarioInicio = true"  
+                  ></p-calendar>   
+                  
+                  <p-button icon="pi pi-check" class="p-button-rounded p-button-text-icon-right"
+                   (click)="mostrarModalCalendarioInicio = false" style="float: right; padding-top: 10px; "></p-button> 
+
+                   <p-button icon="pi pi-times" class="p-button-rounded p-button-text-icon-right"
+                    styleClass="p-button-danger" style="
+                    float: right; margin-right: 10px; padding-top: 10px;"
+                    type="button"  (click)="limpiarFechaInicio() "  ></p-button>
+                  
+                </p-dialog> 
 
                <small class="ng-dirty ng-invalid block" *ngIf="formEventos.get('fecha_inicio')?.touched && formEventos.get('fecha_inicio')?.errors?.['required']" >
                 La fecha_inicio es requerido.
-              </small>             
-            </div>
+              </small>      
+           
+
+            </div>      
 
             <div class="field">
-              <label for="fecha_fin">fecha_fin</label>
+              <label for="fecha_fin">fecha_fin</label>    
               
-                <p-calendar inputId="fecha_fin"  id="fecha_fin" formControlName="fecha_fin" 
-                [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_fin')?.touched && 
-                formEventos.get('fecha_fin')?.errors?.['required']}" dateFormat="yy-mm-dd" 
-                [showIcon]="true" (onSelect)="updateDate('fecha_fin')"></p-calendar>                    
-            </div>        
+              <input pInputText id="fecha_fin"  formControlName="fecha_fin" 
+              [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_fin')?.touched && 
+              formEventos.get('fecha_fin')?.errors?.['required']}" (click)="mostrarModalCalendario = true"/>
+                
+
+                <p-dialog [(visible)]="mostrarModalCalendario" header="Calendario"  [style]="{width: '30rem', height: '40rem'}">  
+                  <p-calendar class="max-w-full" [inline]="true" inputId="fecha_fin"  id="fecha_fin" formControlName="fecha_fin" 
+                  [ngClass]="{ 'ng-invalid ng-dirty': formEventos.get('fecha_fin')?.touched && 
+                  formEventos.get('fecha_fin')?.errors?.['required']}" dateFormat="yy-mm-dd" 
+                  [showIcon]="true" (onSelect)="updateDate('fecha_fin')" (click)="mostrarModalCalendario = true"  
+                  ></p-calendar>   
+                  
+                  <p-button icon="pi pi-check" class="p-button-rounded p-button-text-icon-right"
+                   (click)="mostrarModalCalendario = false" style="float: right; padding-top: 10px; "></p-button> 
+
+                   <p-button icon="pi pi-times" class="p-button-rounded p-button-text-icon-right"
+                    styleClass="p-button-danger" style="
+                    float: right; margin-right: 10px; padding-top: 10px;"
+                    type="button"  (click)="limpiarFechafin() "  ></p-button>
+                  
+                </p-dialog> 
+            </div> 
+
           </form>  
         </ng-template>
 
