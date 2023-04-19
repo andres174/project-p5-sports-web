@@ -11,31 +11,41 @@ export class GruposService {
 
   }
 
-  getEventos(){
+  getEventos() {
 
     return this.http.get<any>(`${environment.apiUrl}get-all-eventos`);
 
   }
 
-  getOneEventoDisciplina(id:number){
+  getOneEventoDisciplina(id: number) {
 
     return this.http.get<any>(`${environment.apiUrl}get-one-eventos-discplinas/${id}`);
 
   }
 
-  getEquiposFromOneDisciplina(id:number){
+  getEquiposFromOneDisciplina(id: number) {
 
     return this.http.get<any>(`${environment.apiUrl}get-equipos-discplinas/${id}`);
 
   }
 
-  getConfiguracionFromEventoDisciplina(id:number){
+  getConfiguracionFromEventoDisciplina(id: number) {
 
     return this.http.get<any>(`${environment.apiUrl}get-config-eventos-discplina/${id}`);
-    
+
   }
 
   
+
+  generarGrupos(form: any) {
+
+    return this.http.post<any>(`${environment.apiUrl}generar-grupos-auto`, form);
+
+  }
+
+
+
+
 
 
 }

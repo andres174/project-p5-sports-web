@@ -39,9 +39,9 @@ export class AppMenuComponent implements OnInit {
             routerLink: ["/pages/disciplinas"],
           },
           {
-            label: 'Configuraciones',
-            icon: 'pi pi-fw pi-sitemap',
-            routerLink: ['/pages/configuracion']
+            label: "Configuraciones",
+            icon: "pi pi-fw pi-cog",
+            routerLink: ["/pages/configuracion"],
           },
           {
             label: "Organizadores",
@@ -80,11 +80,16 @@ export class AppMenuComponent implements OnInit {
             icon: "pi pi-fw pi-server",
             routerLink: ["/pages/tabla-posicion"],
           },
-          
+
           {
             label: "Eventos Disciplina",
             icon: "pi pi-fw pi-calendar-minus",
             routerLink: ["/pages/evento-disciplina"],
+          },
+          {
+            label: "Equipos Jugadores",
+            icon: "pi pi-fw pi-list",
+            routerLink: ["/pages/equipos-jugadores"],
           },
           {
             label: "Auth",

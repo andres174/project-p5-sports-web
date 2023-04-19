@@ -1,0 +1,156 @@
+<div class="grid">
+    <div class="col-12">
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <div class="grid">     
+                <div class="col-12">
+                       
+                        <div class="col-12 md:col-12">
+            
+                            <div class="card p-fluid">
+                                <h5 [ngStyle]="margen">Seleccione los datos necesarios:</h5>
+                                <div class="field grid" [ngStyle]="margen">
+                                    <div class="col-12 md:col-10">
+                                        <span class="p-float-label">
+                                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="eventos"
+                                                [(ngModel)]="evento_selected" optionLabel="nombre"
+                                                (onChange)="getOneEventoDisciplina()">
+                                            </p-dropdown>
+                                            <label for="float-label">Evento: </label>
+                                        </span>
+                                    </div>
+                                </div>
+            
+                                <div class="field grid" [ngStyle]="margen">
+                                    <div class="col-12 md:col-10">
+                                        <span class="p-float-label">
+                                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="evento_disciplina"
+                                                [(ngModel)]="evento_disciplina_selected" optionLabel="disciplina"
+                                                [disabled]="is_evento_selected" (onChange)="getEquiposAndConfigFromDisciplina()">
+                                            </p-dropdown>
+                                            <label for="float-label">Disciplinas: </label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div *ngIf="is_equipos_and_config_loaded == true">
+            
+            
+                                <div class="card" *ngFor="let config of tabla_disciplina">
+                                    <p-fieldset>
+                                        <ng-template pTemplate="header">
+                                            <div class="flex align-items-center text-primary">
+                                                <span class="pi pi-cog mr-2"></span>
+                                                <span class="font-bold text-lg">Tabla de posicion</span>
+                                            </div>
+                                        </ng-template>
+                                        <h6>
+                                            {{config.Equipos}}
+                                        </h6>
+            
+                                        <div class="grid">
+                                            <div class="lg:col-6 md:col-4">
+                                                Número de grupos: <b>{{config.Pts}}</b>
+                                            </div>
+                                            <div class="lg:col-6 md:col-4">
+                                                Número de equipos por grupo: <b>{{config.numero_miembros}}</b>
+                                            </div>
+                                        </div>
+            
+                                        <div class="grid">
+                                            <div class="lg:col-6 md:col-4">
+                                                Tiempo de juego: <b>{{config.minutos_juego}}min</b>
+                                            </div>
+                                            <div class="lg:col-6 md:col-4">
+                                                Tiempo entre partidos: <b>{{config.minutos_entre_partidos}}min</b>
+                                            </div>
+                                        </div>
+            
+                               
+                                        <div class="grid">
+                                            <div class="lg:col-6 md:col-4">
+                                                <h6>
+                                                    Propietario:
+                                                </h6>
+                                                <p>
+                                                    {{config.nombre_org}} {{config.apellido_org}}
+                                                </p>
+                                            </div>
+                                        </div>
+            
+                                    </p-fieldset>
+                                </div>           
+                            </div>          
+                        </div>
+            
+                     
+            
+                </div>
+            
+            
+            </div>
+        
+
+            <div >
+                <p-table  #dt [value]="posiciones"   [columns]="cols" responsiveLayout="scroll"  [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="10" [paginator]="false" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"  selectionMode="multiple" [rowHover]="true" dataKey="id">
+                
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th style="width: 1rem">
+                                
+                            </th>
+                            <th pSortableColumn="code">Codigo</th>
+                            <th pSortableColumn="name">Equipos </th>
+                            <th pSortableColumn="name">Pts </th>
+                            <th pSortableColumn="name">PJ </th>
+                            <th pSortableColumn="name">G </th>
+                            <th pSortableColumn="name">E </th>
+                            <th pSortableColumn="name">P </th>
+                            <th pSortableColumn="name">GF </th>
+                            <th pSortableColumn="name">GC </th>
+                            <th pSortableColumn="name">GD </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-posiciones>
+                        <tr >
+                            <!-- <td>
+                                <p-tableCheckbox [value]="posiciones" ></p-tableCheckbox>
+                            </td> -->
+                            <td style="width:14%; min-width:10rem;"><span class="p-column-title">code</span>
+                                {{posiciones.id}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                                {{posiciones.Equipos}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                                {{posiciones.pj}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                                {{posiciones.g}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                                {{posiciones.e}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                                {{posiciones.p}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                                {{posiciones.gf}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                                {{posiciones.gc}}
+                            </td>
+                            <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                                {{posiciones.gd}}
+                            </td>
+                        
+                        
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>
+

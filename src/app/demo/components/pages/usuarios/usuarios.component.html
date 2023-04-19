@@ -33,13 +33,7 @@
       <p-table
         #dt
         [value]="users"
-        responsiveLayout="scroll"
         [globalFilterFields]="['nombre', 'apellido', 'email']"
-        [rows]="10"
-        [paginator]="false"
-        [rowsPerPageOptions]="[10, 20, 30]"
-        [showCurrentPageReport]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [(selection)]="selectedUsers"
         selectionMode="multiple"
         [rowHover]="true"
@@ -95,6 +89,7 @@
             <td style="width: 14%; min-width: 8rem">
               <span class="p-column-title">Nombre</span>
               {{ u.nombre }}
+              <!-- <span class=" p-2 px-3 border-round" style="background-color: #0a0;"></span> -->
             </td>
             <td style="width: 14%; min-width: 8rem">
               <span class="p-column-title">Apellido</span>

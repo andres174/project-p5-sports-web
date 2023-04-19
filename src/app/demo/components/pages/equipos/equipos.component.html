@@ -33,13 +33,7 @@
       <p-table
         #dt
         [value]="equipos"
-        responsiveLayout="scroll"
         [globalFilterFields]="['nombre']"
-        [rows]="10"
-        [paginator]="false"
-        [rowsPerPageOptions]="[10, 20, 30]"
-        [showCurrentPageReport]="true"
-        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
         [(selection)]="selectedEquipos"
         selectionMode="multiple"
         [rowHover]="true"
@@ -86,7 +80,7 @@
               <span class="p-column-title">Código</span>
               {{ eq.id }}
             </td>
-            <td style="width: 14%; min-width: 8rem">
+            <td style="width: 14%; min-width: 10rem">
               <span class="p-column-title">Nombre</span>
               {{ eq.nombre }}
             </td>
@@ -206,6 +200,49 @@
               >El mínimo de caracteres debe ser 2.
             </small>
           </div>
+          <!-- <div class="field">
+            <label for="equipos">Equipos</label>
+            <p-dropdown
+              [options]="equipos"
+              formControlName="equipo"
+              optionLabel="nombre"
+              [filter]="true"
+              filterBy="nombre"
+              [showClear]="true"
+              placeholder="Select a Country"
+              appendTo="body"
+            >
+              <ng-template pTemplate="selectedItem">
+                <div
+                  class="flex align-items-center gap-2"
+                  *ngIf="equipoForm.value['equipo']"
+                >
+                  <img
+                    [src]="
+                      getEquipoLogo(equipoForm.value['equipo']) ||
+                      '/assets/demo/images/image-placeholder.svg'
+                    "
+                    alt="Logo del equipo"
+                    width="30"
+                  />
+                  <div>{{ equipoForm.value['equipo'].nombre }}</div>
+                </div>
+              </ng-template>
+              <ng-template let-eq pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                  <img
+                    [src]="
+                      getEquipoLogo(eq) ||
+                      '/assets/demo/images/image-placeholder.svg'
+                    "
+                    alt="Logo del equipo"
+                    width="30"
+                  />
+                  <div>{{ eq.nombre }}</div>
+                </div>
+              </ng-template>
+            </p-dropdown>
+          </div> -->
         </form>
       </ng-template>
 

@@ -15,6 +15,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MessagesModule } from 'primeng/messages';
+import { FieldsetModule } from 'primeng/fieldset';
+
 import { TablaPosicionRoutingModule } from './tabla-posicion-routing.module';
 import { TablaPosicionComponent } from './tabla-posicion.component';
 
@@ -23,6 +25,7 @@ import { TablaPosicionComponent } from './tabla-posicion.component';
   declarations: [TablaPosicionComponent],
   imports: [
     CommonModule,
+    TablaPosicionRoutingModule,
     InputTextModule,
     TableModule,
     FileUploadModule,
@@ -38,7 +41,9 @@ import { TablaPosicionComponent } from './tabla-posicion.component';
     DialogModule,
     FormsModule,
     ReactiveFormsModule,
-    MessagesModule 
+    MessagesModule,
+    FileUploadModule,
+    FieldsetModule 
   ]
 })
 export class TablaPosicionModule { }

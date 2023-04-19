@@ -3,11 +3,11 @@ export interface TablaPosicion {
     id: number;
     Equipos: Equipo;
     Pts: number;
-    PJ: number;
-    G: number;
-    E: number;
-    P: number;
-    GF: number;
-    GC: number;
-    GD: number; 
+    pj: number;
+    g: number;
+    e: number;
+    p: number;
+    gf: number;
+    gc: number;
+    gd: number; 
 }
