@@ -2,7 +2,7 @@
   <div class="col-12">
     <p-toast></p-toast>
     <div class="card">
-      <h4>Equipos Jugadores</h4>
+      <h4 class="font-bold">Equipos Jugadores</h4>
       <p>
         En este módulo podrás asignar <strong>Jugadores</strong> a cada
         <strong>Equipo</strong>
@@ -36,9 +36,7 @@
               [autoDisplayFirst]="false"
               [filter]="true"
               filterBy="nombre"
-              (onChange)="
-                getEventoDisciplinasSmallFromEvento(selectedEvento?.id ?? -1)
-              "
+              (onChange)="onEventoChange()"
             >
               <ng-template let-ev pTemplate="selectedItem">
                 <div
@@ -54,7 +52,9 @@
                     width="45"
                     class="shadow-1"
                   />
-                  <div class="flex flex-column align-items-center gap-1 md:align-items-start">
+                  <div
+                    class="flex flex-column align-items-center gap-1 md:align-items-start"
+                  >
                     <span>{{ ev.nombre }}</span>
                     <span>
                       {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }}
@@ -64,7 +64,7 @@
               </ng-template>
               <ng-template let-ev pTemplate="item">
                 <div
-                  class="flex flex-column align-items-center gap-1 md:flex-row md:gap-2 "
+                  class="flex flex-column align-items-center gap-1 md:flex-row md:gap-2"
                 >
                   <img
                     [src]="
@@ -75,7 +75,9 @@
                     width="45"
                     class="shadow-1"
                   />
-                  <div class="flex flex-column align-items-center gap-1 md:align-items-start">
+                  <div
+                    class="flex flex-column align-items-center gap-1 md:align-items-start"
+                  >
                     <span>{{ ev.nombre }}</span>
                     <span>
                       {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }}
@@ -84,16 +86,14 @@
                 </div>
               </ng-template>
               <ng-template pTemplate="empty">
-                <div
-                  class="flex align-items-center gap-2"
-                  *ngIf="isEventoLoading"
-                >
-                  <i class="pi pi-spin pi-spinner text-lg"></i>
-                  <span>Estan cargando los Eventos</span>
-                </div>
-                <div *ngIf="!isEventoLoading">
-                  <!-- TODO: Colocar un mejor mensaje -->
+                <ng-container *ngIf="!isEventosLoading; else eventosLoading">
                   <span>No hay Eventos para seleccionar</span>
+                </ng-container>
+              </ng-template>
+              <ng-template #eventosLoading>
+                <div class="flex align-items-center gap-2">
+                  <i class="pi pi-spin pi-spinner text-lg"></i>
+                  <span>Los Eventos están cargando...</span>
                 </div>
               </ng-template>
             </p-dropdown>
@@ -111,6 +111,7 @@
               [autoDisplayFirst]="false"
               [filter]="true"
               filterBy="nombre_disciplina,nombre_configuracion"
+              (onChange)="onEventoDisciplinaChange()"
               [disabled]="selectedEvento == null"
             >
               <ng-template let-ed pTemplate="selectedItem">
@@ -126,22 +127,71 @@
                 </div>
               </ng-template>
               <ng-template pTemplate="empty">
-                <div
-                  class="flex align-items-center gap-2"
-                  *ngIf="isEventoDisciplinaLoading"
+                <ng-container
+                  *ngIf="!isEventoDisciplinasLoading; else disciplinasLoading"
                 >
-                  <i class="pi pi-spin pi-spinner text-lg"></i>
-                  <span>Estan cargando Las Disciplinas</span>
-                </div>
-                <div *ngIf="!isEventoDisciplinaLoading">
-                  <!-- TODO: Colocar un mejor mensaje -->
                   <span>No hay Disciplinas para seleccionar</span>
-                </div>
+                </ng-container>
+
+                <ng-template #disciplinasLoading>
+                  <div class="flex align-items-center gap-2">
+                    <i class="pi pi-spin pi-spinner text-lg"></i>
+                    <span>Las Disciplinas están cargando...</span>
+                  </div>
+                </ng-template>
               </ng-template>
             </p-dropdown>
             <label for="disciplina-dropdown">Disciplina y Configuración</label>
           </span>
         </div>
+
+        <p-fieldset [toggleable]="true">
+          <ng-template pTemplate="header">
+            <div class="flex align-items-center text-primary">
+              <span class="pi pi-cog mr-2"></span>
+              <span class="font-bold text-lg">
+                Información de la Configuración
+              </span>
+            </div>
+          </ng-template>
+          <ng-container
+            *ngIf="!isConfiguracionLoading; else configuracionLoading"
+          >
+            <ng-container *ngIf="selectedConfiguracion as c">
+              <div class="text-lg font-bold mb-3">{{ c.nombre }}</div>
+              <div class="grid grid-nogutter row-gap-2 mb-3">
+                <div class="col-12 md:col-6">
+                  Número de grupos: <b>{{ c.numero_grupos }}</b>
+                </div>
+                <div class="col-12 md:col-6">
+                  Número de equipos por grupo: <b>{{ c.numero_miembros }}</b>
+                </div>
+                <div class="col-12 md:col-6">
+                  Tiempo de juego: <b>{{ c.minutos_juego }}min</b>
+                </div>
+                <div class="col-12 md:col-6">
+                  Tiempo entre partidos:
+                  <b>{{ c.minutos_entre_partidos }}min</b>
+                </div>
+                <div class="col-12 md:col-6">
+                  Ida y vuelta: <b> {{ c.ida_y_vuelta ? "Si" : "No" }} </b>
+                </div>
+                <div class="col-12 md:col-6">
+                  Tarjetas: <b> {{ c.tarjetas ? "Si" : "No" }} </b>
+                </div>
+              </div>
+              <span class="font-bold">Propietario:</span>
+              <p>{{ c.nombre_organizador }} {{ c.apellido_organizador }}</p>
+            </ng-container>
+          </ng-container>
+
+          <ng-template #configuracionLoading>
+            <div class="flex align-items-center gap-2">
+              <i class="pi pi-spin pi-spinner text-lg"></i>
+              <span>La Configuración está cargando...</span>
+            </div>
+          </ng-template>
+        </p-fieldset>
       </div>
     </div>
   </div>

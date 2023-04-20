@@ -18,6 +18,7 @@ import { TabViewModule } from "primeng/tabview";
 import { LOCALE_ID } from "@angular/core";
 import localeEsEC from "@angular/common/locales/es-EC";
 import { DropdownModule } from "primeng/dropdown";
+import { FieldsetModule } from "primeng/fieldset";
 registerLocaleData(localeEsEC, "es-EC");
 
 @NgModule({
@@ -38,6 +39,7 @@ registerLocaleData(localeEsEC, "es-EC");
     ImageModule,
     TabViewModule,
     DropdownModule,
+    FieldsetModule,
   ],
   providers: [{ provide: LOCALE_ID, useValue: "es-EC" }],
 })

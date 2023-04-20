@@ -8,4 +8,6 @@ export interface Configuracion {
   tarjetas?: boolean;
   ida_y_vuelta?: boolean;
   id_organizador?: number;
+  nombre_organizador?: string;
+  apellido_organizador?: string;
 }

@@ -19,4 +19,11 @@ export class EquiposJugadoresService {
       `${environment.apiUrl}get-evento-disciplinas-small-from-evento/${idEvento}`
     );
   }
+
+  getConfiguracion(id: number) {
+    return this.http.get<any>(
+      `${environment.apiUrl}get-configuracion/${id}`
+    );
+  }
+
 }
