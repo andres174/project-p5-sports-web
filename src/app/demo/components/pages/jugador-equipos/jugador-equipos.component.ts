@@ -1,18 +1,18 @@
-import { EquiposJugadoresService } from "src/app/demo/service/equipos-jugadores.service";
-import { MessageService } from "primeng/api";
 import { Component, OnInit } from "@angular/core";
+import { MessageService } from "primeng/api";
 import { Evento } from "src/app/demo/api/evento.interface";
 import { Configuracion } from "src/app/demo/api/configuracion.interface";
 import { EventoDisciplinaSmall } from "src/app/demo/api/evento-disciplina-small.interface";
 import { environment } from "src/environments/environment";
+import { JugadorEquiposService } from "src/app/demo/service/jugador-equipos.service";
 
 @Component({
-  selector: "app-equipos-jugadores",
-  templateUrl: "./equipos-jugadores.component.html",
-  styleUrls: ["./equipos-jugadores.component.scss"],
+  selector: "app-jugador-equipos",
+  templateUrl: "./jugador-equipos.component.html",
+  styleUrls: ["./jugador-equipos.component.scss"],
   providers: [MessageService],
 })
-export class EquiposJugadoresComponent implements OnInit {
+export class JugadorEquiposComponent implements OnInit {
   eventos: Evento[] = [];
   selectedEvento?: Evento;
   isEventosLoading: boolean = true;
@@ -26,7 +26,7 @@ export class EquiposJugadoresComponent implements OnInit {
 
   loading: boolean = false;
 
-  constructor(private ejService: EquiposJugadoresService) {}
+  constructor(private jeService: JugadorEquiposService) {}
 
   ngOnInit(): void {
     // TODO: utilizar la id del que navega
@@ -34,7 +34,7 @@ export class EquiposJugadoresComponent implements OnInit {
   }
 
   getEventosFromOrganizador(idOrganizador: number) {
-    this.ejService.getEventosFromOrganizador(idOrganizador).subscribe({
+    this.jeService.getEventosFromOrganizador(idOrganizador).subscribe({
       next: (value) => {
         this.eventos = value;
         this.isEventosLoading = false;
@@ -44,7 +44,7 @@ export class EquiposJugadoresComponent implements OnInit {
   }
 
   getEventoDisciplinasSmallFromEvento(idEvento: number) {
-    this.ejService.getEventoDisciplinasSmallFromEvento(idEvento).subscribe({
+    this.jeService.getEventoDisciplinasSmallFromEvento(idEvento).subscribe({
       next: (value) => {
         this.eventoDisciplinasSmall = value;
         this.isEventoDisciplinasLoading = false;
@@ -54,7 +54,7 @@ export class EquiposJugadoresComponent implements OnInit {
   }
 
   getConfiguracion(id: number) {
-    this.ejService.getConfiguracion(id).subscribe({
+    this.jeService.getConfiguracion(id).subscribe({
       next: (value) => {
         this.selectedConfiguracion = value;
         this.isConfiguracionLoading = false;

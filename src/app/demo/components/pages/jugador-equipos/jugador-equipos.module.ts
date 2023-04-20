@@ -1,31 +1,27 @@
 import { NgModule } from "@angular/core";
-import { CommonModule, registerLocaleData } from "@angular/common";
+import { CommonModule } from "@angular/common";
 
-import { EquiposJugadoresRoutingModule } from "./equipos-jugadores-routing.module";
-import { EquiposJugadoresComponent } from "./equipos-jugadores.component";
+import { JugadorEquiposRoutingModule } from "./jugador-equipos-routing.module";
+import { JugadorEquiposComponent } from "./jugador-equipos.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { ButtonModule } from "primeng/button";
 import { DialogModule } from "primeng/dialog";
+import { DropdownModule } from "primeng/dropdown";
+import { FieldsetModule } from "primeng/fieldset";
 import { FileUploadModule } from "primeng/fileupload";
 import { ImageModule } from "primeng/image";
 import { InputTextModule } from "primeng/inputtext";
 import { RippleModule } from "primeng/ripple";
 import { TableModule } from "primeng/table";
+import { TabViewModule } from "primeng/tabview";
 import { ToastModule } from "primeng/toast";
 import { ToolbarModule } from "primeng/toolbar";
-import { TabViewModule } from "primeng/tabview";
-
-import { LOCALE_ID } from "@angular/core";
-import localeEsEC from "@angular/common/locales/es-EC";
-import { DropdownModule } from "primeng/dropdown";
-import { FieldsetModule } from "primeng/fieldset";
-registerLocaleData(localeEsEC, "es-EC");
 
 @NgModule({
-  declarations: [EquiposJugadoresComponent],
+  declarations: [JugadorEquiposComponent],
   imports: [
     CommonModule,
-    EquiposJugadoresRoutingModule,
+    JugadorEquiposRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     TableModule,
@@ -41,6 +37,5 @@ registerLocaleData(localeEsEC, "es-EC");
     DropdownModule,
     FieldsetModule,
   ],
-  providers: [{ provide: LOCALE_ID, useValue: "es-EC" }],
 })
-export class EquiposJugadoresModule {}
+export class JugadorEquiposModule {}

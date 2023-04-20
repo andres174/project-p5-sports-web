@@ -5,7 +5,7 @@ import { environment } from "src/environments/environment";
 @Injectable({
   providedIn: "root",
 })
-export class EquiposJugadoresService {
+export class JugadorEquiposService {
   constructor(private http: HttpClient) {}
 
   getEventosFromOrganizador(idOrganizador: number) {
@@ -21,9 +21,6 @@ export class EquiposJugadoresService {
   }
 
   getConfiguracion(id: number) {
-    return this.http.get<any>(
-      `${environment.apiUrl}get-configuracion/${id}`
-    );
+    return this.http.get<any>(`${environment.apiUrl}get-configuracion/${id}`);
   }
-
 }
