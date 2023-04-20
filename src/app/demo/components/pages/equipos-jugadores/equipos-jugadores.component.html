@@ -1,1 +1,148 @@
-<p>equipos-jugadores works!</p>
+<div class="grid">
+  <div class="col-12">
+    <p-toast></p-toast>
+    <div class="card">
+      <h4>Equipos Jugadores</h4>
+      <p>
+        En este módulo podrás asignar <strong>Jugadores</strong> a cada
+        <strong>Equipo</strong>
+      </p>
+      <!-- <p-tabView
+        (onChange)="onEventChange($event)"
+        *ngIf="events.length !== 0"
+        [scrollable]="true"
+      >
+        <p-tabPanel *ngFor="let ev of events">
+          <ng-template pTemplate="header">
+            <div class="flex flex-column" style="min-width: max-content">
+              <span>{{ ev.nombre }}</span>
+              <span>
+                {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }}
+              </span>
+            </div>
+          </ng-template>
+        </p-tabPanel>
+      </p-tabView> -->
+
+      <div class="card p-fluid">
+        <h5>Seleccione los datos necesarios:</h5>
+        <div class="field pt-3">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="eventos"
+              [(ngModel)]="selectedEvento"
+              placeholder="Escoger un Evento"
+              inputId="evento-dropdown"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="nombre"
+              (onChange)="
+                getEventoDisciplinasSmallFromEvento(selectedEvento?.id ?? -1)
+              "
+            >
+              <ng-template let-ev pTemplate="selectedItem">
+                <div
+                  class="flex flex-column align-items-center md:flex-row gap-2"
+                >
+                  <!-- getEquipoLogo(equipo) || -->
+                  <img
+                    [src]="
+                      getEventoImg(ev) ||
+                      '/assets/demo/images/image-placeholder.svg'
+                    "
+                    [alt]="ev.nombre"
+                    width="45"
+                    class="shadow-1"
+                  />
+                  <div class="flex flex-column align-items-center gap-1 md:align-items-start">
+                    <span>{{ ev.nombre }}</span>
+                    <span>
+                      {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }}
+                    </span>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template let-ev pTemplate="item">
+                <div
+                  class="flex flex-column align-items-center gap-1 md:flex-row md:gap-2 "
+                >
+                  <img
+                    [src]="
+                      getEventoImg(ev) ||
+                      '/assets/demo/images/image-placeholder.svg'
+                    "
+                    [alt]="ev.nombre"
+                    width="45"
+                    class="shadow-1"
+                  />
+                  <div class="flex flex-column align-items-center gap-1 md:align-items-start">
+                    <span>{{ ev.nombre }}</span>
+                    <span>
+                      {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }}
+                    </span>
+                  </div>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="empty">
+                <div
+                  class="flex align-items-center gap-2"
+                  *ngIf="isEventoLoading"
+                >
+                  <i class="pi pi-spin pi-spinner text-lg"></i>
+                  <span>Estan cargando los Eventos</span>
+                </div>
+                <div *ngIf="!isEventoLoading">
+                  <!-- TODO: Colocar un mejor mensaje -->
+                  <span>No hay Eventos para seleccionar</span>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <label for="evento-dropdown">Evento</label>
+          </span>
+        </div>
+
+        <div class="field pt-3">
+          <span class="p-float-label">
+            <p-dropdown
+              [options]="eventoDisciplinasSmall"
+              [(ngModel)]="selectedEventoDisciplina"
+              placeholder="Escoger una Disciplina"
+              inputId="disciplina-dropdown"
+              [autoDisplayFirst]="false"
+              [filter]="true"
+              filterBy="nombre_disciplina,nombre_configuracion"
+              [disabled]="selectedEvento == null"
+            >
+              <ng-template let-ed pTemplate="selectedItem">
+                <div>
+                  {{ ed.nombre_disciplina }} -
+                  {{ ed.nombre_configuracion }}
+                </div>
+              </ng-template>
+              <ng-template let-ed pTemplate="item">
+                <div>
+                  {{ ed.nombre_disciplina }} -
+                  {{ ed.nombre_configuracion }}
+                </div>
+              </ng-template>
+              <ng-template pTemplate="empty">
+                <div
+                  class="flex align-items-center gap-2"
+                  *ngIf="isEventoDisciplinaLoading"
+                >
+                  <i class="pi pi-spin pi-spinner text-lg"></i>
+                  <span>Estan cargando Las Disciplinas</span>
+                </div>
+                <div *ngIf="!isEventoDisciplinaLoading">
+                  <!-- TODO: Colocar un mejor mensaje -->
+                  <span>No hay Disciplinas para seleccionar</span>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <label for="disciplina-dropdown">Disciplina y Configuración</label>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
