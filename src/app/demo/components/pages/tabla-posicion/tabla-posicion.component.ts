@@ -80,8 +80,8 @@ export class TablaPosicionComponent implements OnInit {
   }
 
   getEquiposAndConfigFromDisciplina() {
-    //debugger
-      console.log(this.evento_disciplina_selected.id_evento_disciplina);
+      console.log(this.evento_disciplina_selected);
+      debugger
       this.grupoService.getEquiposFromOneDisciplina(this.evento_disciplina_selected.id_evento_disciplina).subscribe({
           next: (value) => {
               /* console.log(value); */
@@ -93,10 +93,9 @@ export class TablaPosicionComponent implements OnInit {
               console.log(err);
           }
       });
-      this.ResultadoService.gettablaposicion(this.evento_disciplina_selected.id_evento_disciplina).subscribe({       
+      this.ResultadoService.MostrarTablePosition(this.evento_disciplina_selected).subscribe({       
         next: (value) => {
-            debugger
-            console.log(value);
+            /* console.log(value); */
             this.tablaPosicion = value;
             console.log(this.tablaPosicion);
         },
