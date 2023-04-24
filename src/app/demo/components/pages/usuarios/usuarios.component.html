@@ -1,6 +1,6 @@
 <div class="grid">
   <div class="col-12">
-    <div class="card px-6 py-6">
+    <div class="card">
       <p-toast></p-toast>
       <p-toolbar styleClass="mb-4">
         <ng-template pTemplate="left">
@@ -116,6 +116,14 @@
             </td>
             <td>
               <div class="flex">
+                <!-- <button
+                  pButton
+                  pRipple
+                  icon="pi pi-arrow-right"
+                  class="p-button-rounded p-button-info"
+                  routerLink="/pages/equipos-jugadores"
+                  [state]="u"
+                ></button> -->
                 <button
                   pButton
                   pRipple
@@ -127,7 +135,7 @@
                   pButton
                   pRipple
                   icon="pi pi-trash"
-                  class="p-button-rounded p-button-warning"
+                  class="p-button-rounded p-button-warning mr-2"
                   (click)="deleteUser(u)"
                 ></button>
               </div>
