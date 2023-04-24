@@ -17,11 +17,16 @@ export class EventoDisciplinaService {
 
   }
 
-  getDisciplina() {
+  getDisciplinas(){
+    return this.http.get<any>(`${environment.apiUrl}disciplinas`)
+  }
+
+
+  /* getDisciplina() {
 
     return this.http.get<any>(`${environment.apiUrl}get-disciplinas`);
 
-  }
+  } */
 
   getConfiguracion() {
 

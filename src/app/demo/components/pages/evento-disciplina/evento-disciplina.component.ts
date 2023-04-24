@@ -46,8 +46,10 @@ export class EventoDisciplinaComponent implements OnInit{
 
 ngOnInit(): void {
     this.getEventos();
-    this.getDisciplina();
+    
     this.getConfiguracion();
+    this.showDisciplinas();
+
 }
 
 getEventos() {
@@ -62,7 +64,7 @@ getEventos() {
 }
 
 
-getDisciplina() {
+/* getDisciplina() {
   this.eventoDisciplinaService.getDisciplina().subscribe({  
     next: (value) => {
         debugger
@@ -74,7 +76,18 @@ getDisciplina() {
           debugger
       }
   });
-}
+} */
+
+
+showDisciplinas(){
+    this.eventoDisciplinaService.getDisciplinas().subscribe({
+       next:(res)=>{
+         this.disciplina=res
+         console.log(this.disciplina);
+         
+       }
+    })
+   }
 
 getConfiguracion() {
   this.eventoDisciplinaService.getConfiguracion().subscribe({
