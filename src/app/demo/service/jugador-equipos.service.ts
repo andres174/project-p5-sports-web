@@ -14,7 +14,7 @@ export class JugadorEquiposService {
     );
   }
 
-  getEventoDisciplinasSmallByEvento(idEvento: number) {
+  getEventoDisciplinasByEvento(idEvento: number) {
     return this.http.get<any>(
       `${environment.apiUrl}get-evento-disciplinas-small-by-evento/${idEvento}`
     );
