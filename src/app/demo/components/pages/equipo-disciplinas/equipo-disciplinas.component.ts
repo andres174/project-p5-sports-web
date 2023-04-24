@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { MessageService } from "primeng/api";
+import { Table } from "primeng/table";
+import { EquipoDisciplina } from "src/app/demo/api/equipo-disciplina.interface";
 import { Equipo } from "src/app/demo/api/equipo.interface";
 import { EventoDisciplinaFull } from "src/app/demo/api/evento-disciplina-full.interface";
 import { Evento } from "src/app/demo/api/evento.interface";
@@ -15,28 +17,59 @@ import { environment } from "src/environments/environment";
 export class EquipoDisciplinasComponent implements OnInit {
   eventos: Evento[] = [];
   selectedEvento?: Evento;
-  isEventosLoading: boolean = true;
+  isEventosLoading = true;
 
   eventoDisciplinas: EventoDisciplinaFull[] = [];
   selectedEventoDisciplina?: EventoDisciplinaFull;
-  isEventoDisciplinasLoading: boolean = false;
+  isEventoDisciplinasLoading = false;
 
-  equipos: Equipo[] = [];
+  equipoDisciplinas: EquipoDisciplina[] = [];
+  equipoDisciplina: EquipoDisciplina = {};
+  selectedEquipoDisciplinas: EquipoDisciplina[] = [];
+  isEquipoDisciplinasLoading = true;
+
+  deleteEquipoDisciplinaDialog = false;
+  deleteEquipoDisciplinasDialog = false;
+
   equiposToAdd: Equipo[] = [];
   equipoToAdd?: Equipo;
+  isEquiposToAddLoading = false;
 
-  constructor(private edService: EquipoDisciplinasService) {}
+  loading = false;
+
+  constructor(
+    private edService: EquipoDisciplinasService,
+    private messageService: MessageService
+  ) {}
   ngOnInit(): void {
     // TODO: utilizar la id del que navega
     this.getEventosByOrganizador(1);
+  }
+
+  successMessage(msg: string) {
+    this.messageService.add({
+      severity: "success",
+      summary: "Acción exitosa",
+      detail: msg,
+      life: 3000,
+    });
+  }
+
+  errorMessage(msg: string) {
+    this.messageService.add({
+      severity: "error",
+      summary: "Ocurrio un Error",
+      detail: msg,
+      life: 3000,
+    });
   }
 
   getEventosByOrganizador(idOrganizador: number) {
     this.eventos = [];
     this.isEventosLoading = true;
     this.edService.getEventosByOrganizador(idOrganizador).subscribe({
-      next: (value) => {
-        this.eventos = value;
+      next: (res) => {
+        this.eventos = res;
         this.isEventosLoading = false;
       },
       error: console.log,
@@ -48,9 +81,38 @@ export class EquipoDisciplinasComponent implements OnInit {
     this.selectedEventoDisciplina = undefined;
     this.isEventoDisciplinasLoading = true;
     this.edService.getEventoDisciplinasFullByEvento(idEvento).subscribe({
-      next: (value) => {
-        this.eventoDisciplinas = value;
+      next: (res) => {
+        this.eventoDisciplinas = res;
         this.isEventoDisciplinasLoading = false;
+      },
+      error: console.log,
+    });
+  }
+
+  getEquipoDisciplinasByDisciplina(idEventoDisciplina: number) {
+    this.isEquipoDisciplinasLoading = true;
+    this.edService
+      .getEquipoDisciplinasByDisciplina(idEventoDisciplina)
+      .subscribe({
+        next: (res) => {
+          this.equipoDisciplinas = res;
+          this.isEquipoDisciplinasLoading = false;
+          this.loading = false;
+        },
+        error: console.log,
+      });
+  }
+
+  getEquiposToAddByDisciplina(idEventoDisciplina: number) {
+    this.equiposToAdd = [];
+    this.equipoToAdd = undefined;
+    this.isEquiposToAddLoading = true;
+
+    this.edService.getEquiposToAddByDisciplina(idEventoDisciplina).subscribe({
+      next: (values) => {
+        this.equiposToAdd = values;
+        this.isEquiposToAddLoading = false;
+        this.loading = false;
       },
       error: console.log,
     });
@@ -68,12 +130,102 @@ export class EquipoDisciplinasComponent implements OnInit {
     else return "";
   }
 
+  getMaxNumberEquipos() {
+    return (
+      Number(this.selectedEventoDisciplina?.configuracion?.numero_miembros) *
+      Number(this.selectedEventoDisciplina?.configuracion?.numero_grupos)
+    );
+  }
+
+  refreshEquipos() {
+    this.getEquipoDisciplinasByDisciplina(
+      Number(this.selectedEventoDisciplina?.id)
+    );
+    this.getEquiposToAddByDisciplina(Number(this.selectedEventoDisciplina?.id));
+  }
+
   onEventoChange() {
-    this.equipos = [];
+    this.equipoDisciplinas = [];
     this.equipoToAdd = undefined;
 
     this.getEventoDisciplinasByEvento(Number(this.selectedEvento?.id));
   }
 
-  onEventoDisciplinaChange() {}
+  onEventoDisciplinaChange() {
+    this.refreshEquipos();
+  }
+
+  storeEquipoDisciplina() {
+    if (!this.selectedEventoDisciplina && !this.equipoToAdd) return;
+
+    this.loading = true;
+
+    const data = {
+      id_equipo: this.equipoToAdd?.id,
+      id_evento_disciplina: this.selectedEventoDisciplina?.id,
+    };
+
+    this.edService.storeEquipoDisciplina(data).subscribe({
+      next: (res) => {
+        this.refreshEquipos();
+        this.successMessage(res.message);
+      },
+      error: console.log,
+    });
+  }
+
+  deleteEquipoDisciplina(equipoDisciplina: EquipoDisciplina) {
+    this.deleteEquipoDisciplinaDialog = true;
+    this.equipoDisciplina = { ...equipoDisciplina };
+  }
+
+  confirmDelete() {
+    this.deleteEquipoDisciplinaDialog = false;
+    this.loading = true;
+
+    this.edService
+      .deleteEquipoDisciplina(Number(this.equipoDisciplina.id))
+      .subscribe({
+        next: (res) => {
+          this.refreshEquipos();
+          this.successMessage(res.message);
+        },
+        error: (err) => {
+          console.log(err);
+          this.errorMessage(err.error.message);
+          this.loading = false;
+        },
+      });
+
+    this.equipoDisciplina = {};
+  }
+
+  deleteSelectedEquipoDisciplinas() {
+    this.deleteEquipoDisciplinasDialog = true;
+  }
+
+  confirmDeleteSelected() {
+    this.deleteEquipoDisciplinasDialog = false;
+    this.loading = true;
+
+    this.edService
+      .deleteSelectedEquipoDisciplina(
+        this.selectedEquipoDisciplinas.map((eqd) => Number(eqd.id))
+      )
+      .subscribe({
+        next: (res) => {
+          this.refreshEquipos();
+          this.successMessage(res.message);
+        },
+        error: (err) => {
+          console.log(err);
+          this.errorMessage(err.error.message);
+          this.loading = false;
+        },
+      });
+  }
+
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, "contains");
+  }
 }

@@ -20,13 +20,33 @@ export class EquipoDisciplinasService {
     );
   }
 
-  getEquiposByDisciplina(id_evento_disciplina: number) {
+  getEquipoDisciplinasByDisciplina(idEventoDisciplina: number) {
     return this.http.get<any>(
-      `${environment.apiUrl}get-equipos-by-disciplina/${id_evento_disciplina}`
+      `${environment.apiUrl}get-equipo-disciplinas-by-disciplina/${idEventoDisciplina}`
     );
   }
 
-  getEquipos() {
-    return this.http.get<any>(`${environment.apiUrl}equipos`);
+  getEquiposToAddByDisciplina(idEventoDisciplina: number) {
+    return this.http.get<any>(
+      `${environment.apiUrl}get-equipos-to-add-by-disciplina/${idEventoDisciplina}`
+    );
+  }
+
+  storeEquipoDisciplina(form: any) {
+    return this.http.post<any>(`${environment.apiUrl}equipo-disciplinas`, form);
+  }
+
+  deleteEquipoDisciplina(id: number) {
+    return this.http.delete<any>(
+      `${environment.apiUrl}equipo-disciplinas/${id}`
+    );
+  }
+
+  deleteSelectedEquipoDisciplina(ids: number[]) {
+    const data = { ids };
+    return this.http.post<any>(
+      `${environment.apiUrl}delete-selected-equipo-disciplinas`,
+      data
+    );
   }
 }
