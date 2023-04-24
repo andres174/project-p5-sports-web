@@ -11,6 +11,9 @@ import { environment } from 'src/environments/environment';
 })
 export class GruposComponent implements OnInit {
 
+    //dialogs
+    dialog1: boolean = true;
+
     //logo equipo
     logo_equipo_url = environment.equipoUrl;
 

@@ -5,6 +5,7 @@ import { Configuracion } from "src/app/demo/api/configuracion.interface";
 import { EventoDisciplinaSmall } from "src/app/demo/api/evento-disciplina-small.interface";
 import { environment } from "src/environments/environment";
 import { JugadorEquiposService } from "src/app/demo/service/jugador-equipos.service";
+import { Equipo } from "src/app/demo/api/equipo.interface";
 
 @Component({
   selector: "app-jugador-equipos",
@@ -24,17 +25,21 @@ export class JugadorEquiposComponent implements OnInit {
   selectedConfiguracion?: Configuracion;
   isConfiguracionLoading: boolean = false;
 
+  equipos: Equipo[] = [];
+  selectedEquipo?: Equipo;
+  isEquiposLoading: boolean = false;
+
   loading: boolean = false;
 
   constructor(private jeService: JugadorEquiposService) {}
 
   ngOnInit(): void {
     // TODO: utilizar la id del que navega
-    this.getEventosFromOrganizador(1);
+    this.getEventosByOrganizador(1);
   }
 
-  getEventosFromOrganizador(idOrganizador: number) {
-    this.jeService.getEventosFromOrganizador(idOrganizador).subscribe({
+  getEventosByOrganizador(idOrganizador: number) {
+    this.jeService.getEventosByOrganizador(idOrganizador).subscribe({
       next: (value) => {
         this.eventos = value;
         this.isEventosLoading = false;
@@ -43,8 +48,8 @@ export class JugadorEquiposComponent implements OnInit {
     });
   }
 
-  getEventoDisciplinasSmallFromEvento(idEvento: number) {
-    this.jeService.getEventoDisciplinasSmallFromEvento(idEvento).subscribe({
+  getEventoDisciplinasSmallByEvento(idEvento: number) {
+    this.jeService.getEventoDisciplinasSmallByEvento(idEvento).subscribe({
       next: (value) => {
         this.eventoDisciplinasSmall = value;
         this.isEventoDisciplinasLoading = false;
@@ -63,22 +68,45 @@ export class JugadorEquiposComponent implements OnInit {
     });
   }
 
+  getEquiposByDisciplina(id_evento_disciplina: number) {
+    this.jeService.getEquiposByDisciplina(id_evento_disciplina).subscribe({
+      next: (value) => {
+        this.equipos = value;
+        this.isEquiposLoading = false;
+      },
+      error: console.log,
+    });
+  }
+
   getEventoImg(evento: Evento) {
     if (evento.imagen)
       return `${environment.EventUrl}${evento.id}/${evento.imagen}`;
     else return "";
   }
 
+  getEquipoLogo(equipo: Equipo) {
+    if (equipo.logo)
+      return `${environment.equipoUrl}${equipo.id}/${equipo.logo}`;
+    else return "";
+  }
+
   onEventoChange() {
     this.eventoDisciplinasSmall = [];
     this.isEventoDisciplinasLoading = true;
+
     this.selectedConfiguracion = undefined;
 
-    this.getEventoDisciplinasSmallFromEvento(Number(this.selectedEvento?.id));
+    this.equipos = []
+    this.selectedEquipo = undefined;
+
+    this.getEventoDisciplinasSmallByEvento(Number(this.selectedEvento?.id));
   }
 
   onEventoDisciplinaChange() {
-    //TODO: Conseguir equipos
+    this.equipos = []
+    this.selectedEquipo = undefined;
+    this.isEquiposLoading = true;
+    this.getEquiposByDisciplina(Number(this.selectedEventoDisciplina?.id));
 
     if (
       this.selectedEventoDisciplina?.id_configuracion !==
@@ -91,4 +119,6 @@ export class JugadorEquiposComponent implements OnInit {
       );
     }
   }
+
+  onEquipoChange() {}
 }

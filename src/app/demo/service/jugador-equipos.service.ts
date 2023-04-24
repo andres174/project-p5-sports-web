@@ -8,19 +8,25 @@ import { environment } from "src/environments/environment";
 export class JugadorEquiposService {
   constructor(private http: HttpClient) {}
 
-  getEventosFromOrganizador(idOrganizador: number) {
+  getEventosByOrganizador(idOrganizador: number) {
     return this.http.get<any>(
-      `${environment.apiUrl}get-eventos-from-organizador/${idOrganizador}`
+      `${environment.apiUrl}get-eventos-by-organizador/${idOrganizador}`
     );
   }
 
-  getEventoDisciplinasSmallFromEvento(idEvento: number) {
+  getEventoDisciplinasSmallByEvento(idEvento: number) {
     return this.http.get<any>(
-      `${environment.apiUrl}get-evento-disciplinas-small-from-evento/${idEvento}`
+      `${environment.apiUrl}get-evento-disciplinas-small-by-evento/${idEvento}`
     );
   }
 
   getConfiguracion(id: number) {
     return this.http.get<any>(`${environment.apiUrl}get-configuracion/${id}`);
+  }
+
+  getEquiposByDisciplina(id_evento_disciplina: number) {
+    return this.http.get<any>(
+      `${environment.apiUrl}get-equipos-by-disciplina/${id_evento_disciplina}`
+    );
   }
 }
