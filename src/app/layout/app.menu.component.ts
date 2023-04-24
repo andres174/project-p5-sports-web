@@ -93,7 +93,7 @@ export class AppMenuComponent implements OnInit {
           },
           {
             label: "Resultados",
-            icon: "pi pi-fw pi-calendar-times",
+            icon: "pi pi-fw pi-align-left",
             routerLink: ["/pages/resultados"],
           },
           {
