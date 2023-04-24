@@ -16,6 +16,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { CardModule } from 'primeng/card';
+import { FieldsetModule } from 'primeng/fieldset';
 
 import { EventoDisciplinaRoutingModule } from './evento-disciplina-routing.module';
 import { EventoDisciplinaComponent } from './evento-disciplina.component';
@@ -42,7 +44,9 @@ import { EventoDisciplinaComponent } from './evento-disciplina.component';
     FormsModule,
     ReactiveFormsModule,
     InputNumberModule,
-    InputSwitchModule
+    InputSwitchModule,
+    CardModule,
+    FieldsetModule
   ]
 })
 export class EventoDisciplinaModule { }
