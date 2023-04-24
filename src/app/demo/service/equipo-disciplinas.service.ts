@@ -5,7 +5,7 @@ import { environment } from "src/environments/environment";
 @Injectable({
   providedIn: "root",
 })
-export class JugadorEquiposService {
+export class EquipoDisciplinasService {
   constructor(private http: HttpClient) {}
 
   getEventosByOrganizador(idOrganizador: number) {
@@ -14,19 +14,19 @@ export class JugadorEquiposService {
     );
   }
 
-  getEventoDisciplinasByEvento(idEvento: number) {
+  getEventoDisciplinasFullByEvento(idEvento: number) {
     return this.http.get<any>(
-      `${environment.apiUrl}get-evento-disciplinas-by-evento/${idEvento}`
+      `${environment.apiUrl}get-evento-disciplinas-full-by-evento/${idEvento}`
     );
-  }
-
-  getConfiguracion(id: number) {
-    return this.http.get<any>(`${environment.apiUrl}get-configuracion/${id}`);
   }
 
   getEquiposByDisciplina(id_evento_disciplina: number) {
     return this.http.get<any>(
       `${environment.apiUrl}get-equipos-by-disciplina/${id_evento_disciplina}`
     );
+  }
+
+  getEquipos() {
+    return this.http.get<any>(`${environment.apiUrl}equipos`);
   }
 }

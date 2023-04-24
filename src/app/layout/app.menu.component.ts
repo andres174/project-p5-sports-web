@@ -87,6 +87,11 @@ export class AppMenuComponent implements OnInit {
             routerLink: ["/pages/evento-disciplina"],
           },
           {
+            label: "Equipos Disciplinas",
+            icon: "pi pi-fw pi-list",
+            routerLink: ["/pages/equipo-disciplinas"],
+          },
+          {
             label: "Jugadores Equipos",
             icon: "pi pi-fw pi-list",
             routerLink: ["/pages/jugador-equipos"],
