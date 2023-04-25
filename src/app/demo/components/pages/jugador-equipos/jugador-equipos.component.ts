@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { MessageService } from "primeng/api";
 import { Evento } from "src/app/demo/api/evento.interface";
 import { Configuracion } from "src/app/demo/api/configuracion.interface";
-import { EventoDisciplinaSmall } from "src/app/demo/api/evento-disciplina-small.interface";
+import { EventoDisciplina } from "src/app/demo/api/evento-disciplina.interface";
 import { environment } from "src/environments/environment";
 import { JugadorEquiposService } from "src/app/demo/service/jugador-equipos.service";
 import { Equipo } from "src/app/demo/api/equipo.interface";
@@ -18,9 +18,9 @@ export class JugadorEquiposComponent implements OnInit {
   selectedEvento?: Evento;
   isEventosLoading: boolean = true;
 
-  eventoDisciplinasSmall: EventoDisciplinaSmall[] = [];
-  selectedEventoDisciplina?: EventoDisciplinaSmall;
-  isEventoDisciplinasLoading: boolean = true;
+  eventoDisciplinas: EventoDisciplina[] = [];
+  selectedEventoDisciplina?: EventoDisciplina;
+  isEventoDisciplinasLoading: boolean = false;
 
   selectedConfiguracion?: Configuracion;
   isConfiguracionLoading: boolean = false;
@@ -28,8 +28,6 @@ export class JugadorEquiposComponent implements OnInit {
   equipos: Equipo[] = [];
   selectedEquipo?: Equipo;
   isEquiposLoading: boolean = false;
-
-  loading: boolean = false;
 
   constructor(private jeService: JugadorEquiposService) {}
 
@@ -39,6 +37,8 @@ export class JugadorEquiposComponent implements OnInit {
   }
 
   getEventosByOrganizador(idOrganizador: number) {
+    this.eventos = [];
+    this.isEventosLoading = true;
     this.jeService.getEventosByOrganizador(idOrganizador).subscribe({
       next: (value) => {
         this.eventos = value;
@@ -48,10 +48,13 @@ export class JugadorEquiposComponent implements OnInit {
     });
   }
 
-  getEventoDisciplinasSmallByEvento(idEvento: number) {
-    this.jeService.getEventoDisciplinasSmallByEvento(idEvento).subscribe({
+  getEventoDisciplinasByEvento(idEvento: number) {
+    this.eventoDisciplinas = [];
+    this.selectedEventoDisciplina = undefined;
+    this.isEventoDisciplinasLoading = true;
+    this.jeService.getEventoDisciplinasByEvento(idEvento).subscribe({
       next: (value) => {
-        this.eventoDisciplinasSmall = value;
+        this.eventoDisciplinas = value;
         this.isEventoDisciplinasLoading = false;
       },
       error: console.log,
@@ -59,6 +62,8 @@ export class JugadorEquiposComponent implements OnInit {
   }
 
   getConfiguracion(id: number) {
+    this.selectedConfiguracion = undefined;
+    this.isConfiguracionLoading = true;
     this.jeService.getConfiguracion(id).subscribe({
       next: (value) => {
         this.selectedConfiguracion = value;
@@ -69,6 +74,9 @@ export class JugadorEquiposComponent implements OnInit {
   }
 
   getEquiposByDisciplina(id_evento_disciplina: number) {
+    this.equipos = [];
+    this.selectedEquipo = undefined;
+    this.isEquiposLoading = true;
     this.jeService.getEquiposByDisciplina(id_evento_disciplina).subscribe({
       next: (value) => {
         this.equipos = value;
@@ -91,29 +99,21 @@ export class JugadorEquiposComponent implements OnInit {
   }
 
   onEventoChange() {
-    this.eventoDisciplinasSmall = [];
-    this.isEventoDisciplinasLoading = true;
-
     this.selectedConfiguracion = undefined;
 
-    this.equipos = []
+    this.equipos = [];
     this.selectedEquipo = undefined;
 
-    this.getEventoDisciplinasSmallByEvento(Number(this.selectedEvento?.id));
+    this.getEventoDisciplinasByEvento(Number(this.selectedEvento?.id));
   }
 
   onEventoDisciplinaChange() {
-    this.equipos = []
-    this.selectedEquipo = undefined;
-    this.isEquiposLoading = true;
     this.getEquiposByDisciplina(Number(this.selectedEventoDisciplina?.id));
 
     if (
       this.selectedEventoDisciplina?.id_configuracion !==
       this.selectedConfiguracion?.id
     ) {
-      this.selectedConfiguracion = undefined;
-      this.isConfiguracionLoading = true;
       this.getConfiguracion(
         Number(this.selectedEventoDisciplina?.id_configuracion)
       );

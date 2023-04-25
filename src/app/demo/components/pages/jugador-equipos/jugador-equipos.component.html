@@ -7,23 +7,6 @@
         En este módulo podrás asignar <strong>Jugadores</strong> a cada
         <strong>Equipo</strong>
       </p>
-      <!-- <p-tabView
-        (onChange)="onEventChange($event)"
-        *ngIf="events.length !== 0"
-        [scrollable]="true"
-      >
-        <p-tabPanel *ngFor="let ev of events">
-          <ng-template pTemplate="header">
-            <div class="flex flex-column" style="min-width: max-content">
-              <span>{{ ev.nombre }}</span>
-              <span>
-                {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }}
-              </span>
-            </div>
-          </ng-template>
-        </p-tabPanel>
-      </p-tabView> -->
-
       <div class="card p-fluid">
         <h5>Seleccione los datos necesarios:</h5>
         <div class="field pt-3">
@@ -42,7 +25,6 @@
                 <div
                   class="flex flex-column align-items-center md:flex-row gap-2"
                 >
-                  <!-- getEquipoLogo(equipo) || -->
                   <img
                     [src]="
                       getEventoImg(ev) ||
@@ -104,7 +86,7 @@
         <div class="field pt-3">
           <span class="p-float-label">
             <p-dropdown
-              [options]="eventoDisciplinasSmall"
+              [options]="eventoDisciplinas"
               [(ngModel)]="selectedEventoDisciplina"
               placeholder="Escoger una Disciplina"
               inputId="disciplina-dropdown"
@@ -146,12 +128,12 @@
         </div>
 
         <div class="field" *ngIf="selectedEventoDisciplina">
-          <p-fieldset [toggleable]="true">
+          <p-fieldset [toggleable]="true" [collapsed]="true">
             <ng-template pTemplate="header">
               <div class="flex align-items-center text-primary">
                 <span class="pi pi-cog mr-2"></span>
                 <span class="font-bold text-lg">
-                  Información de la Configuración
+                  Detalles de la Configuración
                 </span>
               </div>
             </ng-template>
