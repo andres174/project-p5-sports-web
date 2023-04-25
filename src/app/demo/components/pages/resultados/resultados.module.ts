@@ -18,7 +18,6 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { ReactiveFormsModule } from "@angular/forms";
-import { CalendarModule } from "primeng/calendar";
 import {CheckboxModule} from 'primeng/checkbox';
 import { ImageModule } from 'primeng/image';
 
@@ -44,7 +43,6 @@ import { ImageModule } from 'primeng/image';
     InputNumberModule,
     DialogModule,
     ReactiveFormsModule,
-    CalendarModule,
     CheckboxModule,
     ImageModule
   ]

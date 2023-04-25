@@ -22,12 +22,6 @@ export class EventoDisciplinaService {
   }
 
 
-  /* getDisciplina() {
-
-    return this.http.get<any>(`${environment.apiUrl}get-disciplinas`);
-
-  } */
-
   getConfiguracion() {
 
     return this.http.get<any>(`${environment.apiUrl}get-config`);
