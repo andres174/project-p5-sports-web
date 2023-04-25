@@ -200,49 +200,6 @@
               >El mínimo de caracteres debe ser 2.
             </small>
           </div>
-          <!-- <div class="field">
-            <label for="equipos">Equipos</label>
-            <p-dropdown
-              [options]="equipos"
-              formControlName="equipo"
-              optionLabel="nombre"
-              [filter]="true"
-              filterBy="nombre"
-              [showClear]="true"
-              placeholder="Select a Country"
-              appendTo="body"
-            >
-              <ng-template pTemplate="selectedItem">
-                <div
-                  class="flex align-items-center gap-2"
-                  *ngIf="equipoForm.value['equipo']"
-                >
-                  <img
-                    [src]="
-                      getEquipoLogo(equipoForm.value['equipo']) ||
-                      '/assets/demo/images/image-placeholder.svg'
-                    "
-                    alt="Logo del equipo"
-                    width="30"
-                  />
-                  <div>{{ equipoForm.value['equipo'].nombre }}</div>
-                </div>
-              </ng-template>
-              <ng-template let-eq pTemplate="item">
-                <div class="flex align-items-center gap-2">
-                  <img
-                    [src]="
-                      getEquipoLogo(eq) ||
-                      '/assets/demo/images/image-placeholder.svg'
-                    "
-                    alt="Logo del equipo"
-                    width="30"
-                  />
-                  <div>{{ eq.nombre }}</div>
-                </div>
-              </ng-template>
-            </p-dropdown>
-          </div> -->
         </form>
       </ng-template>
 

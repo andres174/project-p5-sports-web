@@ -1,4 +1,4 @@
-export interface EventoDisciplinaSmall {
+export interface EventoDisciplina {
   id?: number;
   id_disciplina?: number;
   nombre_disciplina?: string;
