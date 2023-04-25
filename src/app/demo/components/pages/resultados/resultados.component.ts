@@ -3,6 +3,7 @@ import { MessageService } from 'primeng/api';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResultadoService } from 'src/app/demo/service/resultado.service';
+import { Table } from 'primeng/table';
 
 @Component({
   selector: 'app-resultados',
@@ -24,6 +25,17 @@ export class ResultadosComponent {
   selectedResultado: ResultadoInterface[] = [];
 
   formResultados: FormGroup;
+
+  isUpdate:boolean=false;
+
+
+  equipo_disciplinas: any[] = [];
+  equipo_disciplinas_selected: any;
+
+  
+  partidos: any[] = [];
+  partidos_selected: any;
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -133,6 +145,94 @@ export class ResultadosComponent {
     this.resultado = {};
   }
 
+  hideDialog() {
+    this.resultadoDialog = false;
+    this.submitted = false;
+    if(this.isUpdate==true){
+      this.formResultados.reset()
+      this.isUpdate=false
+    }
+  }
+
+  saveJugadores() {
+    if (!this.formResultados.valid) {
+      this.formResultados.markAllAsTouched();
+      return;
+    }
+
+    this.submitted = true;
+    const values = { ...this.formResultados.value };
+    if (!this.resultado.id) {
+      this.storeResultados(values);
+    } else {
+      this.updateResultado(values);
+    }
+    this.hideDialog();
+    this.resultado = {};
+  }
+
+  storeResultados(values: any) {
+    const data = new FormData();
+
+    Object.keys(values).forEach((key) => {
+      data.append(key, values[key]);
+    });
+
+    this.resultadoService.saveResultado(data).subscribe({
+      next: (res) => {
+        this.getResultados();
+        console.log(res);
+         this.successMessage(res.message)
+      },
+      error: this.errorMessage,
+    });
+  }
+
+  updateResultado(values: any) {
+    let data = {
+      puntos: values.puntos,
+      goles_favor: values.goles_favor,
+      goles_contra: values.goles_contra,
+      id_equipo_disciplina: values.id_equipo_disciplina,
+      id_partido: values.id_partido,
+    };
+
+    this.resultadoService.updateResultado(data, this.resultado.id).subscribe({
+      next: (res) => {
+        this.getResultados();
+        console.log(res);
+        this.successMessage(res.message);
+      },
+      error: this.errorMessage,
+    });
+  }
+
+  getEquipoDisciplina() {
+    this.resultadoService.getEquipoDisciplina().subscribe({
+      next: (value) => {
+          this.equipo_disciplinas = value;
+      },
+      error: (err) => {
+          console.log(err);
+      }
+  });
+}
+
+getPartido() {
+  this.resultadoService.getPartido().subscribe({
+    next: (value) => {
+        this.partidos = value;
+    },
+    error: (err) => {
+        console.log(err);
+    }
+});
+}
+
+
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, "contains");
+  }
   
 
 }
