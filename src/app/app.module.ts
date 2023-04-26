@@ -11,7 +11,8 @@ import { EventService } from './demo/service/event.service';
 import { IconService } from './demo/service/icon.service';
 import { NodeService } from './demo/service/node.service';
 import { PhotoService } from './demo/service/photo.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { InterceptorService } from './interceptors/interceptor.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -25,12 +26,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
         AppLayoutModule,
         HttpClientModule,
         FormsModule,
-        ReactiveFormsModule 
-    ], 
+        ReactiveFormsModule
+    ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService
+        PhotoService, ProductService,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: InterceptorService,
+            multi: true
+        },
     ],
     bootstrap: [AppComponent]
 })
