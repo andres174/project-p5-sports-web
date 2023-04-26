@@ -26,7 +26,7 @@ export class EquipoDisciplinasComponent implements OnInit {
   equipoDisciplinas: EquipoDisciplina[] = [];
   equipoDisciplina: EquipoDisciplina = {};
   selectedEquipoDisciplinas: EquipoDisciplina[] = [];
-  isEquipoDisciplinasLoading = true;
+  isEquipoDisciplinasLoading = false;
 
   deleteEquipoDisciplinaDialog = false;
   deleteEquipoDisciplinasDialog = false;

@@ -14,19 +14,44 @@ export class JugadorEquiposService {
     );
   }
 
-  getEventoDisciplinasByEvento(idEvento: number) {
+  getEventoDisciplinasFullByEvento(idEvento: number) {
     return this.http.get<any>(
-      `${environment.apiUrl}get-evento-disciplinas-by-evento/${idEvento}`
+      `${environment.apiUrl}get-evento-disciplinas-full-by-evento/${idEvento}`
     );
   }
 
-  getConfiguracion(id: number) {
-    return this.http.get<any>(`${environment.apiUrl}get-configuracion/${id}`);
+  getEquipoDisciplinasByDisciplina(idEventoDisciplina: number) {
+    return this.http.get<any>(
+      `${environment.apiUrl}get-equipo-disciplinas-by-disciplina/${idEventoDisciplina}`
+    );
   }
 
-  getEquiposByDisciplina(id_evento_disciplina: number) {
+  getJugadorEquiposByEquipoDisciplina(idEquipoDisciplina: number) {
     return this.http.get<any>(
-      `${environment.apiUrl}get-equipos-by-disciplina/${id_evento_disciplina}`
+      `${environment.apiUrl}get-jugador-equipos-by-equipo-disciplina/${idEquipoDisciplina}`
+    );
+  }
+
+  storeJugadorEquipo(form: any) {
+    return this.http.post<any>(`${environment.apiUrl}jugador-equipos`, form);
+  }
+
+  updateJugadorEquipo(form: any, id: number) {
+    return this.http.put<any>(
+      `${environment.apiUrl}jugador-equipos/${id}`,
+      form
+    );
+  }
+
+  deleteJugadorEquipo(id: number) {
+    return this.http.delete<any>(`${environment.apiUrl}jugador-equipos/${id}`);
+  }
+
+  deleteSelectedJugadorEquipos(ids: number[]) {
+    const data = { ids };
+    return this.http.post<any>(
+      `${environment.apiUrl}delete-selected-jugador-equipos`,
+      data
     );
   }
 }
