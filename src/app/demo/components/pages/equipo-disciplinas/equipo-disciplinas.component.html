@@ -11,8 +11,8 @@
         <h5>Seleccione los datos necesarios:</h5>
         <div class="grid grid-nogutter row-gap-3">
           <!-- Eventos -->
-          <div class="pt-3 col-12">
-            <span class="p-float-label">
+          <div class="pt-3 col-12 flex align-items-center gap-2">
+            <span class="p-float-label flex-grow-1">
               <p-dropdown
                 [options]="eventos"
                 [(ngModel)]="selectedEvento"
@@ -83,10 +83,14 @@
               </p-dropdown>
               <label for="evento-dropdown">Evento</label>
             </span>
+            <i
+              *ngIf="isEventosLoading"
+              class="pi pi-spin pi-spinner text-lg"
+            ></i>
           </div>
           <!-- Disciplinas -->
-          <div class="pt-3 col-12">
-            <span class="p-float-label">
+          <div class="pt-3 col-12 flex align-items-center gap-2">
+            <span class="p-float-label flex-grow-1">
               <p-dropdown
                 [options]="eventoDisciplinas"
                 [(ngModel)]="selectedEventoDisciplina"
@@ -128,6 +132,10 @@
                 >Disciplina y Configuración</label
               >
             </span>
+            <i
+              *ngIf="isEventoDisciplinasLoading"
+              class="pi pi-spin pi-spinner text-lg"
+            ></i>
           </div>
           <!-- Detalle Configuracion -->
           <div class="col-12">
@@ -184,102 +192,106 @@
       </div>
 
       <p-toolbar styleClass="mb-4">
-        <div
-          class="p-toolbar-group-start grid grid-nogutter align-items-center gap-2"
-        >
-          <div class="p-fluid field col pt-3">
-            <span class="p-float-label">
-              <p-dropdown
-                [options]="equiposToAdd"
-                [(ngModel)]="equipoToAdd"
-                placeholder="Escoger un Equipo"
-                inputId="equipo-dropdown"
-                [autoDisplayFirst]="false"
-                [filter]="true"
-                filterBy="nombre"
-                [disabled]="
-                  selectedEventoDisciplina == null ||
-                  equipoDisciplinas.length >= getMaxNumberEquipos()
-                "
-                [showClear]="true"
-              >
-                <ng-template let-eq pTemplate="selectedItem">
-                  <div
-                    class="flex flex-column align-items-center sm:flex-row gap-2"
-                  >
-                    <img
-                      [src]="
-                        getEquipoLogo(eq) ||
-                        '/assets/demo/images/image-placeholder.svg'
-                      "
-                      [alt]="eq.nombre"
-                      width="50"
-                      class="shadow-1"
-                    />
-                    <span>{{ eq.id }} | {{ eq.nombre }}</span>
-                  </div>
-                </ng-template>
-                <ng-template let-eq pTemplate="item">
-                  <div
-                    class="flex flex-column align-items-center sm:flex-row gap-2"
-                  >
-                    <img
-                      [src]="
-                        getEquipoLogo(eq) ||
-                        '/assets/demo/images/image-placeholder.svg'
-                      "
-                      [alt]="eq.nombre"
-                      width="50"
-                      class="shadow-1"
-                    />
-                    <span>{{ eq.id }} | {{ eq.nombre }}</span>
-                  </div>
-                </ng-template>
-                <ng-template pTemplate="empty">
-                  <ng-container
-                    *ngIf="!isEventoDisciplinasLoading; else equiposLoading"
-                  >
-                    <div>No hay Equipos para seleccionar</div>
-                  </ng-container>
-                  <ng-template #equiposLoading>
-                    <div class="flex align-items-center gap-2">
-                      <i class="pi pi-spin pi-spinner text-lg"></i>
-                      <span>Los Equipos están cargando...</span>
+        <div class="p-toolbar-group-start flex-grow-1">
+          <div class="flex flex-wrap align-items-center column-gap-2 flex-grow-1">
+            <!-- equipos -->
+            <div class="p-fluid py-3 flex align-items-center gap-2 flex-grow-1">
+              <span class="p-float-label flex-grow-1">
+                <p-dropdown
+                  [options]="equiposToAdd"
+                  [(ngModel)]="equipoToAdd"
+                  placeholder="Escoger un Equipo"
+                  inputId="equipo-dropdown"
+                  [autoDisplayFirst]="false"
+                  [filter]="true"
+                  filterBy="nombre"
+                  [disabled]="
+                    selectedEventoDisciplina == null ||
+                    equipoDisciplinas.length >= getMaxNumberEquipos()
+                  "
+                  [showClear]="true"
+                >
+                  <ng-template let-eq pTemplate="selectedItem">
+                    <div
+                      class="flex flex-column align-items-center sm:flex-row gap-2"
+                    >
+                      <img
+                        [src]="
+                          getEquipoLogo(eq) ||
+                          '/assets/demo/images/image-placeholder.svg'
+                        "
+                        [alt]="eq.nombre"
+                        width="50"
+                        class="shadow-1"
+                      />
+                      <span>{{ eq.id }} | {{ eq.nombre }}</span>
                     </div>
                   </ng-template>
-                </ng-template>
-              </p-dropdown>
-              <label for="equipo-dropdown">Equipo a añadir</label>
-            </span>
-          </div>
-          <div>
-            <button
-              pButton
-              pRipple
-              label="Agregar"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
-              (click)="storeEquipoDisciplina()"
-              [disabled]="!equipoToAdd"
-            ></button>
-            <button
-              pButton
-              pRipple
-              label="Eliminar"
-              icon="pi pi-trash"
-              class="p-button-danger"
-              (click)="deleteSelectedEquipoDisciplinas()"
-              [disabled]="
-                !selectedEquipoDisciplinas || !selectedEquipoDisciplinas.length
-              "
-            ></button>
+                  <ng-template let-eq pTemplate="item">
+                    <div
+                      class="flex flex-column align-items-center sm:flex-row gap-2"
+                    >
+                      <img
+                        [src]="
+                          getEquipoLogo(eq) ||
+                          '/assets/demo/images/image-placeholder.svg'
+                        "
+                        [alt]="eq.nombre"
+                        width="50"
+                        class="shadow-1"
+                      />
+                      <span>{{ eq.id }} | {{ eq.nombre }}</span>
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="empty">
+                    <ng-container
+                      *ngIf="!isEventoDisciplinasLoading; else equiposLoading"
+                    >
+                      <div>No hay Equipos para seleccionar</div>
+                    </ng-container>
+                    <ng-template #equiposLoading>
+                      <div class="flex align-items-center gap-2">
+                        <i class="pi pi-spin pi-spinner text-lg"></i>
+                        <span>Los Equipos están cargando...</span>
+                      </div>
+                    </ng-template>
+                  </ng-template>
+                </p-dropdown>
+                <label for="equipo-dropdown">Equipo a añadir</label>
+              </span>
+              <i
+                *ngIf="isEquiposToAddLoading"
+                class="pi pi-spin pi-spinner text-lg"
+              ></i>
+            </div>
+            <!-- botones -->
+            <div class="my-2">
+              <button
+                pButton
+                pRipple
+                label="Agregar"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                (click)="storeEquipoDisciplina()"
+                [disabled]="!equipoToAdd"
+              ></button>
+              <button
+                pButton
+                pRipple
+                label="Eliminar"
+                icon="pi pi-trash"
+                class="p-button-danger"
+                (click)="deleteSelectedEquipoDisciplinas()"
+                [disabled]="
+                  !selectedEquipoDisciplinas || !selectedEquipoDisciplinas.length
+                "
+              ></button>
+            </div>
           </div>
         </div>
-        <ng-template pTemplate="center">
-          <div class="mx-4" *ngIf="loading">
-            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-          </div>
-        </ng-template>
+        <div class="p-toolbar-group-end mx-4">
+          <i class="pi pi-spin pi-spinner" style="font-size: 2rem" *ngIf="loading"></i>
+        </div>
       </p-toolbar>
 
       <p-table

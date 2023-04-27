@@ -11,8 +11,8 @@
         <h5>Seleccione los datos necesarios:</h5>
         <div class="grid grid-nogutter row-gap-3">
           <!-- Eventos -->
-          <div class="pt-3 col-12">
-            <span class="p-float-label">
+          <div class="pt-3 col-12 flex align-items-center gap-2">
+            <span class="p-float-label flex-grow-1">
               <p-dropdown
                 [options]="eventos"
                 [(ngModel)]="selectedEvento"
@@ -21,6 +21,7 @@
                 [autoDisplayFirst]="false"
                 [filter]="true"
                 filterBy="nombre"
+                class="flex-grow-1"
                 (onChange)="onEventoChange()"
               >
                 <ng-template let-ev pTemplate="selectedItem">
@@ -41,7 +42,8 @@
                     >
                       <span>{{ ev.id }} | {{ ev.nombre }}</span>
                       <span>
-                        {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }}
+                        {{ ev.fecha_inicio | date }} -
+                        {{ ev.fecha_fin | date }}
                       </span>
                     </div>
                   </div>
@@ -64,7 +66,8 @@
                     >
                       <span>{{ ev.id }} | {{ ev.nombre }}</span>
                       <span>
-                        {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }}
+                        {{ ev.fecha_inicio | date }} -
+                        {{ ev.fecha_fin | date }}
                       </span>
                     </div>
                   </div>
@@ -83,10 +86,14 @@
               </p-dropdown>
               <label for="evento-dropdown">Evento</label>
             </span>
+            <i
+              *ngIf="isEventosLoading"
+              class="pi pi-spin pi-spinner text-lg"
+            ></i>
           </div>
           <!-- Disciplinas -->
-          <div class="pt-3 col-12">
-            <span class="p-float-label">
+          <div class="pt-3 col-12 flex align-items-center gap-2">
+            <span class="p-float-label flex-grow-1">
               <p-dropdown
                 [options]="eventoDisciplinas"
                 [(ngModel)]="selectedEventoDisciplina"
@@ -128,6 +135,10 @@
                 >Disciplina y Configuración</label
               >
             </span>
+            <i
+              *ngIf="isEventoDisciplinasLoading"
+              class="pi pi-spin pi-spinner text-lg"
+            ></i>
           </div>
           <!-- Detalle Configuracion -->
           <div class="col-12">
@@ -181,8 +192,8 @@
             </p-fieldset>
           </div>
           <!-- Equipo Disciplina -->
-          <div class="pt-3 col-12">
-            <span class="p-float-label">
+          <div class="pt-3 col-12 flex align-items-center gap-2">
+            <span class="p-float-label flex-grow-1">
               <p-dropdown
                 [options]="equipoDisciplinas"
                 [(ngModel)]="selectedEquipoDisciplina"
@@ -228,7 +239,7 @@
                 </ng-template>
                 <ng-template pTemplate="empty">
                   <ng-container
-                    *ngIf="!isEventoDisciplinasLoading; else equiposLoading"
+                    *ngIf="!isEquipoDisciplinasLoading; else equiposLoading"
                   >
                     <div>No hay Equipos para seleccionar</div>
                   </ng-container>
@@ -242,6 +253,10 @@
               </p-dropdown>
               <label for="equipo-dropdown">Equipo</label>
             </span>
+            <i
+              *ngIf="isEquipoDisciplinasLoading"
+              class="pi pi-spin pi-spinner text-lg"
+            ></i>
           </div>
         </div>
       </div>
@@ -388,6 +403,28 @@
             </td>
           </tr>
         </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="7">
+              <ng-container *ngIf="!selectedEquipoDisciplina">
+                Seleccione un Equipo
+              </ng-container>
+              <ng-container *ngIf="selectedEquipoDisciplina && loading">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi pi-spin pi-spinner text-lg"></i>
+                  <span>Los Tecnicos están cargando...</span>
+                </div>
+              </ng-container>
+              <ng-container
+                *ngIf="
+                  selectedEquipoDisciplina && !loading && tecnicos.length == 0
+                "
+              >
+                No hay Tecnicos en este Equipo
+              </ng-container>
+            </td>
+          </tr>
+        </ng-template>
       </p-table>
 
       <!-- Tabla Jugadores -->
@@ -513,7 +550,295 @@
             </td>
           </tr>
         </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="9">
+              <ng-container *ngIf="!selectedEquipoDisciplina">
+                Seleccione un Equipo
+              </ng-container>
+              <ng-container *ngIf="selectedEquipoDisciplina && loading">
+                <div class="flex align-items-center gap-2">
+                  <i class="pi pi-spin pi-spinner text-lg"></i>
+                  <span>Los Jugadores están cargando...</span>
+                </div>
+              </ng-container>
+              <ng-container
+                *ngIf="
+                  selectedEquipoDisciplina && !loading && jugadores.length == 0
+                "
+              >
+                No hay Jugadores en este Equipo
+              </ng-container>
+            </td>
+          </tr>
+        </ng-template>
       </p-table>
     </div>
+
+    <p-dialog
+      [(visible)]="jugadorEquipoDialog"
+      [style]="{ width: '450px' }"
+      header="Detalles del Jugador en el Equipo"
+      [modal]="true"
+      class="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <form [formGroup]="jugadorEquipoForm">
+          <!-- Jugador -->
+          <div class="field">
+            <label for="jugador-to-add-dropdown">Jugador</label>
+            <div class="flex align-items-center gap-2">
+              <p-dropdown
+                [options]="jugadoresToAdd"
+                formControlName="jugador"
+                placeholder="Escoger un Jugador"
+                inputId="jugador-to-add-dropdown"
+                [autoDisplayFirst]="false"
+                [filter]="true"
+                filterBy="nombre,apellido,cedula"
+                appendTo="body"
+                [required]="true"
+                class="flex-grow-1"
+                [ngClass]="{ 'ng-invalid ng-dirty': jugadorEquipoForm.get('jugador')?.touched && jugadorEquipoForm.get('jugador')?.errors?.['required']}"
+              >
+                <ng-template let-j pTemplate="selectedItem">
+                  <div
+                    class="flex flex-column align-items-center sm:flex-row gap-2"
+                  >
+                    <img
+                      [src]="
+                        getJugadorImg(j) ||
+                        '/assets/demo/images/image-placeholder.svg'
+                      "
+                      [alt]="j.nombre"
+                      width="70"
+                      class="shadow-1"
+                    />
+                    <div
+                      class="flex flex-column align-items-center gap-1 sm:align-items-start"
+                    >
+                      <!-- <span>{{ j.id }} | {{ j.nombre }} {{ j.apellido }}</span> -->
+                      <span>ID: {{ j.id }}</span>
+                      <span>Nombre: {{ j.nombre }}</span>
+                      <span>Apellido: {{ j.apellido }} </span>
+                      <span>Cédula: {{ j.cedula }} </span>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template let-j pTemplate="item">
+                  <div
+                    class="flex flex-column align-items-center sm:flex-row gap-2"
+                  >
+                    <img
+                      [src]="
+                        getJugadorImg(j) ||
+                        '/assets/demo/images/image-placeholder.svg'
+                      "
+                      [alt]="j.nombre"
+                      width="70"
+                      class="shadow-1"
+                    />
+                    <div
+                      class="flex flex-column align-items-center gap-1 sm:align-items-start"
+                    >
+                      <!-- <span>{{ j.id }} | {{ j.nombre }} {{ j.apellido }}</span> -->
+                      <span>ID: {{ j.id }}</span>
+                      <span>Nombre: {{ j.nombre }}</span>
+                      <span>Apellido: {{ j.apellido }} </span>
+                      <span>Cédula: {{ j.cedula }} </span>
+                    </div>
+                  </div>
+                </ng-template>
+                <ng-template pTemplate="empty">
+                  <ng-container
+                    *ngIf="!isJugadoresToAddLoading; else jugadoresToAddLoading"
+                  >
+                    <span>No hay Jugadores para seleccionar</span>
+                  </ng-container>
+                </ng-template>
+                <ng-template #jugadoresToAddLoading>
+                  <div class="flex align-items-center gap-2">
+                    <i class="pi pi-spin pi-spinner text-lg"></i>
+                    <span>Los Jugadores están cargando...</span>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+              <i
+                *ngIf="isJugadoresToAddLoading"
+                class="pi pi-spin pi-spinner text-lg"
+              ></i>
+            </div>
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="jugadorEquipoForm.get('jugador')?.touched && jugadorEquipoForm.get('jugador')?.errors?.['required']"
+              >El Jugador es requerido.
+            </small>
+          </div>
+
+          <!-- Posicion -->
+          <div class="field">
+            <label for="posicion-dropdown">Posición</label>
+            <div class="flex align-items-center gap-2">
+              <p-dropdown
+                [options]="posiciones"
+                formControlName="posicion"
+                placeholder="Escoger una Posición"
+                inputId="posicion-dropdown"
+                [autoDisplayFirst]="false"
+                [filter]="true"
+                filterBy="descripcion"
+                appendTo="body"
+                [required]="true"
+                class="flex-grow-1"
+                [ngClass]="{ 'ng-invalid ng-dirty': jugadorEquipoForm.get('posicion')?.touched && jugadorEquipoForm.get('posicion')?.errors?.['required']}"
+                (onChange)="onPosicionChange()"
+              >
+                <ng-template let-p pTemplate="selectedItem">
+                  <div>{{ p.id }} | {{ p.descripcion }}</div>
+                </ng-template>
+                <ng-template let-p pTemplate="item">
+                  <div>{{ p.id }} | {{ p.descripcion }}</div>
+                </ng-template>
+                <ng-template pTemplate="empty">
+                  <ng-container
+                    *ngIf="!isPosicionesLoading; else posicionesLoading"
+                  >
+                    <span>No hay Posiciones para seleccionar</span>
+                  </ng-container>
+                </ng-template>
+                <ng-template #posicionesLoading>
+                  <div class="flex align-items-center gap-2">
+                    <i class="pi pi-spin pi-spinner text-lg"></i>
+                    <span>Las Posiciones están cargando...</span>
+                  </div>
+                </ng-template>
+              </p-dropdown>
+              <i
+                *ngIf="isPosicionesLoading"
+                class="pi pi-spin pi-spinner text-lg"
+              ></i>
+            </div>
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="jugadorEquipoForm.get('posicion')?.touched && jugadorEquipoForm.get('posicion')?.errors?.['required']"
+              >La Posición es requerida.
+            </small>
+          </div>
+
+          <!-- Numero -->
+          <div
+            class="field"
+            *ngIf="jugadorEquipoForm.value?.posicion?.id != TECNICO_ID"
+          >
+            <label for="numero">Número</label>
+            <input
+              type="text"
+              pInputText
+              id="numero"
+              formControlName="numero"
+              required
+              [ngClass]="{ 'ng-invalid ng-dirty': jugadorEquipoForm.get('numero')?.touched && jugadorEquipoForm.get('numero')?.errors?.['required']}"
+            />
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="jugadorEquipoForm.get('numero')?.touched && jugadorEquipoForm.get('numero')?.errors?.['required']"
+              >El número es requerido.
+            </small>
+            <small
+              class="ng-dirty ng-invalid block"
+              *ngIf="jugadorEquipoForm.get('numero')?.errors?.['pattern']"
+              >Solo se aceptan números.
+            </small>
+          </div>
+        </form>
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          label="Cancelar"
+          icon="pi pi-times"
+          class="p-button-text"
+          (click)="hideDialog()"
+        ></button>
+        <button
+          pButton
+          pRipple
+          label="Guardar"
+          icon="pi pi-check"
+          class="p-button-text"
+          (click)="saveJugadorEquipo()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog
+      [(visible)]="deleteJugadorEquipoDialog"
+      header="Confirmación"
+      [modal]="true"
+      [style]="{ width: '450px' }"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span *ngIf="jugadorEquipo as jeq">
+          Estás seguro que deseas eliminar el jugador
+          <b>{{ jeq.jugador?.nombre }}</b> del equipo
+          <b>{{ selectedEquipoDisciplina?.equipo?.nombre }}</b> en
+          <b>{{ selectedEventoDisciplina?.disciplina?.nombre }}</b>
+          ?
+        </span>
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="No"
+          (click)="deleteJugadorEquipoDialog = false"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-text"
+          label="Si"
+          (click)="confirmDelete()"
+        ></button>
+      </ng-template>
+    </p-dialog>
+
+    <p-dialog
+      [(visible)]="deleteJugadorEquiposDialog"
+      header="Confirmación"
+      [modal]="true"
+      [style]="{ width: '450px' }"
+    >
+      <div class="flex align-items-center justify-content-center">
+        <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+        <span
+          >Estás seguro que deseas eliminar los jugadores seleccionados?</span
+        >
+      </div>
+      <ng-template pTemplate="footer">
+        <button
+          pButton
+          pRipple
+          icon="pi pi-times"
+          class="p-button-text"
+          label="No"
+          (click)="deleteJugadorEquiposDialog = false"
+        ></button>
+        <button
+          pButton
+          pRipple
+          icon="pi pi-check"
+          class="p-button-text"
+          label="Si"
+          (click)="confirmDeleteSelected()"
+        ></button>
+      </ng-template>
+    </p-dialog>
   </div>
 </div>

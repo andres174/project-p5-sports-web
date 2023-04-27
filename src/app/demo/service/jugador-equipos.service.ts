@@ -32,6 +32,16 @@ export class JugadorEquiposService {
     );
   }
 
+  getJugadoresToAddByDisciplina(idEventoDisciplina: number) {
+    return this.http.get<any>(
+      `${environment.apiUrl}get-jugadores-to-add-by-disciplina/${idEventoDisciplina}`
+    );
+  }
+
+  getPosiciones() {
+    return this.http.get<any>(`${environment.apiUrl}posiciones`);
+  }
+
   storeJugadorEquipo(form: any) {
     return this.http.post<any>(`${environment.apiUrl}jugador-equipos`, form);
   }

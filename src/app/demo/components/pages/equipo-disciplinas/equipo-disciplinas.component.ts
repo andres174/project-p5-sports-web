@@ -37,6 +37,13 @@ export class EquipoDisciplinasComponent implements OnInit {
 
   loading = false;
 
+  history: any = {};
+
+  // history: any = {
+  //   eventoId: 1,
+  //   eventoDisciplinaId: 1,
+  // };
+
   constructor(
     private edService: EquipoDisciplinasService,
     private messageService: MessageService
@@ -73,6 +80,15 @@ export class EquipoDisciplinasComponent implements OnInit {
         this.isEventosLoading = false;
       },
       error: console.log,
+      complete: () => {
+        if (this.history?.eventoId) {
+          this.selectedEvento = this.eventos.find(
+            (ev) => ev.id == this.history.eventoId
+          );
+          this.getEventoDisciplinasByEvento(this.history.eventoId);
+          this.history.eventoId = null;
+        } else this.history = null;
+      },
     });
   }
 
@@ -86,11 +102,23 @@ export class EquipoDisciplinasComponent implements OnInit {
         this.isEventoDisciplinasLoading = false;
       },
       error: console.log,
+      complete: () => {
+        if (this.history?.eventoDisciplinaId) {
+          this.selectedEventoDisciplina = this.eventoDisciplinas.find(
+            (evd) => evd.id == this.history.eventoDisciplinaId
+          );
+          this.getEquipoDisciplinasByDisciplina(
+            this.history.eventoDisciplinaId
+          );
+          this.history.eventoDisciplinaId = null;
+        } else this.history = null;
+      },
     });
   }
 
   getEquipoDisciplinasByDisciplina(idEventoDisciplina: number) {
     this.isEquipoDisciplinasLoading = true;
+    this.loading = true;
     this.edService
       .getEquipoDisciplinasByDisciplina(idEventoDisciplina)
       .subscribe({
@@ -152,6 +180,8 @@ export class EquipoDisciplinasComponent implements OnInit {
   }
 
   onEventoDisciplinaChange() {
+    this.equipoDisciplinas = [];
+    this.equipoToAdd = undefined;
     this.refreshEquipos();
   }
 
