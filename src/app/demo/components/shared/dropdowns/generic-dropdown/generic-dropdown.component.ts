@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
@@ -11,6 +12,7 @@ import {
   selector: "app-generic-dropdown",
   templateUrl: "./generic-dropdown.component.html",
   styleUrls: ["./generic-dropdown.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenericDropdownComponent<T> {
   @Input() floatLabel: boolean = true;

@@ -23,6 +23,7 @@ import { ToolbarModule } from "primeng/toolbar";
 import { ImageModule } from "primeng/image";
 import { EventoDropdownModule } from "@shared/dropdowns/evento-dropdown/evento-dropdown.module";
 import { EventoDisciplinaDropdownModule } from "@shared/dropdowns/evento-disciplina-dropdown/evento-disciplina-dropdown.module";
+import { ConfiguracionFieldsetModule } from "@shared/fieldsets/configuracion-fieldset/configuracion-fieldset.module";
 
 @NgModule({
   declarations: [EquipoDisciplinasComponent],
@@ -31,6 +32,7 @@ import { EventoDisciplinaDropdownModule } from "@shared/dropdowns/evento-discipl
     EquipoDisciplinasRoutingModule,
     EventoDropdownModule,
     EventoDisciplinaDropdownModule,
+    ConfiguracionFieldsetModule,
     InputTextModule,
     TableModule,
     FileUploadModule,

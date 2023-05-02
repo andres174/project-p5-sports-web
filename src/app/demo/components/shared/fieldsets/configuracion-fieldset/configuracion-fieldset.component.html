@@ -1,0 +1,48 @@
+<p-fieldset [toggleable]="true" [collapsed]="true">
+  <ng-template pTemplate="header">
+    <div class="flex align-items-center text-primary">
+      <span class="pi pi-cog mr-2"></span>
+      <span class="font-bold text-lg">
+        Detalles de la Configuración
+      </span>
+    </div>
+  </ng-template>
+  <ng-container *ngIf="!eventoDisciplina">
+    Seleccione una Disciplina
+  </ng-container>
+  <ng-container
+    *ngIf="eventoDisciplina?.configuracion as c"
+  >
+    <div class="text-lg font-bold mb-3">
+      {{ c.id }} | {{ c.nombre }}
+    </div>
+    <div class="grid grid-nogutter row-gap-2">
+      <div class="col-12 md:col-6">
+        Número de grupos: <b>{{ c.numero_grupos }}</b>
+      </div>
+      <div class="col-12 md:col-6">
+        Número de equipos por grupo: <b>{{ c.numero_miembros }}</b>
+      </div>
+      <div class="col-12 md:col-6">
+        Tiempo de juego: <b>{{ c.minutos_juego }}min</b>
+      </div>
+      <div class="col-12 md:col-6">
+        Tiempo entre partidos:
+        <b>{{ c.minutos_entre_partidos }}min</b>
+      </div>
+      <div class="col-12 md:col-6">
+        Ida y vuelta: <b> {{ c.ida_y_vuelta ? "Si" : "No" }} </b>
+      </div>
+      <div class="col-12 md:col-6">
+        Tarjetas: <b> {{ c.tarjetas ? "Si" : "No" }} </b>
+      </div>
+    </div>
+    <div
+      class="mt-3"
+      *ngIf="c.nombre_organizador && c.apellido_organizador"
+    >
+      <span class="font-bold">Propietario:</span>
+      <p>{{ c.nombre_organizador }} {{ c.apellido_organizador }}</p>
+    </div>
+  </ng-container>
+</p-fieldset>
