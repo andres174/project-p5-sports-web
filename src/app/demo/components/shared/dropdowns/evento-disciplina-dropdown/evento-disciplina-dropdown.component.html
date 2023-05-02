@@ -1,0 +1,23 @@
+<app-generic-dropdown
+  [floatLabel]="floatLabel"
+  [isLoading]="isLoading"
+  [inputId]="inputId"
+  [disabled]="!idEvento"
+  [items]="eventoDisciplinas"
+  [selectedItem]="selectedEventoDisciplina"
+  [itemTemplate]="eventoDisciplinaTemplate"
+  (onChange)="onEventoDisciplinaChange($event)"
+  [labels]="{
+    label: 'Disciplina y Configuración',
+    loadingMessage: 'Las Disciplinas están cargando...',
+    emptyMessage: 'No hay Disciplinas para seleccionar',
+    placeholder: 'Escoger una Disciplina'
+  }"
+  filterBy="disciplina.nombre,configuracion.nombre"
+></app-generic-dropdown>
+<ng-template #eventoDisciplinaTemplate let-evd>
+  <div>
+    {{ evd.id }} | {{ evd.disciplina.nombre }} -
+    {{ evd.configuracion.nombre }}
+  </div>
+</ng-template>

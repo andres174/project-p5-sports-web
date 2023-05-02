@@ -11,7 +11,13 @@
         <h5>Seleccione los datos necesarios:</h5>
         <div class="grid grid-nogutter row-gap-3">
           <!-- Eventos -->
-          <div class="pt-3 col-12 flex align-items-center gap-2">
+          <app-evento-dropdown
+            [idOrganizador]="idOrganizador"
+            (onChange)="onEvChange($event)"
+            inputId="ev-dropdowm"
+            class="col-12"
+          ></app-evento-dropdown>
+          <!-- <div class="pt-3 col-12 flex align-items-center gap-2">
             <span class="p-float-label flex-grow-1">
               <p-dropdown
                 [options]="eventos"
@@ -87,9 +93,16 @@
               *ngIf="isEventosLoading"
               class="pi pi-spin pi-spinner text-lg"
             ></i>
-          </div>
+          </div> -->
+
           <!-- Disciplinas -->
-          <div class="pt-3 col-12 flex align-items-center gap-2">
+          <app-evento-disciplina-dropdown
+            [idEvento]="selectedEvento?.id"
+            (onChange)="onEvDChange($event)"
+            inputId="evd-dropdown"
+            class="col-12"
+          ></app-evento-disciplina-dropdown>
+          <!-- <div class="pt-3 col-12 flex align-items-center gap-2">
             <span class="p-float-label flex-grow-1">
               <p-dropdown
                 [options]="eventoDisciplinas"
@@ -136,7 +149,8 @@
               *ngIf="isEventoDisciplinasLoading"
               class="pi pi-spin pi-spinner text-lg"
             ></i>
-          </div>
+          </div> -->
+
           <!-- Detalle Configuracion -->
           <div class="col-12">
             <p-fieldset [toggleable]="true" [collapsed]="true">
@@ -193,7 +207,9 @@
 
       <p-toolbar styleClass="mb-4">
         <div class="p-toolbar-group-start flex-grow-1">
-          <div class="flex flex-wrap align-items-center column-gap-2 flex-grow-1">
+          <div
+            class="flex flex-wrap align-items-center column-gap-2 flex-grow-1"
+          >
             <!-- equipos -->
             <div class="p-fluid py-3 flex align-items-center gap-2 flex-grow-1">
               <span class="p-float-label flex-grow-1">
@@ -283,14 +299,19 @@
                 class="p-button-danger"
                 (click)="deleteSelectedEquipoDisciplinas()"
                 [disabled]="
-                  !selectedEquipoDisciplinas || !selectedEquipoDisciplinas.length
+                  !selectedEquipoDisciplinas ||
+                  !selectedEquipoDisciplinas.length
                 "
               ></button>
             </div>
           </div>
         </div>
         <div class="p-toolbar-group-end mx-4">
-          <i class="pi pi-spin pi-spinner" style="font-size: 2rem" *ngIf="loading"></i>
+          <i
+            class="pi pi-spin pi-spinner"
+            style="font-size: 2rem"
+            *ngIf="loading"
+          ></i>
         </div>
       </p-toolbar>
 

@@ -21,12 +21,16 @@ import { TableModule } from "primeng/table";
 import { ToastModule } from "primeng/toast";
 import { ToolbarModule } from "primeng/toolbar";
 import { ImageModule } from "primeng/image";
+import { EventoDropdownModule } from "@shared/dropdowns/evento-dropdown/evento-dropdown.module";
+import { EventoDisciplinaDropdownModule } from "@shared/dropdowns/evento-disciplina-dropdown/evento-disciplina-dropdown.module";
 
 @NgModule({
   declarations: [EquipoDisciplinasComponent],
   imports: [
     CommonModule,
     EquipoDisciplinasRoutingModule,
+    EventoDropdownModule,
+    EventoDisciplinaDropdownModule,
     InputTextModule,
     TableModule,
     FileUploadModule,
@@ -38,7 +42,6 @@ import { ImageModule } from "primeng/image";
     InputTextareaModule,
     DropdownModule,
     RadioButtonModule,
-    InputNumberModule,
     DialogModule,
     FormsModule,
     ReactiveFormsModule,

@@ -1,0 +1,54 @@
+<ng-container *ngIf="floatLabel">
+  <div class="pt-3 flex align-items-center gap-2">
+    <span class="p-float-label flex-grow-1">
+      <ng-container *ngTemplateOutlet="dropdown"></ng-container>
+      <label for="dropdown">{{ labels.label }}</label>
+    </span>
+    <i *ngIf="isLoading" class="pi pi-spin pi-spinner text-lg"></i>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="!floatLabel">
+  <label [for]="inputId">{{ labels.label }}</label>
+  <div class="flex align-items-center gap-2">
+    <ng-container *ngTemplateOutlet="dropdown"></ng-container>
+    <i *ngIf="isLoading" class="pi pi-spin pi-spinner text-lg"></i>
+  </div>
+</ng-container>
+
+<ng-template #dropdown>
+  <p-dropdown
+    [options]="items"
+    [(ngModel)]="selectedItem"
+    [placeholder]="labels.placeholder"
+    [inputId]="inputId"
+    [autoDisplayFirst]="false"
+    [filter]="true"
+    [filterBy]="filterBy"
+    (onChange)="onItemChange()"
+    class="flex-grow-1"
+    [disabled]="disabled"
+  >
+    <ng-template let-item pTemplate="selectedItem">
+      <ng-container
+        *ngTemplateOutlet="itemTemplate; context: { $implicit: item }"
+      ></ng-container>
+    </ng-template>
+    <ng-template let-item pTemplate="item">
+      <ng-container
+        *ngTemplateOutlet="itemTemplate; context: { $implicit: item }"
+      ></ng-container>
+    </ng-template>
+    <ng-template pTemplate="empty">
+      <ng-container *ngIf="!isLoading; else loadingTemplate">
+        <span>{{ labels.emptyMessage }}</span>
+      </ng-container>
+    </ng-template>
+    <ng-template #loadingTemplate>
+      <div class="flex align-items-center gap-2">
+        <i class="pi pi-spin pi-spinner text-lg"></i>
+        <span>{{ labels.loadingMessage }}</span>
+      </div>
+    </ng-template>
+  </p-dropdown>
+</ng-template>

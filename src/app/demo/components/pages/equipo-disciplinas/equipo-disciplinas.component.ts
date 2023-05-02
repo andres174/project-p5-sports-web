@@ -15,6 +15,8 @@ import { environment } from "src/environments/environment";
   providers: [MessageService],
 })
 export class EquipoDisciplinasComponent implements OnInit {
+  idOrganizador = 1;
+
   eventos: Evento[] = [];
   selectedEvento?: Evento;
   isEventosLoading = true;
@@ -50,7 +52,6 @@ export class EquipoDisciplinasComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     // TODO: utilizar la id del que navega
-    this.getEventosByOrganizador(1);
   }
 
   successMessage(msg: string) {
@@ -172,17 +173,23 @@ export class EquipoDisciplinasComponent implements OnInit {
     this.getEquiposToAddByDisciplina(Number(this.selectedEventoDisciplina?.id));
   }
 
-  onEventoChange() {
+  onEvChange(evento: Evento) {
+    this.selectedEvento = { ...evento };
+
     this.equipoDisciplinas = [];
     this.equipoToAdd = undefined;
 
     this.getEventoDisciplinasByEvento(Number(this.selectedEvento?.id));
   }
 
-  onEventoDisciplinaChange() {
+  onEvDChange(eventoDisciplina: EventoDisciplinaFull) {
+    this.selectedEventoDisciplina = { ...eventoDisciplina };
+
     this.equipoDisciplinas = [];
     this.equipoToAdd = undefined;
+
     this.refreshEquipos();
+
   }
 
   storeEquipoDisciplina() {

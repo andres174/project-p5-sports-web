@@ -1,0 +1,31 @@
+<app-generic-dropdown
+  [floatLabel]="floatLabel"
+  [items]="eventos"
+  [selectedItem]="selectedEvento"
+  [isLoading]="isLoading"
+  [itemTemplate]="eventoItemTemplate"
+  (onChange)="onEventoChange($event)"
+  [labels]="{
+    label: 'Evento',
+    loadingMessage: 'Los Eventos están cargando...',
+    emptyMessage: 'No hay Eventos para seleccionar',
+    placeholder: 'Escoger un Evento'
+  }"
+  [inputId]="inputId"
+  filterBy="nombre"
+  [disabled]="!idOrganizador"
+></app-generic-dropdown>
+<ng-template #eventoItemTemplate let-ev>
+  <div class="flex flex-column align-items-center md:flex-row gap-2">
+    <img
+      [src]="ev.imagen || '/assets/demo/images/image-placeholder.svg'"
+      [alt]="ev.nombre"
+      width="50"
+      class="shadow-1"
+    />
+    <div class="flex flex-column align-items-center gap-1 md:align-items-start">
+      <span>{{ ev.id }} | {{ ev.nombre }}</span>
+      <span> {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }} </span>
+    </div>
+  </div>
+</ng-template>
