@@ -18,6 +18,7 @@ import { EquipoDisciplinasService } from "src/app/demo/service/equipo-disciplina
 export class EventoDisciplinaDropdownComponent implements OnChanges {
   @Input() floatLabel: boolean = true;
   @Input() inputId: string = "";
+  @Input() formControlName = "";
 
   @Input() idEvento?: number;
 

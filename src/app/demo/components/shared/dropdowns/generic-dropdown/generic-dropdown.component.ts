@@ -3,7 +3,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnInit,
   Output,
   TemplateRef,
 } from "@angular/core";
@@ -29,6 +28,8 @@ export class GenericDropdownComponent<T> {
 
   @Input() items: T[] = [];
   @Input() selectedItem?: T;
+  // @Input() formControl = new FormControl<T | undefined>(undefined);
+  @Input() formControlName = "";
 
   @Input() isLoading = false;
 

@@ -5,6 +5,7 @@
   [disabled]="!idEvento"
   [items]="eventoDisciplinas"
   [selectedItem]="selectedEventoDisciplina"
+  [formControlName]="formControlName"
   [itemTemplate]="eventoDisciplinaTemplate"
   (onChange)="onEventoDisciplinaChange($event)"
   [labels]="{

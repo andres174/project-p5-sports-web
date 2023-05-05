@@ -19,6 +19,7 @@ import { environment } from "src/environments/environment";
 export class EventoDropdownComponent implements OnChanges {
   @Input() floatLabel: boolean = true;
   @Input() inputId: string = "";
+  @Input() formControlName = "";
 
   @Input() idOrganizador?: number;
 
