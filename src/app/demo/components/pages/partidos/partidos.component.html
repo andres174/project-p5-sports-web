@@ -1,1 +1,208 @@
-<p>partidos works!</p>
+<div class="grid">
+    <div class="col-12">
+        <!-- principal -->
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+           <!-- botones de agregar y eliminar de la parte superior  -->
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()" ></button>
+                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger"  ></button>
+                    </div>
+                </ng-template>
+
+                <!-- <ng-template pTemplate="right">
+                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template> -->
+            </p-toolbar>
+           <!-- tabla con datos  -->
+            <p-table  #dt [value]="partidos" [columns]="cols" responsiveLayout="scroll"  [globalFilterFields]="['nombre','id']" [rows]="10" [paginator]="false" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedPartido"selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Products</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text"  placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+                        </th>
+                        <th pSortableColumn="id">Codigo                    <!--<p-sortIcon field="id"></p-sortIcon>    --></th>
+                        <th pSortableColumn="nombre">Nombre                <!--<p-sortIcon field="nombre"></p-sortIcon>--></th>
+                        <th pSortableColumn="name">Numero de grupos        <!--<p-sortIcon field="name"></p-sortIcon>  --></th>
+                        <th pSortableColumn="name"># de equipos por grupo  <!--<p-sortIcon field="name"></p-sortIcon>  --></th>
+                        <th pSortableColumn="name">Minutos de juego        <!--<p-sortIcon field="name"></p-sortIcon>  --></th>
+                        <th pSortableColumn="name">Minutos entre partidos  <!--<p-sortIcon field="name"></p-sortIcon>  --></th>
+                        <th pSortableColumn="name">Partidos de ida y vuelta<!--<p-sortIcon field="name"></p-sortIcon>  --></th>
+                        <th pSortableColumn="name">Tarjetas                <!--<p-sortIcon field="name"></p-sortIcon>  --></th>
+                        <!-- <th>Image</th> -->
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-configuracion>
+                    <tr >
+                        <td>
+                            <!-- <p-tableCheckbox [value]="configuracion" *ngIf="configuracion.id_organizador==idUsuario"></p-tableCheckbox> -->
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">code</span>
+                            {{configuracion.id}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.nombre}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.numero_grupos}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.numero_miembros}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.minutos_juego}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.minutos_entre_partidos}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.ida_y_vuelta}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">name</span>
+                            {{configuracion.tarjetas}}
+                        </td>
+                        <!-- <td style="width:14%; min-width:10rem;"><span class="p-column-title">Image</span>
+                            <img [src]="" width="100" class="shadow-4" />
+                        </td> -->
+                        <td>
+                            <div class="flex">
+                                <button  pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editPartido()" ></button>
+                                <button  pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"(click)="deletePartido()"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <!-- modal -->
+        <p-dialog [(visible)]="partidoDialog" [style]="{width: '650px'}" header="Disciplinas" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <form >
+                    <div class="field grid"  style="margin-top: 20px ;">
+                        <div class="col-12 md:col-12">
+                            <span class="p-float-label">
+                                <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" 
+                                     optionLabel="nombre"
+                                    >
+                                </p-dropdown>
+                                <label for="float-label">Seleccione grupo: </label>
+                            </span>
+                        </div>
+                        <div class="col-6"  style="margin-top: 20px ;">
+                            <span class="p-float-label">
+                                <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" 
+                                     optionLabel="nombre"
+                                    >
+                                </p-dropdown>
+                                <label for="float-label">Equipo 1: </label>
+                            </span>
+                        </div>
+                        <div class="col-6"  style="margin-top: 20px ;">
+                            <span class="p-float-label">
+                                <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" 
+                                     optionLabel="nombre"
+                                    >
+                                </p-dropdown>
+                                <label for="float-label">Equipo 2: </label>
+                            </span>
+                        </div>
+
+                        <div class="col-4"  style="margin-top: 20px ;">
+                            <img [src]="'/assets/demo/images/image-placeholder.svg'" alt="Logo del equipo"  width="150" class="mt-1 mx-auto mb-5 block shadow-2"/>
+                        </div>
+                        <div class="col-4"  style="margin-top: 20px ;">
+                            <img [src]="'/assets/demo/images/image-placeholder.svg'" alt="Logo del equipo"  width="150" class="mt-1 mx-auto mb-5 block shadow-2"/>
+                        </div>
+                        <div class="col-4"  style="margin-top: 20px ;">
+                            <img [src]="'/assets/demo/images/image-placeholder.svg'" alt="Logo del equipo"  width="150" class="mt-1 mx-auto mb-5 block shadow-2"/>
+                        </div>
+
+
+                        <div class="col-4 " style="margin-top: 20px ; text-align: center;" >
+                            <label >Equipo 1 </label>
+                        </div>
+                        <div class="col-4" style="margin-top: 20px ; text-align: center;">
+                           
+                        </div>
+                        <div class="col-4 " style="margin-top: 20px ; text-align: center;">
+                            <label >Equipo 2 </label>
+                        </div>
+
+                        
+            <div class=" field col-6"  style="margin-top: 20px ; text-align: center;">
+                <label for="fecha_inicio">fecha_inicio</label>
+  
+                <input  pInputText id="fecha_inicio"  (click)="mostrarModalCalendarioInicio = true" autocomplete="off"/>
+                  
+                  <p-dialog [(visible)]="mostrarModalCalendarioInicio" header="Calendario"  [style]="{width: '30rem', height: '40rem'}">  
+                    <p-calendar class="max-w-full" [inline]="true" inputId="fecha_inicio"  id="fecha_inicio"
+                     (onSelect)="updateDate()" (click)="mostrarModalCalendarioInicio = true"  
+                    ></p-calendar>   
+                    
+                 
+
+                    
+                  </p-dialog>
+  
+              </div>   
+
+              <div class=" field col-6"  style="margin-top: 20px ; text-align: center;">
+                <label for="fecha_inicio">Escoja el lugar del partido</label>
+  
+                <input  pInputText id="fecha_inicio"  (click)="mostrarModalmapa = true" autocomplete="off"/>
+  
+                <p-dialog [(visible)]="mostrarModalmapa" header="Mapa"  [style]="{width: '50rem', height: '50rem'}">  
+                    <div #map class="map"></div>
+                  </p-dialog>
+                    </div>
+
+            </div>
+                   
+                </form>
+                
+                
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()" ></button>
+                <button *ngIf="!isUpdate" pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="savePartido()"></button>
+                <button *ngIf="isUpdate" pButton pRipple label="Update" icon="pi pi-check" class="p-button-text" (click)="updatePartido()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deletePartidoDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span >Esta seguro de que desea eliminar esta configuracion ?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletePartidoDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" ></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deletePartidosDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Esta seguro de querer eliminar las configuraciones seleccionadas?</span>
+            </div>
+            <ng-template pTemplate="footer"> 
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deletePartidosDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" ></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>
