@@ -100,13 +100,12 @@
               <div class="flex justify-content-center">
                 <p-image
                   [src]="
-                    getUserImage(u) ||
-                    '/assets/demo/images/user-placeholder.svg'
+                    u.foto_perfil || '/assets/demo/images/user-placeholder.svg'
                   "
                   [alt]="u.nombre"
                   width="100"
                   class="shadow-2"
-                  [preview]="getUserImage(u) != ''"
+                  [preview]="u.foto_perfil || ''"
                 ></p-image>
               </div>
             </td>
@@ -156,7 +155,7 @@
           <img
             [src]="
               selectedImageSrc ||
-              getUserImage(user) ||
+              user.foto_perfil ||
               '/assets/demo/images/user-placeholder.svg'
             "
             alt="Foto de perfil"
@@ -203,21 +202,25 @@
               formControlName="nombre"
               required
               autofocus
-              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('nombre')?.touched && userForm.get('nombre')?.errors?.['required']}"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  userForm.controls['nombre'].touched &&
+                  userForm.controls['nombre'].errors
+              }"
             />
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('nombre')?.touched && userForm.get('nombre')?.errors?.['required']"
+              *ngIf="userForm.controls['nombre'].touched && userForm.controls['nombre'].errors?.['required']"
               >El nombre es requerido.
             </small>
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('nombre')?.errors?.['pattern']"
+              *ngIf="userForm.controls['nombre'].errors?.['pattern']"
               >Solo se aceptan letras.
             </small>
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('nombre')?.touched && userForm.get('nombre')?.errors?.['minlength']"
+              *ngIf="userForm.controls['nombre'].errors?.['minlength']"
               >El mínimo de caracteres debe ser 2.
             </small>
           </div>
@@ -230,21 +233,25 @@
               id="apellido"
               formControlName="apellido"
               required
-              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('apellido')?.touched && userForm.get('apellido')?.errors?.['required']}"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  userForm.controls['apellido'].touched &&
+                  userForm.controls['apellido'].errors
+              }"
             />
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('apellido')?.touched && userForm.get('apellido')?.errors?.['required']"
+              *ngIf="userForm.controls['apellido'].touched && userForm.controls['apellido'].errors?.['required']"
               >El apellido es requerido.
             </small>
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('apellido')?.errors?.['pattern']"
+              *ngIf="userForm.controls['apellido'].errors?.['pattern']"
               >Solo se aceptan letras.
             </small>
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('apellido')?.touched && userForm.get('apellido')?.errors?.['minlength']"
+              *ngIf="userForm.controls['apellido'].errors?.['minlength']"
               >El mínimo de caracteres debe ser 2.
             </small>
           </div>
@@ -257,16 +264,20 @@
               id="email"
               formControlName="email"
               required
-              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('email')?.touched && userForm.get('email')?.errors?.['required']}"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  userForm.controls['email'].touched &&
+                  userForm.controls['email'].errors
+              }"
             />
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors?.['required']"
+              *ngIf="userForm.controls['email'].touched && userForm.controls['email'].errors?.['required']"
               >El correo electrónico es requerido.
             </small>
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('email')?.touched && userForm.get('email')?.errors?.['email']"
+              *ngIf="userForm.controls['email'].errors?.['email']"
               >Ingrese el correo electrónico en un formato correcto.
             </small>
           </div>
@@ -281,16 +292,20 @@
               id="password"
               [feedback]="false"
               [toggleMask]="true"
-              [ngClass]="{ 'ng-invalid ng-dirty': userForm.get('password')?.touched && userForm.get('password')?.errors?.['required']}"
+              [ngClass]="{
+                'ng-invalid ng-dirty':
+                  userForm.controls['password'].touched &&
+                  userForm.controls['password'].errors
+              }"
             ></p-password>
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('password')?.touched && userForm.get('password')?.errors?.['required']"
+              *ngIf="userForm.controls['password'].touched && userForm.controls['password'].errors?.['required']"
               >La contraseña es requerida.
             </small>
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="userForm.get('password')?.touched && userForm.get('password')?.errors?.['minlength']"
+              *ngIf="userForm.controls['password'].errors?.['minlength']"
               >El mínimo de caracteres debe ser 8.
             </small>
           </div>

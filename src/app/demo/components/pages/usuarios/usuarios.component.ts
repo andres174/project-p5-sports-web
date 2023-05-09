@@ -58,8 +58,11 @@ export class UsuariosComponent implements OnInit {
   getOrganizadores() {
     this.loading = true;
     this.usuariosService.mostrarOrganizadores().subscribe({
-      next: (res) => {
-        this.users = res;
+      next: (res: Usuario[]) => {
+        this.users = res.map((u) => {
+          u.foto_perfil &&= `${environment.userUrl}${u.id}/${u.foto_perfil}`;
+          return u;
+        });
         this.loading = false;
       },
       error: (err) => {
@@ -108,12 +111,6 @@ export class UsuariosComponent implements OnInit {
     // console.log(user);
     // console.log(this.userForm);
     this.userDialog = true;
-  }
-
-  getUserImage(user: Usuario) {
-    if (user.foto_perfil)
-      return `${environment.userUrl}${user.id}/${user.foto_perfil}`;
-    else return "";
   }
 
   deleteSelectedUsers() {
@@ -170,6 +167,13 @@ export class UsuariosComponent implements OnInit {
   }
 
   saveUser() {
+    // Recortar los valores del formulario
+    Object.keys(this.userForm.value).map((key) => {
+      if (typeof this.userForm.value[key] === 'string') {
+        this.userForm.controls[key].setValue(this.userForm.value[key].trim())
+      }
+    });
+
     if (!this.userForm.valid) {
       this.userForm.markAllAsTouched();
       return;

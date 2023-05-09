@@ -38,7 +38,7 @@ export class EquiposComponent implements OnInit {
         "",
         [
           Validators.required,
-          Validators.pattern(/^[A-ZÀ-ÿ -]+$/i),
+          // Validators.pattern(/^[A-ZÀ-ÿ -]+$/i),
           Validators.minLength(3),
         ],
       ],
@@ -48,8 +48,11 @@ export class EquiposComponent implements OnInit {
   getEquipos() {
     this.loading = true;
     this.equiposService.getEquipos().subscribe({
-      next: (res) => {
-        this.equipos = res;
+      next: (res: Equipo[]) => {
+        this.equipos = res.map((eq) => {
+          eq.logo &&= `${environment.equipoUrl}${eq.id}/${eq.logo}`;
+          return eq;
+        });
         this.loading = false;
       },
       error: (err) => {
@@ -101,12 +104,6 @@ export class EquiposComponent implements OnInit {
     this.equipoForm.patchValue({ ...equipo });
     this.clearSelectedImage();
     this.equipoDialog = true;
-  }
-
-  getEquipoLogo(equipo: Equipo) {
-    if (equipo.logo)
-      return `${environment.equipoUrl}${equipo.id}/${equipo.logo}`;
-    else return "";
   }
 
   deleteSelectedEquipos() {
@@ -162,6 +159,15 @@ export class EquiposComponent implements OnInit {
   }
 
   saveEquipo() {
+    // Recortar los valores del formulario
+    Object.keys(this.equipoForm.value).map((key) => {
+      if (typeof this.equipoForm.value[key] === "string") {
+        this.equipoForm.controls[key].setValue(
+          this.equipoForm.value[key].trim()
+        );
+      }
+    });
+
     if (!this.equipoForm.valid) {
       this.equipoForm.markAllAsTouched();
       return;
