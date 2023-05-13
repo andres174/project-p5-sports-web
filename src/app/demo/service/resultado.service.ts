@@ -55,8 +55,11 @@ export class ResultadoService {
   }
 
   gettablaposicion(id: number) {
-    debugger
     return this.http.get<any>(`${environment.apiUrl}tablaposicion/${id}`);
+  }
+  
+  gettablaGrupos(id: number) {
+    return this.http.get<any>(`${environment.apiUrl}gettablaGrupos/${id}`);
   }
 
 

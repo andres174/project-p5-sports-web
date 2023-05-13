@@ -11,14 +11,17 @@ import { environment } from 'src/environments/environment';
 })
 export class GruposComponent implements OnInit {
 
+    // booleans
+    is_generar_grupos_clicked: boolean = false;
+    is_manual: boolean = false;
+    is_automatica: boolean = false;
+
     //dialogs
     dialog1: boolean = true;
 
     //logo equipo
     logo_equipo_url = environment.equipoUrl;
 
-    // booleans
-    is_generar_grupos_clicked: boolean = false;
     is_equipos_and_config_loaded: boolean = false;
 
     //arrays & selecteds
@@ -54,7 +57,13 @@ export class GruposComponent implements OnInit {
     generarGruposBool() {
         this.getEventos();
         this.is_generar_grupos_clicked = true;
-
+        this.is_automatica = true;
+        this.is_manual = false;
+    }
+    generarGruposManual() {
+        this.is_generar_grupos_clicked = true;
+        this.is_manual = true;
+        this.is_automatica = false;
     }
 
     getEventos() {
@@ -141,9 +150,7 @@ export class GruposComponent implements OnInit {
         });
     }
 
-    impAlert() {
-        console.log(this.evento_selected);
-    }
+    
 
 
 

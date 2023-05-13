@@ -9,273 +9,132 @@
       </p>
       <div class="card p-fluid">
         <h5>Seleccione los datos necesarios:</h5>
-        <!-- Eventos -->
-        <div class="field pt-3">
-          <span class="p-float-label">
-            <p-dropdown
-              [options]="eventos"
-              [(ngModel)]="selectedEvento"
-              placeholder="Escoger un Evento"
-              inputId="evento-dropdown"
-              [autoDisplayFirst]="false"
-              [filter]="true" 
-              filterBy="nombre"
-              (onChange)="onEventoChange()"
-            >
-              <ng-template let-ev pTemplate="selectedItem">
-                <div
-                  class="flex flex-column align-items-center md:flex-row gap-2"
-                >
-                  <img
-                    [src]="
-                      getEventoImg(ev) ||
-                      '/assets/demo/images/image-placeholder.svg'
-                    "
-                    [alt]="ev.nombre"
-                    width="50"
-                    class="shadow-1"
-                  />
-                  <div
-                    class="flex flex-column align-items-center gap-1 md:align-items-start"
-                  >
-                    <span>{{ ev.id }} | {{ ev.nombre }}</span>
-                    <span>
-                      {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }}
-                    </span>
-                  </div>
-                </div>
-              </ng-template>
-              <ng-template let-ev pTemplate="item">
-                <div
-                  class="flex flex-column align-items-center md:flex-row gap-2"
-                >
-                  <img
-                    [src]="
-                      getEventoImg(ev) ||
-                      '/assets/demo/images/image-placeholder.svg'
-                    "
-                    [alt]="ev.nombre"
-                    width="50"
-                    class="shadow-1"
-                  />
-                  <div
-                    class="flex flex-column align-items-center gap-1 md:align-items-start"
-                  >
-                    <span>{{ ev.id }} | {{ ev.nombre }}</span>
-                    <span>
-                      {{ ev.fecha_inicio | date }} - {{ ev.fecha_fin | date }}
-                    </span>
-                  </div>
-                </div>
-              </ng-template>
-              <ng-template pTemplate="empty">
-                <ng-container *ngIf="!isEventosLoading; else eventosLoading">
-                  <span>No hay Eventos para seleccionar</span>
-                </ng-container>
-              </ng-template>
-              <ng-template #eventosLoading>
-                <div class="flex align-items-center gap-2">
-                  <i class="pi pi-spin pi-spinner text-lg"></i>
-                  <span>Los Eventos están cargando...</span>
-                </div>
-              </ng-template>
-            </p-dropdown>
-            <label for="evento-dropdown">Evento</label>
-          </span>
-        </div>
-        <!-- Disciplinas -->
-        <div class="field pt-3">
-          <span class="p-float-label">
-            <p-dropdown
-              [options]="eventoDisciplinas"
-              [(ngModel)]="selectedEventoDisciplina"
-              placeholder="Escoger una Disciplina"
-              inputId="disciplina-dropdown"
-              [autoDisplayFirst]="false"
-              [filter]="true"
-              filterBy="disciplina.nombre,configuracion.nombre"
-              (onChange)="onEventoDisciplinaChange()"
-              [disabled]="selectedEvento == null"
-            >
-              <ng-template let-ed pTemplate="selectedItem">
-                <div>
-                  {{ ed.id }} | {{ ed.disciplina.nombre }} -
-                  {{ ed.configuracion.nombre }}
-                </div>
-              </ng-template>
-              <ng-template let-ed pTemplate="item">
-                <div>
-                  {{ ed.id }} | {{ ed.disciplina.nombre }} -
-                  {{ ed.configuracion.nombre }}
-                </div>
-              </ng-template>
-              <ng-template pTemplate="empty">
-                <ng-container
-                  *ngIf="!isEventoDisciplinasLoading; else disciplinasLoading"
-                >
-                  <span>No hay Disciplinas para seleccionar</span>
-                </ng-container>
+        <div class="grid grid-nogutter row-gap-3">
+          <!-- Eventos -->
+          <app-evento-dropdown
+            [idOrganizador]="idOrganizador"
+            (onChange)="onEventoChange($event)"
+            inputId="ev-dropdowm"
+            class="col-12"
+          ></app-evento-dropdown>
 
-                <ng-template #disciplinasLoading>
-                  <div class="flex align-items-center gap-2">
-                    <i class="pi pi-spin pi-spinner text-lg"></i>
-                    <span>Las Disciplinas están cargando...</span>
-                  </div>
-                </ng-template>
-              </ng-template>
-            </p-dropdown>
-            <label for="disciplina-dropdown">Disciplina y Configuración</label>
-          </span>
-        </div>
-        <!-- Detalle Configuracion -->
-        <div class="">
-          <p-fieldset [toggleable]="true" [collapsed]="true">
-            <ng-template pTemplate="header">
-              <div class="flex align-items-center text-primary">
-                <span class="pi pi-cog mr-2"></span>
-                <span class="font-bold text-lg">
-                  Detalles de la Configuración
-                </span>
-              </div>
-            </ng-template>
+          <!-- Disciplinas -->
+          <app-evento-disciplina-dropdown
+            [idEvento]="selectedEvento?.id"
+            (onChange)="onEventoDisciplinaChange($event)"
+            inputId="evd-dropdown"
+            class="col-12"
+          ></app-evento-disciplina-dropdown>
 
-            <ng-container *ngIf="!selectedEventoDisciplina">
-              Seleccione una Disciplina
-            </ng-container>
-
-            <ng-container *ngIf="selectedEventoDisciplina?.configuracion as c">
-              <div class="text-lg font-bold mb-3">
-                {{ c.id }} | {{ c.nombre }}
-              </div>
-              <div class="grid grid-nogutter row-gap-2">
-                <div class="col-12 md:col-6">
-                  Número de grupos: <b>{{ c.numero_grupos }}</b>
-                </div>
-                <div class="col-12 md:col-6">
-                  Número de equipos por grupo: <b>{{ c.numero_miembros }}</b>
-                </div>
-                <div class="col-12 md:col-6">
-                  Tiempo de juego: <b>{{ c.minutos_juego }}min</b>
-                </div>
-                <div class="col-12 md:col-6">
-                  Tiempo entre partidos:
-                  <b>{{ c.minutos_entre_partidos }}min</b>
-                </div>
-                <div class="col-12 md:col-6">
-                  Ida y vuelta: <b> {{ c.ida_y_vuelta ? "Si" : "No" }} </b>
-                </div>
-                <div class="col-12 md:col-6">
-                  Tarjetas: <b> {{ c.tarjetas ? "Si" : "No" }} </b>
-                </div>
-              </div>
-              <div
-                class="mt-3"
-                *ngIf="c.nombre_organizador && c.apellido_organizador"
-              >
-                <span class="font-bold">Propietario:</span>
-                <p>{{ c.nombre_organizador }} {{ c.apellido_organizador }}</p>
-              </div>
-            </ng-container>
-          </p-fieldset>
+          <!-- Detalle Configuracion -->
+          <app-configuracion-fieldset
+            [eventoDisciplina]="selectedEventoDisciplina"
+            class="col-12"
+          ></app-configuracion-fieldset>
         </div>
       </div>
+
       <p-toolbar styleClass="mb-4">
-        <div
-          class="p-toolbar-group-start grid grid-nogutter align-items-center gap-2"
-        >
-          <div class="p-fluid field col pt-3">
-            <span class="p-float-label">
-              <p-dropdown
-                [options]="equiposToAdd"
-                [(ngModel)]="equipoToAdd"
-                placeholder="Escoger un Equipo"
-                inputId="equipo-dropdown"
-                [autoDisplayFirst]="false"
-                [filter]="true"
-                filterBy="nombre"
-                [disabled]="selectedEventoDisciplina == null"
-                [showClear]="true"
-              >
-                <ng-template let-eq pTemplate="selectedItem">
-                  <div
-                    class="flex flex-column align-items-center sm:flex-row gap-2"
-                  >
-                    <img
-                      [src]="
-                        getEquipoLogo(eq) ||
-                        '/assets/demo/images/image-placeholder.svg'
-                      "
-                      [alt]="eq.nombre"
-                      width="50"
-                      class="shadow-1"
-                    />
-                    <span>{{ eq.id }} | {{ eq.nombre }}</span>
-                  </div>
-                </ng-template>
-                <ng-template let-eq pTemplate="item">
-                  <div
-                    class="flex flex-column align-items-center sm:flex-row gap-2"
-                  >
-                    <img
-                      [src]="
-                        getEquipoLogo(eq) ||
-                        '/assets/demo/images/image-placeholder.svg'
-                      "
-                      [alt]="eq.nombre"
-                      width="50"
-                      class="shadow-1"
-                    />
-                    <span>{{ eq.id }} | {{ eq.nombre }}</span>
-                  </div>
-                </ng-template>
-                <ng-template pTemplate="empty">
-                  <ng-container
-                    *ngIf="!isEventoDisciplinasLoading; else equiposLoading"
-                  >
-                    <div>No hay Equipos para seleccionar</div>
-                  </ng-container>
-                  <ng-template #equiposLoading>
-                    <div class="flex align-items-center gap-2">
-                      <i class="pi pi-spin pi-spinner text-lg"></i>
-                      <span>Los Equipos están cargando...</span>
+        <div class="p-toolbar-group-start flex-grow-1">
+          <div
+            class="flex flex-wrap align-items-center column-gap-2 flex-grow-1"
+          >
+            <!-- equipos -->
+            <div class="p-fluid py-3 flex align-items-center gap-2 flex-grow-1">
+              <span class="p-float-label flex-grow-1">
+                <p-dropdown
+                  [options]="equiposToAdd"
+                  [(ngModel)]="equipoToAdd"
+                  placeholder="Escoger un Equipo"
+                  inputId="equipo-dropdown"
+                  [autoDisplayFirst]="false"
+                  [filter]="true"
+                  filterBy="nombre"
+                  [disabled]="
+                    !selectedEventoDisciplina ||
+                    equipoDisciplinas.length >= maxNumberEquipos
+                  "
+                  [showClear]="true"
+                >
+                  <ng-template let-eq pTemplate="selectedItem">
+                    <ng-container
+                      *ngTemplateOutlet="equipoItem; context: { $implicit: eq }"
+                    ></ng-container>
+                  </ng-template>
+                  <ng-template let-eq pTemplate="item">
+                    <ng-container
+                      *ngTemplateOutlet="equipoItem; context: { $implicit: eq }"
+                    ></ng-container>
+                  </ng-template>
+                  <ng-template #equipoItem let-eq>
+                    <div
+                      class="flex flex-column align-items-center sm:flex-row gap-2"
+                    >
+                      <img
+                        [src]="
+                          eq.logo || '/assets/demo/images/image-placeholder.svg'
+                        "
+                        [alt]="eq.nombre"
+                        width="50"
+                        class="shadow-1"
+                      />
+                      <span>{{ eq.id }} | {{ eq.nombre }}</span>
                     </div>
                   </ng-template>
-                </ng-template>
-              </p-dropdown>
-              <label for="equipo-dropdown">Equipo a añadir</label>
-            </span>
-          </div>
-          <div>
-            <button
-              pButton
-              pRipple
-              label="Agregar"
-              icon="pi pi-plus"
-              class="p-button-success mr-2"
-              (click)="storeEquipoDisciplina()"
-              [disabled]="
-                !equipoToAdd ||
-                equipoDisciplinas.length >= getMaxNumberEquipos()
-              "
-            ></button>
-            <button
-              pButton
-              pRipple
-              label="Eliminar"
-              icon="pi pi-trash"
-              class="p-button-danger"
-              (click)="deleteSelectedEquipoDisciplinas()"
-              [disabled]="
-                !selectedEquipoDisciplinas || !selectedEquipoDisciplinas.length
-              "
-            ></button>
+                  <ng-template pTemplate="empty">
+                    <!-- <ng-container
+                      *ngIf="!isEventoDisciplinasLoading; else equiposLoading"
+                    >
+                      <div>No hay Equipos para seleccionar</div>
+                    </ng-container>
+                    <ng-template #equiposLoading>
+                      <div class="flex align-items-center gap-2">
+                        <i class="pi pi-spin pi-spinner text-lg"></i>
+                        <span>Los Equipos están cargando...</span>
+                      </div>
+                    </ng-template> -->
+                  </ng-template>
+                </p-dropdown>
+                <label for="equipo-dropdown">Equipo a añadir</label>
+              </span>
+              <i
+                *ngIf="isEquiposToAddLoading"
+                class="pi pi-spin pi-spinner text-lg"
+              ></i>
+            </div>
+            <!-- botones -->
+            <div class="my-2">
+              <button
+                pButton
+                pRipple
+                label="Agregar"
+                icon="pi pi-plus"
+                class="p-button-success mr-2"
+                (click)="storeEquipoDisciplina()"
+                [disabled]="!equipoToAdd"
+              ></button>
+              <button
+                pButton
+                pRipple
+                label="Eliminar"
+                icon="pi pi-trash"
+                class="p-button-danger"
+                (click)="deleteSelectedEquipoDisciplinas()"
+                [disabled]="
+                  !selectedEquipoDisciplinas ||
+                  !selectedEquipoDisciplinas.length
+                "
+              ></button>
+            </div>
           </div>
         </div>
-        <ng-template pTemplate="center">
-          <div class="mx-4" *ngIf="loading">
-            <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
-          </div>
-        </ng-template>
+        <div class="p-toolbar-group-end mx-4">
+          <i
+            class="pi pi-spin pi-spinner"
+            style="font-size: 2rem"
+            *ngIf="loading"
+          ></i>
+        </div>
       </p-toolbar>
 
       <p-table
@@ -296,7 +155,7 @@
               <ng-container *ngIf="selectedEventoDisciplina as evd">
                 de {{ evd.disciplina?.nombre }} -
                 {{ evd.configuracion?.nombre }} |
-                {{ equipoDisciplinas.length }}/{{ getMaxNumberEquipos() }}
+                {{ equipoDisciplinas.length }}/{{ maxNumberEquipos }}
               </ng-container>
             </h5>
             <span class="block mt-2 md:mt-0 p-input-icon-left">
@@ -317,12 +176,11 @@
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
             <th pSortableColumn="id">
-              ID <br />
-              Eq. Disc.<p-sortIcon field="id"></p-sortIcon>
+              ID Eq. Disc.<p-sortIcon field="id"></p-sortIcon>
             </th>
             <th>Logo</th>
             <th pSortableColumn="equipo.nombre">
-              Nombre<p-sortIcon field="nombre"></p-sortIcon>
+              Nombre<p-sortIcon field="equipo.nombre"></p-sortIcon>
             </th>
             <th></th>
           </tr>
@@ -332,20 +190,20 @@
             <td>
               <p-tableCheckbox [value]="eqd"></p-tableCheckbox>
             </td>
-            <td style="width: 14%; min-width: 8rem">
+            <td style="width: 14%; min-width: 10rem">
               {{ eqd.id }}
             </td>
             <td style="width: 14%; min-width: 10rem">
               <div class="flex justify-content-center">
                 <p-image
                   [src]="
-                    getEquipoLogo(eqd.equipo) ||
+                    eqd.equipo.logo ||
                     '/assets/demo/images/image-placeholder.svg'
                   "
                   [alt]="eqd.equipo.nombre"
                   width="80"
                   class="shadow-2"
-                  [preview]="getEquipoLogo(eqd.equipo) != ''"
+                  [preview]="eqd.equipo.logo != null"
                 ></p-image>
               </div>
             </td>

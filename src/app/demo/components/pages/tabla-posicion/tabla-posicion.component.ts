@@ -25,15 +25,18 @@ export class TablaPosicionComponent implements OnInit {
     //arrays & selecteds
     eventos: any[] = [];
     evento_selected: any;
-    is_evento_selected: boolean = true; // para el disable
+    
+    // para el disable
+    is_evento_selected: boolean = true; 
 
-    evento_disciplina: any[] = [];
-    evento_disciplina_selected: any;
+   //arrays & selecteds
+    disciplina: any[] = [];
+    disciplina_selected: any;
 
-    equipos_disciplina: any[] = [];
+   //arrays & selecteds
+    grupo: any[] = [];
+    grupo_selected: any;
 
-
-    tabla_disciplina: any[] = [];
 
     tablaPosicion: TablaPosicion[] = [];
     //ngStyle 
@@ -51,13 +54,13 @@ export class TablaPosicionComponent implements OnInit {
     }
     ngOnInit(): void {
         this.getEventos();
+        this.getEquiposGrupos();
     }
 
 
 
     getEventos() {
         this.grupoService.getEventos().subscribe({
-
             next: (value) => {
                 this.eventos = value;
             },
@@ -67,10 +70,11 @@ export class TablaPosicionComponent implements OnInit {
         });
     }
 
+
     getOneEventoDisciplina() {
         this.grupoService.getOneEventoDisciplina(this.evento_selected.id).subscribe({
             next: (value) => {
-                this.evento_disciplina = value;
+                this.disciplina = value;
             },
             error: (err) => {
                 console.log(err);
@@ -80,25 +84,9 @@ export class TablaPosicionComponent implements OnInit {
     }
 
     getEquiposAndConfigFromDisciplina() {
-        //debugger
-        console.log(this.evento_disciplina_selected.id_evento_disciplina);
-        this.grupoService.getEquiposFromOneDisciplina(this.evento_disciplina_selected.id_evento_disciplina).subscribe({
+        this.grupoService.getEquiposFromOneDisciplina(this.disciplina_selected.id_evento_disciplina).subscribe({
             next: (value) => {
-                /* console.log(value); */
-                this.equipos_disciplina = value;
-                console.log(this.equipos_disciplina);
-            },
-
-            error: (err) => {
-                console.log(err);
-            }
-        });
-        this.ResultadoService.gettablaposicion(this.evento_disciplina_selected.id_evento_disciplina).subscribe({
-            next: (value) => {
-                debugger
-                console.log(value);
-                this.tablaPosicion = value;
-                console.log(this.tablaPosicion);
+                this.grupo = value;
             },
             error: (err) => {
                 console.log(err);
@@ -109,11 +97,23 @@ export class TablaPosicionComponent implements OnInit {
     }
 
 
+    getEquiposGrupos() {
+      
+        this.ResultadoService.gettablaGrupos(this.grupo_selected.id).subscribe({
+            next: (value) => {
+                this.grupo = value;
+            },
+            error: (err) => {
+                console.log(err);
+            }
+        });
+        this.is_evento_selected = false;
 
-
-
-
+    }
 
 }
+
+
+
 
 

@@ -15,18 +15,15 @@ import { environment } from "src/environments/environment";
   providers: [MessageService],
 })
 export class EquipoDisciplinasComponent implements OnInit {
-  eventos: Evento[] = [];
-  selectedEvento?: Evento;
-  isEventosLoading = true;
+  idOrganizador = 1;
 
-  eventoDisciplinas: EventoDisciplinaFull[] = [];
+  selectedEvento?: Evento;
   selectedEventoDisciplina?: EventoDisciplinaFull;
-  isEventoDisciplinasLoading = false;
 
   equipoDisciplinas: EquipoDisciplina[] = [];
   equipoDisciplina: EquipoDisciplina = {};
   selectedEquipoDisciplinas: EquipoDisciplina[] = [];
-  isEquipoDisciplinasLoading = true;
+  isEquipoDisciplinasLoading = false;
 
   deleteEquipoDisciplinaDialog = false;
   deleteEquipoDisciplinasDialog = false;
@@ -35,15 +32,24 @@ export class EquipoDisciplinasComponent implements OnInit {
   equipoToAdd?: Equipo;
   isEquiposToAddLoading = false;
 
+  maxNumberEquipos = 0;
+
   loading = false;
 
+  history: any = {};
+
+  // history: any = {
+  //   eventoId: 1,
+  //   eventoDisciplinaId: 1,
+  // };
+
+  //TODO: hacer form
   constructor(
     private edService: EquipoDisciplinasService,
     private messageService: MessageService
   ) {}
   ngOnInit(): void {
     // TODO: utilizar la id del que navega
-    this.getEventosByOrganizador(1);
   }
 
   successMessage(msg: string) {
@@ -64,38 +70,38 @@ export class EquipoDisciplinasComponent implements OnInit {
     });
   }
 
-  getEventosByOrganizador(idOrganizador: number) {
-    this.eventos = [];
-    this.isEventosLoading = true;
-    this.edService.getEventosByOrganizador(idOrganizador).subscribe({
-      next: (res) => {
-        this.eventos = res;
-        this.isEventosLoading = false;
-      },
-      error: console.log,
-    });
+  onEventoChange(evento: Evento) {
+    this.selectedEvento = { ...evento };
+
+    this.equipoDisciplinas = [];
+    this.equipoToAdd = undefined;
   }
 
-  getEventoDisciplinasByEvento(idEvento: number) {
-    this.eventoDisciplinas = [];
-    this.selectedEventoDisciplina = undefined;
-    this.isEventoDisciplinasLoading = true;
-    this.edService.getEventoDisciplinasFullByEvento(idEvento).subscribe({
-      next: (res) => {
-        this.eventoDisciplinas = res;
-        this.isEventoDisciplinasLoading = false;
-      },
-      error: console.log,
-    });
+  onEventoDisciplinaChange(eventoDisciplina: EventoDisciplinaFull) {
+    this.selectedEventoDisciplina = { ...eventoDisciplina };
+
+    this.maxNumberEquipos =
+      Number(eventoDisciplina.configuracion?.numero_miembros) *
+      Number(eventoDisciplina.configuracion?.numero_grupos);
+
+    this.equipoDisciplinas = [];
+    this.equipoToAdd = undefined;
+
+    this.refreshEquipos();
   }
 
   getEquipoDisciplinasByDisciplina(idEventoDisciplina: number) {
     this.isEquipoDisciplinasLoading = true;
+    this.loading = true;
     this.edService
       .getEquipoDisciplinasByDisciplina(idEventoDisciplina)
       .subscribe({
-        next: (res) => {
-          this.equipoDisciplinas = res;
+        next: (res: EquipoDisciplina[]) => {
+          this.equipoDisciplinas = res.map((eqd) => {
+            if (eqd.equipo)
+              eqd.equipo.logo &&= `${environment.equipoUrl}${eqd.equipo?.id}/${eqd.equipo?.logo}`;
+            return eqd;
+          });
           this.isEquipoDisciplinasLoading = false;
           this.loading = false;
         },
@@ -109,8 +115,11 @@ export class EquipoDisciplinasComponent implements OnInit {
     this.isEquiposToAddLoading = true;
 
     this.edService.getEquiposToAddByDisciplina(idEventoDisciplina).subscribe({
-      next: (values) => {
-        this.equiposToAdd = values;
+      next: (res: Equipo[]) => {
+        this.equiposToAdd = res.map((eq) => {
+          eq.logo &&= `${environment.equipoUrl}${eq.id}/${eq.logo}`;
+          return eq;
+        });
         this.isEquiposToAddLoading = false;
         this.loading = false;
       },
@@ -118,41 +127,11 @@ export class EquipoDisciplinasComponent implements OnInit {
     });
   }
 
-  getEventoImg(evento: Evento) {
-    if (evento.imagen)
-      return `${environment.EventUrl}${evento.id}/${evento.imagen}`;
-    else return "";
-  }
-
-  getEquipoLogo(equipo: Equipo) {
-    if (equipo.logo)
-      return `${environment.equipoUrl}${equipo.id}/${equipo.logo}`;
-    else return "";
-  }
-
-  getMaxNumberEquipos() {
-    return (
-      Number(this.selectedEventoDisciplina?.configuracion?.numero_miembros) *
-      Number(this.selectedEventoDisciplina?.configuracion?.numero_grupos)
-    );
-  }
-
   refreshEquipos() {
     this.getEquipoDisciplinasByDisciplina(
       Number(this.selectedEventoDisciplina?.id)
     );
     this.getEquiposToAddByDisciplina(Number(this.selectedEventoDisciplina?.id));
-  }
-
-  onEventoChange() {
-    this.equipoDisciplinas = [];
-    this.equipoToAdd = undefined;
-
-    this.getEventoDisciplinasByEvento(Number(this.selectedEvento?.id));
-  }
-
-  onEventoDisciplinaChange() {
-    this.refreshEquipos();
   }
 
   storeEquipoDisciplina() {

@@ -88,14 +88,11 @@
               <span class="p-column-title">Logo</span>
               <div class="flex justify-content-center">
                 <p-image
-                  [src]="
-                    getEquipoLogo(eq) ||
-                    '/assets/demo/images/image-placeholder.svg'
-                  "
+                  [src]="eq.logo || '/assets/demo/images/image-placeholder.svg'"
                   [alt]="eq.nombre"
                   width="100"
                   class="shadow-2"
-                  [preview]="getEquipoLogo(eq) != ''"
+                  [preview]="eq.logo != ''"
                 ></p-image>
               </div>
             </td>
@@ -134,7 +131,7 @@
           <img
             [src]="
               selectedImageSrc ||
-              getEquipoLogo(equipo) ||
+              equipo.logo ||
               '/assets/demo/images/image-placeholder.svg'
             "
             alt="Logo del equipo"
@@ -182,22 +179,24 @@
               formControlName="nombre"
               required
               autofocus
-              [ngClass]="{ 'ng-invalid ng-dirty': equipoForm.get('nombre')?.touched && equipoForm.get('nombre')?.errors?.['required']}"
+              [ngClass]="{
+                'ng-invalid ng-dirty': equipoForm.controls['nombre'].touched && equipoForm.controls['nombre'].errors
+              }"
             />
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="equipoForm.get('nombre')?.touched && equipoForm.get('nombre')?.errors?.['required']"
+              *ngIf="equipoForm.controls['nombre'].touched && equipoForm.controls['nombre'].errors?.['required']"
               >El nombre es requerido.
             </small>
-            <small
+            <!-- <small
               class="ng-dirty ng-invalid block"
-              *ngIf="equipoForm.get('nombre')?.errors?.['pattern']"
+              *ngIf="equipoForm.controls['nombre'].errors?.['pattern']"
               >Solo se aceptan letras.
-            </small>
+            </small> -->
             <small
               class="ng-dirty ng-invalid block"
-              *ngIf="equipoForm.get('nombre')?.touched && equipoForm.get('nombre')?.errors?.['minlength']"
-              >El mínimo de caracteres debe ser 2.
+              *ngIf="equipoForm.controls['nombre'].errors?.['minlength']"
+              >El mínimo de caracteres debe ser 3.
             </small>
           </div>
         </form>

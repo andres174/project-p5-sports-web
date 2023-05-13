@@ -20,6 +20,7 @@ import { RouterModule } from "@angular/router";
         { path: "equipo-disciplinas", loadChildren: () => import("./equipo-disciplinas/equipo-disciplinas.module").then((m) => m.EquipoDisciplinasModule), },
         { path: "jugador-equipos", loadChildren: () => import("./jugador-equipos/jugador-equipos.module").then((m) => m.JugadorEquiposModule), },
         { path: "resultados", loadChildren: () => import("./resultados/resultados.module").then((m) => m.ResultadosModule), },
+        { path: "Partidos", loadChildren: () => import("./partidos/partidos.module").then((m) => m.PartidosModule), },
         { path: '**', redirectTo: '/notfound' }
 
     ])],

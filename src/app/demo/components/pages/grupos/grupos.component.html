@@ -3,10 +3,10 @@
         <div class="card">
             <h4>Grupos</h4>
             <p>En este modulo podras crear los grupos para tu campeonato, ya sea de forma automática o manual.</p>
-            <button pButton pRipple type="button" label="Generar grupos" class="p-button-success"
+            <button pButton pRipple type="button" label="Generar grupos de forma automática." class="p-button-success"
                 (click)="generarGruposBool()"></button>
-            <!-- <button pButton pRipple type="button" label="IMp ALert" class="p-button-success"
-                (click)="impAlert()"></button> -->
+            <button pButton pRipple type="button" label="Generar grupos de forma manual." class="p-button-success margen-btn-lft"
+                (click)="generarGruposManual()"></button>
         </div>
     </div>
 
@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <div class="col-12">
+    <!-- <div class="col-12">
 
         <p-dialog header="Dialog" [(visible)]="dialog1" [modal]="true" showEffect="fade" [style]="{width: '35vw'}" [breakpoints]="{'960px': '75vw'}">
             <p class="line-height-3 m-0">
@@ -32,10 +32,11 @@
             </ng-template>
         </p-dialog>
 
-    </div>
+    </div> -->
 
+    <!-- INICIO GRUPO AUTOMATICO -->
     <div class="col-12">
-        <div class="card" *ngIf="is_generar_grupos_clicked == true">
+        <div class="card" *ngIf="is_generar_grupos_clicked === true && is_automatica === true">
             <h4>Crear grupos automáticamente:</h4>
 
             <div class="col-12 md:col-12">
@@ -156,9 +157,17 @@
             </div>
 
         </div>
-
-
     </div>
+    <!-- FIN GRUPOS AUTOMATICOS -->
 
+    <!-- INICIO GRUPOS MANUAL -->
+    <div class="col-12">
+        <div class="card" *ngIf="is_generar_grupos_clicked === true && is_manual === true">
+
+            
+
+        </div>
+    </div>
+    <!-- FIN GRUPOS MANUAL -->
 
 </div>
