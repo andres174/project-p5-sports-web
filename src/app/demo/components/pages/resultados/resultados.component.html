@@ -41,21 +41,12 @@
                         <th pSortableColumn="goles_contra"> 
                             Goles en contra <p-sortIcon field="goles_contra"></p-sortIcon>
                         </th>
-                        <span class="p-float-label">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="equipo_disciplinas"
-                                [(ngModel)]="equipo_disciplinas_selected" optionLabel="nombre"
-                                (onChange)="getEquipoDisciplina()">
-                            </p-dropdown>
-                            <label for="float-label">Equipo Disciplina: </label>
-                        </span>
-
-                        <span class="p-float-label">
-                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="partidos"
-                                [(ngModel)]="partidos_selected" optionLabel="nombre"
-                                (onChange)="getPartido()">
-                            </p-dropdown>
-                            <label for="float-label">Partido: </label>
-                        </span>
+                        <th pSortableColumn="id_equipo_disciplina"> 
+                            id equipo disciplina <p-sortIcon field="id_equipo_disciplina"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="id_partido"> 
+                            id partido <p-sortIcon field="id_partido"></p-sortIcon>
+                        </th>
 
                         <th></th>
                     </tr>
@@ -111,6 +102,8 @@
                   </ng-template>
             </p-table>
         </div>
+
+ 
       
     </div>
 </div>
