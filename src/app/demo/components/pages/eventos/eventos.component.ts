@@ -30,7 +30,7 @@ export class EventosComponent implements OnInit {
   eventos: EventoInterface[] = [];
   evento: EventoInterface = {};
 
-  selectedEventos: EventoInterface[] = [];
+  selectedEventos: EventoInterface[] = [];      
 
   formEventos: FormGroup;
   idUsuario=2

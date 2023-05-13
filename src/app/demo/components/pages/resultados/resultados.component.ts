@@ -105,7 +105,7 @@ export class ResultadosComponent {
     this.deleteResultadosDialog = true;
   }
 
-  deleteJugadores(resul: ResultadoInterface) {
+  deleteResultado(resul: ResultadoInterface) {
     this.deleteResultadoDialog = true;
     this.resultado = { ...resul };
   }

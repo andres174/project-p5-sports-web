@@ -1,6 +1,117 @@
-<p>resultados works!
+<div class="grid">
+    <div class="col-12">
+        <!-- principal -->
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+           <!-- botones de agregar y eliminar de la parte superior  -->
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                        <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedResultados()" [disabled]="!selectedResultado || !selectedResultado.length"></button>
+                    </div>
+                </ng-template>
 
+            </p-toolbar>
+           <!-- tabla con datos  -->
+            <p-table  #dt [value]="resultados"  responsiveLayout="scroll"  [globalFilterFields]="['nombre','id']" [rows]="10" [paginator]="false" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedResultado"selectionMode="multiple" [rowHover]="true" dataKey="id">
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Resultados</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text"  placeholder="Search..."  class="w-full sm:w-auto" (input)="onGlobalFilter(dt,$event)"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+                        </th>
+                        <th pSortableColumn="id">
+                            Codigo <p-sortIcon field="id"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="puntos">
+                            Puntos <p-sortIcon field="puntos"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="goles_favor">
+                            Goles a favor <p-sortIcon field="goles_favor"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="goles_contra"> 
+                            Goles en contra <p-sortIcon field="goles_contra"></p-sortIcon>
+                        </th>
+                        <span class="p-float-label">
+                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="equipo_disciplinas"
+                                [(ngModel)]="equipo_disciplinas_selected" optionLabel="nombre"
+                                (onChange)="getEquipoDisciplina()">
+                            </p-dropdown>
+                            <label for="float-label">Equipo Disciplina: </label>
+                        </span>
 
-    
-</p>
+                        <span class="p-float-label">
+                            <p-dropdown inputId="dropdown" [autoDisplayFirst]="false" [options]="partidos"
+                                [(ngModel)]="partidos_selected" optionLabel="nombre"
+                                (onChange)="getPartido()">
+                            </p-dropdown>
+                            <label for="float-label">Partido: </label>
+                        </span>
+
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-resultado>
+                    <tr>
+                      <td>
+                        <p-tableCheckbox [value]="resultado"></p-tableCheckbox>
+                      </td>
+                      <td style="width: 14%; min-width: 8rem">
+                        <span class="p-column-title">Código</span>
+                        {{ resultado.id }}
+                      </td>
+                      <td style="width: 14%; min-width: 8rem">
+                        <span class="p-column-title">Puntos</span>
+                        {{ resultado.puntos }}
+                      </td>
+                      <td style="width: 14%; min-width: 8rem">
+                        <span class="p-column-title">Goles a favor</span>
+                        {{ resultado.goles_favor }}
+                      </td>
+                    
+                      <td style="width: 14%; min-width: 8rem">
+                        <span class="p-column-title">goles_contra</span>
+                        {{ resultado.goles_contra }}
+                      </td>
+
+                      <td style="width: 14%; min-width: 8rem">
+                        <span class="p-column-title">goles_contra</span>
+                        {{ resultado.goles_contra }}
+                      </td>
+
+                      <td style="width: 14%; min-width: 8rem">
+                        <span class="p-column-title">id equipo disciplina</span>
+                        {{ resultado.id_equipo_disciplina }}
+                      </td>
+                      <td style="width: 14%; min-width: 8rem">
+                        <span class="p-column-title">id partido</span>
+                        {{ resultado.id_partido }}
+                      </td>
+                      
+                      <td>
+                        <div class="flex">
+                          <button
+                            pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editResultado(resultado)">
+                          </button>
+                          <button
+                            pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteResultado(resultado)">
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </ng-template>
+            </p-table>
+        </div>
+      
+    </div>
+</div>
 
