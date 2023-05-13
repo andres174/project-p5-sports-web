@@ -154,7 +154,7 @@ export class ResultadosComponent {
     }
   }
 
-  saveJugadores() {
+  saveResultado() {
     if (!this.formResultados.valid) {
       this.formResultados.markAllAsTouched();
       return;

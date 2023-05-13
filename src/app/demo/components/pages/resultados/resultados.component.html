@@ -103,7 +103,98 @@
             </p-table>
         </div>
 
- 
+         <!-- modal -->
+         <p-dialog [(visible)]="resultadoDialog" [style]="{width: '450px'}" header="Resultado" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <form [formGroup]="formResultados">
+                   
+                    <div class="field">
+                        <label for="name">Ingrese los puntos</label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="100" formControlName="puntos"  
+                        [ngClass]="{' ng-dirty' : formResultados.get('puntos')?.touched && 
+                        formResultados.get('puntos')?.errors?.['required'] }">
+                        </p-inputNumber>
+                        <div>
+                            <small class="ng-dirty ng-invalid" *ngIf="formResultados.get('puntos')?.touched && formResultados.get('puntos')?.errors?.['required']">El numero de puntos es requerido</small>
+                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
+                        </div>
+                    </div>
+
+                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" 
+                       spinnerMode="horizontal" [step]="0" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" 
+                       incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" mode="decimal" ></p-inputNumber>
+
+
+                    <div class="field">
+                        <label for="name">Ingrese el numero de equipos por grupo</label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="100" formControlName="numero_miembros"  [ngClass]="{' ng-dirty' : formResultados.get('numero_miembros')?.touched && formResultados.get('numero_miembros')?.errors?.['required'] }">
+                        </p-inputNumber>
+                        <div>
+                            <small class="ng-dirty ng-invalid" *ngIf="formResultados.get('numero_miembros')?.touched && formResultados.get('numero_miembros')?.errors?.['required']">El numero de grupos es requerido</small>
+                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
+                        </div>
+                    </div>
+                    <div class="fiel">
+                        <label for="name">Ingrese los minutos de duracion del partido</label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="120" formControlName="minutos_juego"  [ngClass]="{' ng-dirty' : formResultados.get('minutos_juego')?.touched && formResultados.get('minutos_juego')?.errors?.['required'] }">
+                        </p-inputNumber>
+                        <div>
+                            <small class="ng-dirty ng-invalid" *ngIf="formResultados.get('minutos_juego')?.touched && formResultados.get('minutos_juego')?.errors?.['required']">La cantidad de tiempo es requerida</small>
+                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="name">Ingrese los minutos de descanso entre partidos</label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="120" formControlName="minutos_entre_partidos"  [ngClass]="{' ng-dirty' : formResultados.get('minutos_entre_partidos')?.touched && formResultados.get('minutos_entre_partidos')?.errors?.['required'] }">
+                        </p-inputNumber>
+                        <div>
+                            <small class="ng-dirty ng-invalid" *ngIf="formResultados.get('minutos_entre_partidos')?.touched && formResultados.get('minutos_entre_partidos')?.errors?.['required']">La cantidad de tiempo es requerida</small>
+                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="name">El campeonato contara con partidos de ida y vuelta</label>
+                        <p-inputSwitch formControlName="ida_y_vuelta" ></p-inputSwitch>
+                    </div>
+                    <div class="field">
+                        <label for="name">Se tomaran en cuenta las tarjetas dentro del capeonato</label>
+                        <p-inputSwitch formControlName="tarjetas" ></p-inputSwitch>
+                    </div>
+
+                   
+                </form>
+                
+                
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()" ></button>
+                <button *ngIf="!isUpdate" pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveResultado()"></button>
+<!--                 <button *ngIf="isUpdate" pButton pRipple label="Update" icon="pi pi-check" class="p-button-text" (click)="updateConfiguracion()"></button> -->
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteResultadoDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span >Esta seguro de que desea eliminar esta configuracion ?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteResultadoDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteResultadosDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Esta seguro de querer eliminar las configuraciones seleccionadas?</span>
+            </div>
+            <ng-template pTemplate="footer"> 
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteResultadosDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog>
       
     </div>
 </div>
