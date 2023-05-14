@@ -1,6 +1,6 @@
 import { ResultadoInterface } from './resultados.interface';
 import { MessageService } from 'primeng/api';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ResultadoService } from 'src/app/demo/service/resultado.service';
 import { Table } from 'primeng/table';
@@ -10,7 +10,8 @@ import { Table } from 'primeng/table';
   templateUrl: './resultados.component.html',
   providers: [MessageService]
 })
-export class ResultadosComponent {
+export class ResultadosComponent implements OnInit{
+
   submitted: boolean = false;
 
   resultadoDialog: boolean = false;
@@ -61,7 +62,7 @@ export class ResultadosComponent {
     });
   }
 
-  ngOnInit(){
+  ngOnInit(): void {
     this.getResultados()
   }
 

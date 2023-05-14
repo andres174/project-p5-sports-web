@@ -7,7 +7,9 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                        <button 
+                           pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()">
+                        </button>
                         <button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedResultados()" [disabled]="!selectedResultado || !selectedResultado.length"></button>
                     </div>
                 </ng-template>
@@ -120,48 +122,53 @@
                         </div>
                     </div>
 
-                    <p-inputNumber [showButtons]="true" buttonLayout="horizontal" inputId="horizontal" 
-                       spinnerMode="horizontal" [step]="0" decrementButtonClass="p-button-danger" incrementButtonClass="p-button-success" 
-                       incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" mode="decimal" ></p-inputNumber>
-
-
-                    <div class="field">
-                        <label for="name">Ingrese el numero de equipos por grupo</label>
-                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="100" formControlName="numero_miembros"  [ngClass]="{' ng-dirty' : formResultados.get('numero_miembros')?.touched && formResultados.get('numero_miembros')?.errors?.['required'] }">
-                        </p-inputNumber>
-                        <div>
-                            <small class="ng-dirty ng-invalid" *ngIf="formResultados.get('numero_miembros')?.touched && formResultados.get('numero_miembros')?.errors?.['required']">El numero de grupos es requerido</small>
-                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
-                        </div>
-                    </div>
-                    <div class="fiel">
-                        <label for="name">Ingrese los minutos de duracion del partido</label>
-                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="120" formControlName="minutos_juego"  [ngClass]="{' ng-dirty' : formResultados.get('minutos_juego')?.touched && formResultados.get('minutos_juego')?.errors?.['required'] }">
-                        </p-inputNumber>
-                        <div>
-                            <small class="ng-dirty ng-invalid" *ngIf="formResultados.get('minutos_juego')?.touched && formResultados.get('minutos_juego')?.errors?.['required']">La cantidad de tiempo es requerida</small>
-                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="name">Ingrese los minutos de descanso entre partidos</label>
-                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="120" formControlName="minutos_entre_partidos"  [ngClass]="{' ng-dirty' : formResultados.get('minutos_entre_partidos')?.touched && formResultados.get('minutos_entre_partidos')?.errors?.['required'] }">
-                        </p-inputNumber>
-                        <div>
-                            <small class="ng-dirty ng-invalid" *ngIf="formResultados.get('minutos_entre_partidos')?.touched && formResultados.get('minutos_entre_partidos')?.errors?.['required']">La cantidad de tiempo es requerida</small>
-                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label for="name">El campeonato contara con partidos de ida y vuelta</label>
-                        <p-inputSwitch formControlName="ida_y_vuelta" ></p-inputSwitch>
-                    </div>
-                    <div class="field">
-                        <label for="name">Se tomaran en cuenta las tarjetas dentro del capeonato</label>
-                        <p-inputSwitch formControlName="tarjetas" ></p-inputSwitch>
-                    </div>
-
                    
+                    <div class="field">
+                        <label for="name">Ingrese los goles a favor</label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="100" formControlName="goles_favor"  [ngClass]="{' ng-dirty' : formResultados.get('goles_favor')?.touched && formResultados.get('goles_favor')?.errors?.['required'] }">
+                        </p-inputNumber>
+                        <div>
+                            <small 
+                               class="ng-dirty ng-invalid" *ngIf="formResultados.get('goles_favor')?.touched && formResultados.get('goles_favor')?.errors?.['required']">El numero de los goles a favor es requerido
+                            </small>
+                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
+                        </div>
+                    </div>
+
+                    <div class="fiel">
+                        <label for="name">Ingrese los goles en contra</label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="100" formControlName="goles_contra"  [ngClass]="{' ng-dirty' : formResultados.get('goles_contra')?.touched && formResultados.get('goles_contra')?.errors?.['required'] }">
+                        </p-inputNumber>
+                        <div>
+                            <small 
+                                class="ng-dirty ng-invalid" *ngIf="formResultados.get('goles_contra')?.touched && formResultados.get('goles_contra')?.errors?.['required']">El numero de los goles en contra es requerida
+                            </small>
+                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="name">Ingrese el id equipo disciplina</label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="100" formControlName="id_equipo_disciplina"  [ngClass]="{' ng-dirty' : formResultados.get('id_equipo_disciplina')?.touched && formResultados.get('id_equipo_disciplina')?.errors?.['required'] }">
+                        </p-inputNumber>
+                        <div>
+                            <small 
+                                  class="ng-dirty ng-invalid" *ngIf="formResultados.get('id_equipo_disciplina')?.touched && formResultados.get('id_equipo_disciplina')?.errors?.['required']">El id equipo disciplina es requerido
+                            </small>
+                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
+                        </div>
+                    </div>      
+
+                    <div class="field">
+                        <label for="name">Ingrese el id partido</label>
+                        <p-inputNumber mode="decimal" [showButtons]="true" [min]="0" [max]="100" formControlName="id_partido"  [ngClass]="{' ng-dirty' : formResultados.get('id_partido')?.touched && formResultados.get('id_partido')?.errors?.['required'] }">
+                        </p-inputNumber>
+                        <div>
+                            <small 
+                                class="ng-dirty ng-invalid" *ngIf="formResultados.get('id_partido')?.touched && formResultados.get('id_partido')?.errors?.['required']">El id partido es requerido
+                            </small>
+                        <!-- <p-message severity="warn" text="Message Content"> </p-message>  -->
+                        </div>
+                    </div>     
                 </form>
                 
                 
