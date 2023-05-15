@@ -8,6 +8,7 @@ import { Table } from 'primeng/table';
 @Component({
   selector: 'app-resultados',
   templateUrl: './resultados.component.html',
+  styleUrls:  ['./resultados.component.scss'],
   providers: [MessageService]
 })
 export class ResultadosComponent implements OnInit{
@@ -25,8 +26,6 @@ export class ResultadosComponent implements OnInit{
 
   selectedResultado: ResultadoInterface[] = [];
 
-  formResultados: FormGroup;
-
   isUpdate:boolean=false;
 
 
@@ -37,13 +36,16 @@ export class ResultadosComponent implements OnInit{
   partidos: any[] = [];
   partidos_selected: any;
 
+  formResultados: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
     private resultadoService: ResultadoService,
     private messageService: MessageService,
-  ) {
+  ) 
+  {
     this.formResultados=formBuilder.group({
+
       puntos:          ['',[Validators.required]],
       goles_favor:        ['',[Validators.required]],
       goles_contra:          ['',[Validators.required]],
@@ -58,12 +60,16 @@ export class ResultadosComponent implements OnInit{
       next: (res) => {
         this.resultados = res;
         this.submitted = false;
+
       },
     });
   }
 
   ngOnInit(): void {
-    this.getResultados()
+    this.getResultados();
+
+    this.getEquipoDisciplina();
+    this.getPartido();
   }
 
   successMessage(msg: string) {
